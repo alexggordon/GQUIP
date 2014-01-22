@@ -1,3 +1,34 @@
+<?php
+include("authenticate.php");
+
+// **** CANNOT HAVE TEXT, SPACE OR COMMENTS ABOVE THE PHP TAG ****
+// check to see if user is logging out
+if(isset($_GET['out'])) {
+    // destroy session
+    session_unset();
+    $_SESSION = array();
+    unset($_SESSION['user'],$_SESSION['access']);
+    session_destroy();
+}
+
+// check to see if login form has been submitted
+if(isset($_POST['userLogin'])){
+    // run information through authenticator
+    if(authenticate_with_ad($_POST['userLogin'],$_POST['userPassword']))
+    {
+        // authentication passed
+        header("Location: home.php");
+        die();
+    } else {
+        // authentication failed
+        $error = 1;
+    }
+}
+// output error to user
+if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br /-->";
+// output logout success
+if (isset($_GET['out']))
+?>
 <!DOCTYPE html>
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
@@ -14,64 +45,9 @@
 	<link rel="stylesheet" href="css/foundation.css">
 
 	<script src="js/vendor/custom.modernizr.js"></script>
-
 </head>
 <body>
-<?php
-include("authenticate.php");
-// check to see if user is logging out
-if(isset($_GET['out'])) {
-		// destroy session
-		session_unset();
-		$_SESSION = array();
-		unset($_SESSION['user'],$_SESSION['access']);
-		session_destroy();
-}
-if(isset($_POST['userLogin'])){
-		if(authenticate($_POST['userLogin'],$_POST['userPassword']))
-		{
-				header("Location: home.php");
-				die("Unable to connect to home");
-		} else {
-				$error = 1;
-		}
-}
-if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br />";
-if (isset($_GET['out'])) echo "Logout successful<br />";?>
-<?php
-include("authenticate.php");
- 
-// check to see if user is logging out
-if(isset($_GET['out'])) {
-    // destroy session
-    session_unset();
-    $_SESSION = array();
-    unset($_SESSION['user'],$_SESSION['access']);
-    session_destroy();
-}
- 
-// check to see if login form has been submitted
-if(isset($_POST['userLogin'])){
-    // run information through authenticator
-    if(authenticate($_POST['userLogin'],$_POST['userPassword']))
-    {
-        // authentication passed
-        header("Location: index.php");
-        die();
-    } else {
-        // authentication failed
-        $error = 1;
-    }
-}
- 
-// output error to user
-if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br /-->";
- 
-// output logout success
-if (isset($_GET['out'])) echo "Logout successful";
-?>
 	<!-- Header and Nav -->
-
 <div class="row">
 		<div class="large-3 columns">
 			<h1><img src="img/logo.gif"></h1>
@@ -84,7 +60,7 @@ if (isset($_GET['out'])) echo "Logout successful";
 	</div>
 		<!-- First Band (Image) -->
  <div class="row">
-	<form method="post" action="login.php" data-abide>
+	<form action="login.php" method="post" data-abide>
 	 <fieldset>
 		<legend>Log In</legend>
 		<div class="row">
@@ -93,7 +69,7 @@ if (isset($_GET['out'])) echo "Logout successful";
 				 <div class="row collapse">
 					 <label>Username <small>required</small></label>
 					 <div class="small-9 columns">
-						 <input name="userLogin" type="text" placeholder="first.last" pattern="alpha_numeric" required>
+						 <input name="userLogin" type="text" placeholder="first.last" required>
 						 <small class="error">A valid username is required.</small>
 					 </div>
 					 <div class="small-3 columns">
@@ -107,13 +83,13 @@ if (isset($_GET['out'])) echo "Logout successful";
 				<div class="row collapse">
 				<label for="password">Password <small>required</small></label>
 					<div class="small-10 columns">
-						<input type="password" id="password" pattern="password_" placeholder="password" name="userPassword" required="">
+						<input name="userPassword" type="password" placeholder="password" required="">
 						<small class="error">You might want to check your password. It doesn't meet Gordon's standards so it shouldn't work!</small>
 					</div>
 					<div class="small-2 columns">
-<!--             <a href="home.php" class="button postfix">Log In</a> -->
-								<input type="submit" name="submit" value="Submit" class="button postfix" value="Log In">
+					
 					</div>
+					<input type="submit" name="submit" value="Submit" class="button postfix" formmethod="post" formaction="login.php" value="Log In">
 				</div>
 			</div>
 		</div>
@@ -123,17 +99,6 @@ if (isset($_GET['out'])) echo "Logout successful";
 
 	<!-- Footer -->
 <div><?php include('footer.php');?></div>
-	<script>
-		$(document)
-			.foundation()
-			.foundation('abide', {
-				patterns: {
-					password_: /(?=^.{7,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
-				}
-			});
-	</script>
 
-
-	
 </body>
 </html>
