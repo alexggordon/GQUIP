@@ -1,5 +1,5 @@
 $servername = “AdminTrainSQL.gordon.edu”;
-$databaseconnection = mssql_connect ($servername, “elliott.staude”, “Hash_1_Gordon_Network”);
+$databaseconnection = mssql_connect($servername, “elliott.staude”, “Hash_1_Gordon_Network”);
 echo $databaseconnection;
 if ($databaseconnection)
 {
