@@ -1,6 +1,6 @@
 <?php
-$myServer = "AdminTrainSQL.gordon.edu";
-$myUser = "alex.gordon";
+$myServer = "admintrainsql.gordon.edu";
+$myUser = "alex.gordon@gordon.edu";
 $myPass = "7132a8b2p45kldr69_";
 $myDB = "CTSEquipment"; 
 echo "1";
