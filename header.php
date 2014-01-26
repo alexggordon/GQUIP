@@ -14,7 +14,8 @@
   <link rel="javascrip" href="css/foundation.css">
 
   <script src="js/vendor/custom.modernizr.js"></script>
-  <script type="text/javascript" src="js/foundation/foundation.topbar.js"></script>
+  <script src="js/foundation/foundation.js"></script>
+  <script src="js/foundation/foundation.topbar.js"></script>
   
   
 
