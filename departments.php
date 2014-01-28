@@ -10,7 +10,7 @@ if(!isset($_SESSION['user'])) {
 
 $query = "SELECT * 
 FROM Departments
-ORDER BY name;"
+ORDER BY name;";
 
 //A connection to the database is established through the script open_db
 
