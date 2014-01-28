@@ -31,7 +31,9 @@ echo "<h1>" . $numRows . " Row" . ($numRows == 1 ? "" : "s") . " Returned </h1>"
 //display the results 
 while($row = mssql_fetch_array($result))
 {
+
   echo "<li>" . $row["name"] . $row["software_type"] . $row["last_updated_by"] . " | EDIT_BUTTON_FOR_" . $row["name"] . " | " . "</li>";
+
 }
 
 //The following segments consult with the permissions of the user and

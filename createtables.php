@@ -96,7 +96,7 @@ echo $echoholder . “ >>> 3”;
 
 echo $echoholder . “ >>> 4”;
 
-	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Hardware_assignment' (
+	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Hardware_assignments' (
   'id' INT NOT NULL,
   'user_id' INT,
   'last_updated_by' INT NOT NULL,
@@ -116,26 +116,26 @@ echo $echoholder . “ >>> 4”;
   'end_assignment' DATETIME,
   'nextneed_note' TEXT,
   PRIMARY KEY ('id'),
-  INDEX 'fk_Hardware_assignment_Users1_idx' ('user_id' ASC),
-  INDEX 'fk_Hardware_assignment_Departments1_idx' ('department_id' ASC),
-  INDEX 'fk_Hardware_assignment_Computers1_idx' ('control' ASC),
-  INDEX 'fk_Hardware_assignment_Users2_idx' ('last_updated_by' ASC),
-  CONSTRAINT 'fk_Hardware_assignment_Users1'
+  INDEX 'fk_Hardware_assignments_Users1_idx' ('user_id' ASC),
+  INDEX 'fk_Hardware_assignments_Departments1_idx' ('department_id' ASC),
+  INDEX 'fk_Hardware_assignments_Computers1_idx' ('control' ASC),
+  INDEX 'fk_Hardware_assignments_Users2_idx' ('last_updated_by' ASC),
+  CONSTRAINT 'fk_Hardware_assignments_Users1'
     FOREIGN KEY ('user_id')
     REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Hardware_assignment_Departments1'
+  CONSTRAINT 'fk_Hardware_assignments_Departments1'
     FOREIGN KEY ('department_id')
     REFERENCES 'Departments'('name')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Hardware_assignment_Computers1'
+  CONSTRAINT 'fk_Hardware_assignments_Computers1'
     FOREIGN KEY ('control')
     REFERENCES 'Computers' ('control')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Hardware_assignment_Users2'
+  CONSTRAINT 'fk_Hardware_assignments_Users2'
     FOREIGN KEY ('last_updated_by')
     REFERENCES 'Users'('id')
     ON DELETE NO ACTION

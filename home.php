@@ -32,7 +32,30 @@ echo "<h1>" . $numRows . " Row" . ($numRows == 1 ? "" : "s") . " Returned </h1>"
 //display the results 
 while($row = mssql_fetch_array($result))
 {
+
+  $cur_control = $row["control"];
+  $assignmentquery = "SELECT * 
+  FROM Hardware_assignments
+  JOIN Users
+  ON Users.id = Hardware_assignments.user_id
+  WHERE Hardware_assignments.control = $cur_control
+  ORDER BY control;";
+
+  include('open_db.php');
+
+  $assignmentresult = mssql_query($assignmentquery);
+
+  include('close_db.php');
+
   echo "<li>" . $row["control"] . $row["model"] . $row["manufacturer"] . " | EDIT_BUTTON_FOR_" . $row["control"] . " | " . "</li>";
+
+  while($assignmentrow = mssql_fetch_array($assignmentresult))
+  {
+  
+  	echo " && " . $assignmentrow["Users.last_name"] . $assignmentrow["Users.first_name"] . $assignmentrow["Hardware_assignments.start_assignment"] . $assignmentrow["Hardware_assignments.end_assignment"];
+  
+  }
+
 }
 
 //The following segments consult with the permissions of the user and
