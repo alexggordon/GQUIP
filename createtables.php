@@ -3,7 +3,7 @@ $databaseconnection = mssql_connect($servername, “elliott.staude”, “Hash_1
 echo $databaseconnection;
 if ($databaseconnection)
 {
-	$echoholder = $mssql_query(“CREATE TABLE IF NOT EXISTS 'User' (
+	$echoholder = $mssql_query(“CREATE TABLE IF NOT EXISTS 'Users' (
   'id' INT NOT NULL,
   'last_updated_by' INT NOT NULL,
   'department' VARCHAR(45),
@@ -25,37 +25,38 @@ if ($databaseconnection)
   'country' VARCHAR(45) NOT NULL,
   'zip' INT NULL,
   PRIMARY KEY ('id'),
-  INDEX 'fk_User_User1_idx' ('last_updated_by' ASC),
-    CONSTRAINT 'fk_User_User1'
+  INDEX 'fk_Users_Users1_idx' ('last_updated_by' ASC),
+    CONSTRAINT 'fk_Users_Users1'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 
 	echo $echoholder . “ >>> 1”;
 
-	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Department' (
+	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Departments' (
   'name' VARCHAR(45) NOT NULL,
+  'full_name' VARCHAR(45) NOT NULL,
   'last_updated_by' INT NOT NULL,
   'last_updated_at' DATETIME NOT NULL,
   'created_at' DATETIME NOT NULL,
   PRIMARY KEY ('name'),
-  INDEX 'fk_Department_User1_idx' ('last_updated_by' ASC),
-  CONSTRAINT 'fk_Department_User1'
+  INDEX 'fk_Departments_Users1_idx' ('last_updated_by' ASC),
+  CONSTRAINT 'fk_Departments_Users1'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 
 echo $echoholder . “ >>> 2”;
 
-	$echoholder = mssql_query(“ALTER TABLE User
+	$echoholder = mssql_query(“ALTER TABLE Users
 ADD FOREIGN KEY (department)
-REFERENCES Department(name)”, $databaseconnection);
+REFERENCES Departments(name)”, $databaseconnection);
 
 echo $echoholder . “ >>> 3”;
 
-	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Computer' (
+	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Computers' (
   'control' VARCHAR(45) NOT NULL,
   'legacy_department' VARCHAR(45),
   'last_updated_by' INT NOT NULL,
@@ -80,16 +81,16 @@ echo $echoholder . “ >>> 3”;
   'part_number' VARCHAR(45),
   'ip_address' VARCHAR(45),
   PRIMARY KEY ('control'),
-  INDEX 'fk_Computer_User1_idx' ('last_updated_by' ASC),
-  INDEX 'fk_Computer_Department1_idx' ('legacy_department' ASC),
-  CONSTRAINT 'fk_Computer_User1'
+  INDEX 'fk_Computers_Users1_idx' ('last_updated_by' ASC),
+  INDEX 'fk_Computers_Departments1_idx' ('legacy_department' ASC),
+  CONSTRAINT 'fk_Computers_Users1'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Computer_Department1'
+  CONSTRAINT 'fk_Computers_Departments1'
     FOREIGN KEY ('legacy_department')
-    REFERENCES 'Department'('name')
+    REFERENCES 'Departments'('name')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 
@@ -115,34 +116,34 @@ echo $echoholder . “ >>> 4”;
   'end_assignment' DATETIME,
   'nextneed_note' TEXT,
   PRIMARY KEY ('id'),
-  INDEX 'fk_Hardware_assignment_User1_idx' ('user_id' ASC),
-  INDEX 'fk_Hardware_assignment_Department1_idx' ('department_id' ASC),
-  INDEX 'fk_Hardware_assignment_Computer1_idx' ('control' ASC),
-  INDEX 'fk_Hardware_assignment_User2_idx' ('last_updated_by' ASC),
-  CONSTRAINT 'fk_Hardware_assignment_User1'
+  INDEX 'fk_Hardware_assignment_Users1_idx' ('user_id' ASC),
+  INDEX 'fk_Hardware_assignment_Departments1_idx' ('department_id' ASC),
+  INDEX 'fk_Hardware_assignment_Computers1_idx' ('control' ASC),
+  INDEX 'fk_Hardware_assignment_Users2_idx' ('last_updated_by' ASC),
+  CONSTRAINT 'fk_Hardware_assignment_Users1'
     FOREIGN KEY ('user_id')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Hardware_assignment_Department1'
+  CONSTRAINT 'fk_Hardware_assignment_Departments1'
     FOREIGN KEY ('department_id')
-    REFERENCES 'Department'('name')
+    REFERENCES 'Departments'('name')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Hardware_assignment_Computer1'
+  CONSTRAINT 'fk_Hardware_assignment_Computers1'
     FOREIGN KEY ('control')
-    REFERENCES 'Computer' ('control')
+    REFERENCES 'Computers' ('control')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Hardware_assignment_User2'
+  CONSTRAINT 'fk_Hardware_assignment_Users2'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 
 echo $echoholder . “ >>> 5”;
 
-	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Comment' (
+	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Comments' (
   'id' INT NOT NULL,
   'user_id' INT NOT NULL,
   'last_updated_by' INT NOT NULL,
@@ -151,22 +152,22 @@ echo $echoholder . “ >>> 5”;
   'created_at' DATETIME NOT NULL,
   'body' TEXT NOT NULL,
   PRIMARY KEY ('id'),
-  INDEX 'fk_Comment_Computer1_idx' ('computer_id' ASC),
-  INDEX 'fk_Comment_User1_idx' ('user_id' ASC),
-  INDEX 'fk_Comment_User2_idx' ('last_updated_by' ASC),
-  CONSTRAINT 'fk_Comment_Computer1'
+  INDEX 'fk_Comments_Computers1_idx' ('computer_id' ASC),
+  INDEX 'fk_Comments_Users1_idx' ('user_id' ASC),
+  INDEX 'fk_Comments_Users2_idx' ('last_updated_by' ASC),
+  CONSTRAINT 'fk_Comments_Computers1'
     FOREIGN KEY ('computer_id')
-    REFERENCES 'Computer'('control')
+    REFERENCES 'Computers'('control')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Comment_User1'
+  CONSTRAINT 'fk_Comments_Users1'
     FOREIGN KEY ('user_id')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_Comment_User2'
+  CONSTRAINT 'fk_Comments_Users2'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 
@@ -177,18 +178,19 @@ echo $echoholder . “ >>> 6”;
   'last_updated_by' INT NOT NULL,
   'last_updated_at' DATETIME NOT NULL,
   'created_at' DATETIME NOT NULL,
+  'name' VARCHAR(45) NOT NULL,
   'software_type' VARCHAR(45) NOT NULL,
   PRIMARY KEY ('id'),
-  INDEX 'fk_Software_User1_idx' ('last_updated_by' ASC),
-  CONSTRAINT 'fk_Software_User1'
+  INDEX 'fk_Software_Users1_idx' ('last_updated_by' ASC),
+  CONSTRAINT 'fk_Software_Users1'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User’('id')
+    REFERENCES 'Users’('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 
 echo $echoholder . “ >>> 7”;
 
-	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'License' (
+	$echoholder = mssql_query(“CREATE TABLE IF NOT EXISTS 'Licenses' (
   'id' INT NOT NULL,
   'user_id' INT NOT NULL,
   'last_updated_by' INT NOT NULL,
@@ -196,22 +198,22 @@ echo $echoholder . “ >>> 7”;
   'last_updated_at' DATETIME NOT NULL,
   'created_at' DATETIME NOT NULL,
   PRIMARY KEY ('id'),
-  INDEX 'fk_License_User1_idx' ('user_id' ASC),
-  INDEX 'fk_License_Software1_idx' ('software_id' ASC),
-  INDEX 'fk_License_User2_idx' ('last_updated_by' ASC),
-  CONSTRAINT 'fk_License_User1'
+  INDEX 'fk_Licenses_Users1_idx' ('user_id' ASC),
+  INDEX 'fk_Licenses_Software1_idx' ('software_id' ASC),
+  INDEX 'fk_Licenses_Users2_idx' ('last_updated_by' ASC),
+  CONSTRAINT 'fk_Licenses_Users1'
     FOREIGN KEY ('user_id')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_License_Software1'
+  CONSTRAINT 'fk_Licenses_Software1'
     FOREIGN KEY ('software_id')
     REFERENCES 'Software'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT 'fk_License_User2'
+  CONSTRAINT 'fk_Licenses_Users2'
     FOREIGN KEY ('last_updated_by')
-    REFERENCES 'User'('id')
+    REFERENCES 'Users'('id')
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);”, $databaseconnection);
 

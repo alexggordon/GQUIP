@@ -1,7 +1,6 @@
 <?php
-// Test Commment
 include('config.php');
-include('header.php');
+include('header.php')
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
 }
@@ -10,8 +9,8 @@ if(!isset($_SESSION['user'])) {
 //to the database to cut back on overhead
 
 $query = "SELECT * 
-FROM Computers
-ORDER BY control;"
+FROM Software
+ORDER BY name;"
 
 //A connection to the database is established through the script open_db
 
@@ -32,41 +31,39 @@ echo "<h1>" . $numRows . " Row" . ($numRows == 1 ? "" : "s") . " Returned </h1>"
 //display the results 
 while($row = mssql_fetch_array($result))
 {
-  echo "<li>" . $row["control"] . $row["model"] . $row["manufacturer"] . " | EDIT_BUTTON_FOR_" . $row["control"] . " | " . "</li>";
+  echo "<li>" . $row["name"] . $row["software_type"] . $row["last_updated_by"] . " | EDIT_BUTTON_FOR_" . $row["name"] . " | " . "</li>";
 }
 
 //The following segments consult with the permissions of the user and
 //accordingly render the page and/or allow the user to perform certain
 //actions based on the permissions level
 
+
+// Manager
 if($_SESSION['access']=="3" ) {
 ?>
 
 
-
 <?php
 }
+// Faculty
 if($_SESSION['access']=="2" ) {
 ?>
 
-<a href="#" data-dropdown="drop1">Has Dropdown</a>
-<ul id="drop1" class="f-dropdown" data-dropdown-content>
-	<li><a href="#">This is a link</a></li>
-	<li><a href="#">This is another</a></li>
-	<li><a href="#">Yet another</a></li>
-</ul>
-<a href="#" data-dropdown="drop2">Has Content Dropdown</a>
-<div id="drop2" data-dropdown-content class="f-dropdown content">
-	<p>Some text that people will think is awesome! Some text that people will think is awesome! Some text that people will think is awesome!</p>
-</div>
 
 <?php
 }
+// User
 if($_SESSION['access']=="1" ) {
 ?>
 
-
 <?php
 }
-include('footer.php');
+?>
+
+
+
+
+<?php
+include('footer.php')
 ?>
