@@ -1,17 +1,18 @@
 <?php
-$myServer = "admintrainsql.gordon.edu";
-$myUser = "alex.gordon";
-$myPass = "7132a8b2p45kldr69_";
-$myDB = "CTSEquipment"; 
-echo "1";
+//<!!!> all the lines of functional code that are commented in this version are already present
+// -- open_db.php/close_db.php
 
-$dbhandle = mssql_connect($myServer, $myUser, $myPass) 
-	or die("Couldn't connect to $myServer"); 
+// $myServer = "admintrainsql.gordon.edu";
+// $myUser = "alex.gordon@gordon.edu";
+// $myPass = "7132a8b2p45kldr69_";
+// $myDB = "CTSEquipment"; 
+
+// $dbhandle = mssql_connect($myServer, $myUser, $myPass) 
+	// or die("Couldn't connect to $myServer"); 
 
 //select a database to work with
-$selected = mssql_select_db($myDB, $dbhandle) or die("Couldn't open database $myDB"); 
+// $selected = mssql_select_db($myDB, $dbhandle) or die("Couldn't open database $myDB"); 
 
-echo "2";
 //declare the SQL statement that will query the database
 $query = "SELECT id, name, year ";
 $query .= "FROM cars ";
@@ -29,5 +30,5 @@ while($row = mssql_fetch_array($result))
   echo "<li>" . $row["id"] . $row["name"] . $row["year"] . "</li>";
 }
 //close the connection
-mssql_close($dbhandle);
+// mssql_close($dbhandle);
 ?>
