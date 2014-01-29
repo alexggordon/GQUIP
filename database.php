@@ -2,15 +2,18 @@
 //<!!!> all the lines of functional code that are commented in this version are already present
 // -- open_db.php/close_db.php
 
-// $myServer = "admintrainsql.gordon.edu";
-// $myUser = "alex.gordon@gordon.edu";
-// $myPass = "7132a8b2p45kldr69_";
-// $myDB = "CTSEquipment"; 
+$myServer = "admintrainsql.gordon.edu";
+$myUser = "GORDON\alex.gordon";
+$myPass = "7132a8b2p45kldr69_";
+$myDB = "CTSEquipment"; 
 
-// $dbhandle = mssql_connect($myServer, $myUser, $myPass) 
-	// or die("Couldn't connect to $myServer"); 
+$dbhandle = mssql_connect($myServer, $myUser, $myPass) 
+	or die("Couldn't connect to $myServer"); 
+
+// $s = mssql_connect($myServer,$mssqlUser,$mssqlPass) or die('Could not connect to SQL Server on '.$mssqlHost.' '. mssql_get_last_message());
 
 //select a database to work with
+
 // $selected = mssql_select_db($myDB, $dbhandle) or die("Couldn't open database $myDB"); 
 
 //declare the SQL statement that will query the database
@@ -30,5 +33,5 @@ while($row = mssql_fetch_array($result))
   echo "<li>" . $row["id"] . $row["name"] . $row["year"] . "</li>";
 }
 //close the connection
-// mssql_close($dbhandle);
+mssql_close($dbhandle);
 ?>
