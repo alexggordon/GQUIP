@@ -2,8 +2,8 @@
     <div class="large-12 columns">
       <hr />
       <div class="row">
-        <div class="large-12 columns">
-          <ul class="inline-list center">
+        <div class="twelve columns text-center">
+          <ul class="inline-list">
             <li>&copy; Copyright Gordon College <script language="javascript" type="text/javascript">
             var today = new Date()
             var year = today.getFullYear()

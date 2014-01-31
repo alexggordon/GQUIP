@@ -50,7 +50,7 @@ if (isset($_GET['out']))
 	<!-- Header and Nav -->
 <div class="row">
 		<div class="large-3 columns">
-			<h1><img src="img/logo.gif"></h1>
+			<h1><img src="img/logo.png"></h1>
 		</div>
 		<div class="large-9 columns">
 			<ul class="button-group right">
