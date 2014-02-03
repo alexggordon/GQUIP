@@ -1,4 +1,10 @@
 <?php
+include('header.php');
+if(!isset($_SESSION['user'])) {
+    header('Location: login.php');
+}
+// Manager
+if($_SESSION['access']=="3" ) {
 
 $self = $_SERVER['PHP_SELF'];
 $request = $_SERVER['REQUEST_METHOD'];
@@ -12,8 +18,7 @@ $get_success = $_GET['success'];
 
 if (!empty($_FILES)) { 
 
-    /* Format the errors and die */
-	
+    // this function gets errors from SQL Server and reports them. 
     function get_last_error() {
         $retErrors = sqlsrv_errors(SQLSRV_ERR_ALL);
         $errorMessage = 'No errors found';
@@ -31,22 +36,23 @@ if (!empty($_FILES)) {
         die ($errorMessage);
     }
 
-    /* connect */
+    // connect to sql server. 
     function connect() {
         if (!function_exists('sqlsrv_num_rows')) { // Insure sqlsrv_1.1 is loaded.
             die ('sqlsrv_1.1 is not available');
         }
 
-        /* Log all Errors */
+        // server configurations
         sqlsrv_configure("WarningsReturnAsErrors", TRUE);        // BE SURE TO NOT ERROR ON A WARNING
         sqlsrv_configure("LogSubsystems", SQLSRV_LOG_SYSTEM_ALL);
         sqlsrv_configure("LogSeverity", SQLSRV_LOG_SEVERITY_ALL);
 
-        $conn = sqlsrv_connect('cslogs', array
+        // connect to the server
+        $conn = sqlsrv_connect('GQUIP.gordon.edu', array
         (
-        'UID' => 'mailreport',
-        'PWD' => '123456',
-        'Database' => 'Mail',
+        'UID' => 'alex.gordon',
+        'PWD' => '7132a8b2p45kldr69_',
+        'Database' => 'CTSEquipment',
         'CharacterSet' => 'UTF-8',
         'MultipleActiveResultSets' => true,
         'ConnectionPooling' => true,
@@ -54,12 +60,14 @@ if (!empty($_FILES)) {
         ));
 
         if ($conn === FALSE) {
+            // if the function can't connect, get the last error and report it. 
             get_last_error();
         }
 
         return $conn;
     }
 
+    // this runs the query against the server. 
     function query($conn, $query) {
         $result = sqlsrv_query($conn, $query);
         if ($result === FALSE) {
@@ -68,8 +76,7 @@ if (!empty($_FILES)) {
         return $result;
     }
 
-    /* Prepare a reusable query (prepare/execute) */
-	
+    // this will prepare a reusable query. This allows for easy cacheing. 	
     function prepare ( $conn, $query, $params ) {
         $result = sqlsrv_prepare($conn, $query, $params);
         if ($result === FALSE) {
@@ -82,6 +89,8 @@ if (!empty($_FILES)) {
     do the deed. once prepared, execute can be called multiple times
     getting different values from the variable references.
     */
+    // execute the query. Once the query is perpared (see the function), execute can 
+    // be called multiple times getting different values from the variables. 
 	
     function execute ( $stmt ) {
         $result = sqlsrv_execute($stmt);
@@ -91,6 +100,7 @@ if (!empty($_FILES)) {
         return $result;
     }
 
+    // grabs the query result data off of SQL server. 
     function fetch_array($query) {
         $result = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC);
         if ($result === FALSE) {
@@ -101,7 +111,7 @@ if (!empty($_FILES)) {
 
     $conn = connect();
 
-    /* prepare the statement */
+    // prepare the query statement. It is done in this form for easy modification. 
     $query = "INSERT Records values ( ? , ? , ? )";
     $param1 = null; // this will hold col1 from the CSV
     $param2 = null; // this will hold col2 from the CSV
@@ -138,22 +148,43 @@ sqlsrv_close($conn);
 header( "Location: test.php?success=1" );
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
-<head> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<title>Import a CSV File with PHP & MS SQL Server</title> 
-</head> 
-
-<body> 
-
 <?php if (!empty($get_success)) { echo "<b>Your file has been imported.</b><br><br>"; } //generic success notice ?> 
+<br>
+<br>
+<div class="row">
+    <div class="large-12 columns">
+        <h1>Welcome to the CSV data import page.</h1>
+        <p>If you have yet to read the instructions, please refer to the <a href="/faq.php">GQUIP CSV import FAQ</a>. Please double check your file to make sure that adheres to the provided <a href="/template.csv">template</a>.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="large-12 columns">
+        <form action="" method="post" enctype="multipart/form-data" name="form1" id="form1"> 
+          <fieldset>
+              <legend>Choose your file: </legend>
+              <div class="large-12 columns">
+                            <input name="csv" type="file" id="csv">
+                            <input type="submit" name="Submit" value="Import" class="button" /> </div>
+          </fieldset>
+        </form> 
+    </div>
+</div>
 
-<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1"> 
-  Choose your file: <br /> 
-  <input name="csv" type="file" id="csv" /> 
-  <input type="submit" name="Submit" value="Submit" /> 
-</form> 
+<?php
+}
+// Faculty
+if($_SESSION['access']=="2" ) {
 
-</body> 
-</html> 
+// Faculty can not access this page
+header('Location: home.php');
+
+}
+// User
+if($_SESSION['access']=="1" ) {
+
+// User can not access this page
+header('Location: home.php');
+
+}
+include('footer.php')
+?>

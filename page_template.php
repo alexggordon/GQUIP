@@ -1,5 +1,4 @@
 <?php
-include('config.php');
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
@@ -8,6 +7,9 @@ if(!isset($_SESSION['user'])) {
 if($_SESSION['access']=="3" ) {
 ?>
 
+<!-- Page html goes here -->
+<!-- no need for html tags or body tags. Just raw page html. -->
+
 
 <?php
 }
@@ -15,6 +17,8 @@ if($_SESSION['access']=="3" ) {
 if($_SESSION['access']=="2" ) {
 ?>
 
+<!-- Page html goes here -->
+<!-- no need for html tags or body tags. Just raw page html. -->
 
 <?php
 }
@@ -22,13 +26,10 @@ if($_SESSION['access']=="2" ) {
 if($_SESSION['access']=="1" ) {
 ?>
 
+<!-- Page html goes here -->
+<!-- no need for html tags or body tags. Just raw page html. -->
+
 <?php
 }
-?>
-
-
-
-
-<?php
 include('footer.php')
 ?>

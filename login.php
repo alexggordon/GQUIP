@@ -1,7 +1,12 @@
 <?php
+// include the domain authentication function
 include("authenticate.php");
 
-// **** CANNOT HAVE TEXT, SPACE OR COMMENTS ABOVE THE PHP TAG ****
+// if already logged in, redirect to home
+if(isset($_SESSION['user'])) {
+    header('Location: home.php');
+}
+
 // check to see if user is logging out
 if(isset($_GET['out'])) {
     // destroy session
@@ -47,17 +52,21 @@ if (isset($_GET['out']))
 	<script src="js/vendor/custom.modernizr.js"></script>
 </head>
 <body>
+<br>
+<br>
 	<!-- Header and Nav -->
 <div class="row">
-		<div class="large-3 columns">
-			<h1><img src="img/logo.png"></h1>
-		</div>
-		<div class="large-9 columns">
-			<ul class="button-group right">
-		<li><h1>G-Quip</h1></li>
+	<div class="large-12 columns">
+		<ul class="button-group">
+			<ul class="button-group left">
+				<li><img src="img/logo75.png"></li>
 			</ul>
-		</div>
+			<ul class="button-group right">
+				<li><h1>GQUIP</h1></li>
+			</ul>
+		</ul>
 	</div>
+</div>
 		<!-- First Band (Image) -->
  <div class="row">
 	<form action="login.php" method="post" data-abide>
@@ -81,7 +90,8 @@ if (isset($_GET['out']))
 		<div class="row">
 			<div class="large-9 large-centered columns">
 				<div class="row collapse">
-				<label for="password">Password <small>required</small></label>
+				<label for="password">
+				 <small>required</small></label>
 					<div class="small-10 columns">
 						<input name="userPassword" type="password" placeholder="password" required="">
 						<small class="error">You might want to check your password. It doesn't meet Gordon's standards so it shouldn't work!</small>
