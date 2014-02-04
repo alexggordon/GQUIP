@@ -2,8 +2,19 @@ CREATE TABLE CTSEquipment.dbo.users
 (id int NOT NULL,
 department varchar(45) NOT NULL,
 first_name varchar(45) NOT NULL,
+middle_name varchar(45),
 last_name varchar(45) NOT NULL,
 email varchar(45),
+role VARCHAR(45) NOT NULL,
+building VARCHAR(45) NOT NULL,
+room INT NOT NULL,
+phone VARCHAR(45),
+barcode VARCHAR(45),
+active VARCHAR(45) NOT NULL,
+on_campus BIT NOT NULL,
+state VARCHAR(45),
+country VARCHAR(45) NOT NULL,
+zip INT NULL,
 PRIMARY KEY (id))
 
 
@@ -46,4 +57,48 @@ REFERENCES [dbo].[users] ([id])
 GO
 
 ALTER TABLE [dbo].[computers] CHECK CONSTRAINT [fk_computers_users_1]
+GO
+
+CREATE TABLE CTSEquipment.dbo.hardware_assignments
+(id INT NOT NULL,
+user_id INT,
+last_updated_by INT NOT NULL,
+control VARCHAR(45) NOT NULL,
+control_ts DATETIME NOT NULL,
+department_id VARCHAR(45),
+last_updated_at DATETIME NOT NULL,
+created_at DATETIME NOT NULL,
+fullorpart BIT NOT NULL,
+dedicated BIT NOT NULL,
+primary_computer BIT NOT NULL,
+replace_with_recycled BIT NOT NULL,
+nextneed_macpc BIT NOT NULL,
+nextneed_laptopdesktop BIT NOT NULL,
+special BIT NOT NULL,
+start_assignment DATETIME NOT NULL,
+lab BIT NOT NULL,
+end_assignment DATETIME,
+nextneed_note TEXT,
+PRIMARY KEY (id, last_updated_at))
+
+
+ALTER TABLE dbo.hardware_assignments  WITH CHECK ADD  CONSTRAINT [fk_hardware_assignments_users_1] FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([id])
+GO
+
+ALTER TABLE dbo.hardware_assignments  WITH CHECK ADD  CONSTRAINT [fk_hardware_assignments_users_2] FOREIGN KEY([last_updated_by])
+REFERENCES [dbo].[users] ([id])
+GO
+
+ALTER TABLE dbo.hardware_assignments  WITH CHECK ADD  CONSTRAINT [fk_hardware_assignments_computers_1] FOREIGN KEY([control], [control_ts])
+REFERENCES [dbo].[computers] ([control], [last_updated_at])
+GO
+
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_assignments_users_1]
+GO
+
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_assignments_users_2]
+GO
+
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_assignments_computers_1]
 GO
