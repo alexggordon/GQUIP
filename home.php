@@ -11,7 +11,10 @@ if($_SESSION['access']=="3" ) {
   //The set of SQL queries for the page is put together before connecting
   //to the database to cut back on overhead
 
-  $query = "SELECT * FROM Computers ORDER BY control;";
+  $query = "SELECT * FROM computers 
+  WHERE control IN 
+  (SELECT Max(last_updated_at) FROM computers GROUP BY control) 
+  ORDER BY last_updated_at DESC;";
 
   //A connection to the database is established through the script open_db
 
@@ -34,7 +37,9 @@ if($_SESSION['access']=="3" ) {
   {
 
     $cur_control = $row["control"];
-    $assignmentquery = "SELECT * FROM Hardware_assignmentsJOIN UsersON Users.id = Hardware_assignments.user_id WHERE Hardware_assignments.control = $cur_control ORDER BY control;";
+    $assignmentquery = "SELECT * FROM hardware_assignments JOIN users ON users.id = hardware_assignments.user_id WHERE hardware_assignments.control = $cur_control ORDER BY control;";
+
+    $commentquery = "SELECT * FROM comments JOIN WHERE comments.control = $cur_control ORDER BY comment;";
 
     include('open_db.php');
 
@@ -47,9 +52,11 @@ if($_SESSION['access']=="3" ) {
     while($assignmentrow = mssql_fetch_array($assignmentresult))
     {
     
-      echo " && " . $assignmentrow["Users.last_name"] . $assignmentrow["Users.first_name"] . $assignmentrow["Hardware_assignments.start_assignment"] . $assignmentrow["Hardware_assignments.end_assignment"];
+      echo " && " . $assignmentrow["users.last_name"] . $assignmentrow["users.first_name"] . $assignmentrow["hardware_assignments.start_assignment"] . $assignmentrow["hardware_assignments.end_assignment"];
     
     }
+
+
 
   }
 
