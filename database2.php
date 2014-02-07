@@ -1,12 +1,27 @@
 <?php
-$serverName = "serverName\sqlexpress"; //serverName\instanceName
-$connectionInfo = array( "Database"=>"dbName", "UID"=>"userName", "PWD"=>"password");
+
+
+//$connectionInfo = array("UID" => "alex.gordon", "PWD" => "7132a8b2p45kldr69_");
+//$serverName = '(local)';
+$serverName = "sql05train1.gordon.edu";
+$connectionInfo = array(
+'Database' => 'CTSEquipment');
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
-if( $conn ) {
-     echo "Connection established.<br />";
-}else{
-     echo "Connection could not be established.<br />";
+if( $conn )
+{
+     echo "Connection established.\n";
+}
+else
+{
+     echo "Connection could not be established.\n";
      die( print_r( sqlsrv_errors(), true));
 }
+
+//-----------------------------------------------
+// Perform operations with connection.
+//-----------------------------------------------
+
+/* Close the connection. */
+//sqlsrv_close( $conn);
 ?>

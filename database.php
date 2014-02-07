@@ -2,36 +2,44 @@
 //<!!!> all the lines of functional code that are commented in this version are already present
 // -- open_db.php/close_db.php
 
-$myServer = "admintrainsql.gordon.edu";
+$myServer = "SQL05TRAIN1";
 $myUser = "GORDON\alex.gordon";
 $myPass = "7132a8b2p45kldr69_";
-$myDB = "CTSEquipment"; 
+$myDB = "CTSEquipmentCTSEquipmentCTSEquipment"; 
 
-$dbhandle = mssql_connect($myServer, $myUser, $myPass) 
-	or die("Couldn't connect to $myServer"); 
+/* Specify the server and connection string attributes. */
+$serverName = "admintrainsql.gordon.edu";
 
-// $s = mssql_connect($myServer,$mssqlUser,$mssqlPass) or die('Could not connect to SQL Server on '.$mssqlHost.' '. mssql_get_last_message());
+/* Get UID and PWD from application-specific files.  */
+$uid = 'GORDON\\alex.gordon';
+$pwd = '7132a8b2p45kldr69_';
+$connectionInfo = array( "UID"=>$uid,
+                         "PWD"=>$pwd,
+                         "Database"=>"CTSEquipment");
 
-//select a database to work with
-
-// $selected = mssql_select_db($myDB, $dbhandle) or die("Couldn't open database $myDB"); 
-
-//declare the SQL statement that will query the database
-$query = "SELECT id, name, year ";
-$query .= "FROM cars ";
-$query .= "WHERE name='BMW'"; 
-
-//execute the SQL query and return records
-$result = mssql_query($query);
-
-$numRows = mssql_num_rows($result); 
-echo "<h1>" . $numRows . " Row" . ($numRows == 1 ? "" : "s") . " Returned </h1>"; 
-
-//display the results 
-while($row = mssql_fetch_array($result))
+/* Connect using SQL Server Authentication. */
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
+if( $conn === false )
 {
-  echo "<li>" . $row["id"] . $row["name"] . $row["year"] . "</li>";
+     echo "Unable to connect.</br>";
+     die( print_r( sqlsrv_errors(), true));
 }
-//close the connection
-mssql_close($dbhandle);
+
+/* Query SQL Server for the login of the user accessing the
+database. */
+$tsql = "SELECT CONVERT(varchar(32), SUSER_SNAME())";
+$stmt = sqlsrv_query( $conn, $tsql);
+if( $stmt === false )
+{
+     echo "Error in executing query.</br>";
+     die( print_r( sqlsrv_errors(), true));
+}
+
+/* Retrieve and display the results of the query. */
+$row = sqlsrv_fetch_array($stmt);
+echo "User login: ".$row[0]."</br>";
+
+/* Free statement and connection resources. */
+sqlsrv_free_stmt( $stmt);
+sqlsrv_close( $conn);
 ?>
