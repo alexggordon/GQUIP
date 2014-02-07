@@ -39,11 +39,13 @@ if($_SESSION['access']=="3" ) {
     $cur_control = $row["control"];
     $assignmentquery = "SELECT * FROM hardware_assignments JOIN users ON users.id = hardware_assignments.user_id WHERE hardware_assignments.control = $cur_control ORDER BY control;";
 
-    $commentquery = "SELECT * FROM comments JOIN WHERE comments.control = $cur_control ORDER BY comment;";
+    $commentquery = "SELECT * FROM comments JOIN users WHERE comments.computer = $cur_control ORDER BY comment.created_at;";
 
     include('open_db.php');
 
     $assignmentresult = mssql_query($assignmentquery);
+
+    $commentresult = mssql_query($commentquery);
 
     include('close_db.php');
 
@@ -56,7 +58,12 @@ if($_SESSION['access']=="3" ) {
     
     }
 
-
+    while($commentrow = mssql_fetch_array($commentresult))
+    {
+    
+      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
+    
+    }
 
   }
 
