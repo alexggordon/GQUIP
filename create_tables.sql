@@ -19,11 +19,14 @@ PRIMARY KEY (id))
 
 
 
+
+
+
 CREATE TABLE [dbo].[computers](
 	[control] [varchar](45) NOT NULL,
 	[department] [varchar](45) NOT NULL,
 	[last_updated_by] [int] NOT NULL,
-	[serial] [varchar](25) NULL,
+	[serial_num] [varchar](25) NULL,
 	[model] [varchar](25) NOT NULL,
 	[manufacturer] [varchar](25) NOT NULL,
 	[purchase_date] [varchar](25) NOT NULL,
@@ -59,26 +62,29 @@ GO
 ALTER TABLE [dbo].[computers] CHECK CONSTRAINT [fk_computers_users_1]
 GO
 
-CREATE TABLE CTSEquipment.dbo.hardware_assignments
-(id INT NOT NULL,
-user_id INT,
-last_updated_by INT NOT NULL,
-control VARCHAR(45) NOT NULL,
-control_ts DATETIME NOT NULL,
-department_id VARCHAR(45),
-last_updated_at DATETIME NOT NULL,
-created_at DATETIME NOT NULL,
-fullorpart BIT NOT NULL,
-dedicated BIT NOT NULL,
-primary_computer BIT NOT NULL,
-replace_with_recycled BIT NOT NULL,
-nextneed_macpc BIT NOT NULL,
-nextneed_laptopdesktop BIT NOT NULL,
-special BIT NOT NULL,
-start_assignment DATETIME NOT NULL,
-lab BIT NOT NULL,
-end_assignment DATETIME,
-nextneed_note TEXT,
+
+
+
+
+
+CREATE TABLE [dbo].[hardware_assignments]
+([id] [int] NOT NULL,
+[user_id] [int],
+[last_updated_by] [int] NOT NULL,
+[control] [varchar](45) NOT NULL,
+[control_ts] [date] NOT NULL,
+[department_id] [varchar](45),
+[fullorpart] [bit] NOT NULL,
+[dedicated] [bit] NOT NULL,
+[primary_computer] [bit] NOT NULL,
+[replace_with_recycled] [bit] NOT NULL,
+[nextneed_macpc] [bit] NOT NULL,
+[nextneed_laptopdesktop] [bit] NOT NULL,
+[special] [bit] NOT NULL,
+[start_assignment] [date] NOT NULL,
+[lab] [bit] NOT NULL,
+[end_assignment] [date],
+[nextneed_note] [text],
 PRIMARY KEY (id, last_updated_at))
 
 
@@ -101,4 +107,87 @@ ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_assignmen
 GO
 
 ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_assignments_computers_1]
+GO
+
+
+
+
+
+
+CREATE TABLE [dbo].[comments]
+([id] [int] NOT NULL,
+[user_id] [int],
+[computer] [varchar](45) NOT NULL,
+[computer_ts] [date] NOT NULL,
+[body] [text] NOT NULL,
+PRIMARY KEY (id))
+
+
+ALTER TABLE dbo.comments  WITH CHECK ADD  CONSTRAINT [fk_comments_users_1] FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([id])
+GO
+
+ALTER TABLE dbo.comments  WITH CHECK ADD  CONSTRAINT [fk_comments_computers_1] FOREIGN KEY([control], [control_ts])
+REFERENCES [dbo].[computers] ([control], [last_updated_at])
+GO
+
+ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [fk_comments_users_1]
+GO
+
+ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [fk_comments_computers_1]
+GO
+
+
+
+
+
+
+CREATE TABLE [dbo].[software]
+([id] [int] NOT NULL,
+[last_updated_by] [int] NOT NULL,
+[name] [varchar](45) NOT NULL,
+[software_type] [varchar](45) NOT NULL,
+PRIMARY KEY (id, last_updated_by))
+
+
+ALTER TABLE dbo.software  WITH CHECK ADD  CONSTRAINT [fk_software_users_1] FOREIGN KEY([last_updated_by])
+REFERENCES [dbo].[users] ([id])
+GO
+
+ALTER TABLE [dbo].[software] CHECK CONSTRAINT [fk_software_users_1]
+GO
+
+
+
+
+
+
+CREATE TABLE [dbo].[licenses]
+([id] [int] NOT NULL,
+[last_updated_by] [int] NOT NULL,
+[user_id] [int] NOT NULL,
+[software] [int] NOT NULL,
+[software_ts] [date](45) NOT NULL,
+PRIMARY KEY (id))
+
+
+ALTER TABLE dbo.licenses  WITH CHECK ADD  CONSTRAINT [fk_licenses_users_1] FOREIGN KEY([last_updated_by])
+REFERENCES [dbo].[users] ([id])
+GO
+
+ALTER TABLE dbo.licenses  WITH CHECK ADD  CONSTRAINT [fk_licenses_users_2] FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([id])
+GO
+
+ALTER TABLE dbo.licenses  WITH CHECK ADD  CONSTRAINT [fk_licenses_software_1] FOREIGN KEY([software], [software_ts])
+REFERENCES [dbo].[software] ([id], [last_updated_at])
+GO
+
+ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_users_1]
+GO
+
+ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_users_2]
+GO
+
+ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_software_1]
 GO
