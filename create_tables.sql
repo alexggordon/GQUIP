@@ -19,6 +19,7 @@ PRIMARY KEY (id))
 
 
 
+CREATE SYNONYM CTSEquipment.dbo.users for #<???> what is the name of the schema in AD?
 
 
 
