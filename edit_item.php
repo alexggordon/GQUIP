@@ -150,6 +150,7 @@ if (isset($_POST['submit'])){
         die('Unable to connect or select database!');
     }
     //assign form input to variables
+    // <!!!> where do the fields for these new columns go in the form?
     $controlNumber = $_POST['controlNumber'];
     $manufacturer = $_POST['manufacturer'];
     $model = $_POST['model'];
@@ -159,6 +160,8 @@ if (isset($_POST['submit'])){
     $partNumber = $_POST['partNumber'];
     $equipmentType = $_POST['equipmentType'];
     $warrantyLength = $_POST['warrantyLength'];
+    $warrantyEnd = $_POST['warrantyEnd'];			//New
+    $warrantyType = $_POST['warrantyType'];			//New
     $accountNumber = $_POST['accountNumber'];
     $purchaseDate = $_POST['purchaseDate'];
     $purchasePrice = $_POST['purchasePrice'];
@@ -166,6 +169,8 @@ if (isset($_POST['submit'])){
     $userName = $_POST['userName'];
     $department = $_POST['department'];
     $assignmentType = $_POST['assignmentType'];
+    $cameronId = $_POST['cameronId'];				//New
+    $ipNumber = $_POST['ipNumber'];					//New
 
     //SQL query to insert variables above into table
     $sql = " INSERT INTO dbo.computer ([control],[manufacturer],[model],[serialNumber],[ram],[hdSize],[partNumber],[equipmentType],[warrantyLength],[accountNumber],[purchaseDate],[purchasePrice],[replacementYear],[userName],[department],[assignmentType])VALUES('$controlNumber','$manufacturer','$model','$serialNumber','$ram','$hdSize','$partNumber','$equipmentType','$warrantyLength','$accountNumber','$purchaseDate','$purchasePrice','$replacementYear','$userName','$department','$assignmentType')";
@@ -206,12 +211,14 @@ if(isset($_GET['control']))
 
   	include('close_db.php');
 
-  	while($row = mssql_fetch_array($result))
-	{
-		while($commentrow = mssql_fetch_array($commentresult))
-		{
-			while($assignmentrow = mssql_fetch_array($assignmentresult))
-			{
+	// If a computer matches this control number, return its data
+  	$numRows = mssql_num_rows($result); 
+  	if($numRows > 0)
+  	{
+
+  	$row = mssql_fetch_array($result);
+  	$commentrow = mssql_fetch_array($commentresult);
+  	$assignmentrow = mssql_fetch_array($commentresult);
 ?>
 <div class="large-12 columns">
 <h1>New Equipment Item</h1>
@@ -269,23 +276,22 @@ if(isset($_GET['control']))
 			</div>
 			<div class="large-3 columns">
 				<label>Equipment Type</label>
-					<select class="medium" name="equipmentType
-					" required>
-					    <option DISABLED selected>Choose an Option</option>
-					    <option value="1">Laptop</option>
-					    <option value="2">Desktop</option>
-					    <option value="3">Tablet</option>
+					<select class="medium" name="equipmentType" required>	
+						<option DISABLED>Category of Computer</option>
+						<option <?php if("$row[\"computer_type\"]" == "1") {echo "selected";} ?> value="1">Laptop</option>;
+						<option <?php if("$row[\"computer_type\"]" == "2") {echo "selected";} ?> value="2">Desktop</option>;
+						<option <?php if("$row[\"computer_type\"]" == "3") {echo "selected";} ?> value="3">Tablet</option>;
 					</select>
 			</div>
 			<div class="large-3 columns">
 				<label>Warranty Length</label>
 				<select class="medium" name="warrantyLength" required>
-				    <option DISABLED selected>Length In Years</option>
-				    <option value="1">1 Year</option>
-				    <option value="2">2 Years</option>
-				    <option value="3">3 Years</option>
-				    <option value="4">4 Years</option>
-				    <option value="5">Expired</option>
+				    <option DISABLED>Length In Years</option>
+				    <option <?php if("$row[\"warranty_length\"]" == "1") {echo "selected";} ?> value="1">1 Year</option>
+				    <option <?php if("$row[\"warranty_length\"]" == "2") {echo "selected";} ?> value="2">2 Years</option>
+				    <option <?php if("$row[\"warranty_length\"]" == "3") {echo "selected";} ?> value="3">3 Years</option>
+				    <option <?php if("$row[\"warranty_length\"]" == "4") {echo "selected";} ?> value="4">4 Years</option>
+				    <option <?php if("$row[\"warranty_length\"]" == "5") {echo "selected";} ?> value="5">Expired</option>
 				</select>
 			</div>
 			<div class="large-3 columns">
@@ -330,14 +336,14 @@ if(isset($_GET['control']))
 			<div class="large-3 columns">
 				<label>User Name</label>
 				<select class="medium" name="userName" required>
-				    <option DISABLED selected>User Name</option>
-				    <option value="1"><?="$assignmentrow[\"user.first_name\"] . $assignmentrow[\"user.last_name\"]"?></option>
+				    <option DISABLED>User Name</option>
+				    <option selected value=<?="$assignmentrow[\"users.id\"]"?>><?="$assignmentrow[\"users.first_name\"] . $assignmentrow[\"users.last_name\"]"?></option>
 				</select>
 			</div>
 			<div class="large-3 columns">
 				<label>Department</label>
 				<select class="medium" name="department" required>
-				    <option DISABLED selected><?="$assignmentrow[\"hardware_assignment.department\"]"?></option>
+				    <option DISABLED selected><?="$assignmentrow[\"hardware_assignments.department\"]"?></option>
 				    <option value="1">PHP GOES HERE</option>
 				</select>
 			</div>
@@ -345,16 +351,18 @@ if(isset($_GET['control']))
 				<label>Assignment Type</label>
 				<select class="medium" name="assignmentType" required>
 				    <option DISABLED selected>Assignment Type</option>
-				    <option value="1">Dedicated Computer</option>
-				    <option value="2">Special</option>
-				    <option value="3">Lab</option>
-				    <option value="4">Kiosk</option>
-				    <option value="5">Printer</option>
+				    <?php // <!!!> what column is used for kiosk and printer data? ?>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.dedicated\"]" == "1") {echo "selected";} ?> value="1">Dedicated Computer</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.special\"]" == "1") {echo "selected";} ?> value="2">Special</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.lab\"]" == "1") {echo "selected";} ?> value="3">Lab</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.\"]" == "4") {echo "selected";} ?> value="4">Kiosk</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.\"]" == "5") {echo "selected";} ?> value="5">Printer</option>
 				</select>
 			</div>
 			<div class="large-3 columns">
+				<?php // <!!!> what is this supposed to do? there is already a replacement year field ?>
 				<label>Replacement Year</label>
-				<input type="month" name="replacementYear" value=<?="$row[\"replacement_year\"]"?>>
+				<input type="month" name="replacementYear"> 
 			</div>
 
 		</div>
@@ -367,9 +375,19 @@ if(isset($_GET['control']))
 </form>
 </div>;
 
-?>
-
 <?php
+		}
+		else
+		{
+			// If there are no rows for this query, redirect to the home page.
+			header('Location: home.php');
+		}
+	}
+	else
+	{
+		// If the user does not set a control value, redirect to the home page.
+		header('Location: home.php');
+	}
 }
 // Faculty
 if($_SESSION['access']=="2" ) {
