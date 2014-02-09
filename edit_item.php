@@ -25,25 +25,25 @@ if(isset($_GET['control']))
 
   	include('open_db.php');
 
-  	$result = mssql_query($itemquery);
-  	$commentresult = mssql_query($commentquery);
-  	$assignmentresult = mssql_query($assignmentquery);
+  	$result = sqlsrv_query($itemquery);
+  	$commentresult = sqlsrv_query($commentquery);
+  	$assignmentresult = sqlsrv_query($assignmentquery);
 
   	include('close_db.php');
 
-	while($row = mssql_fetch_array($result))
+	while($row = sqlsrv_fetch_array($result))
 	  {
 
 	    echo "<li>" . $row["control"] . $row["model"] . $row["manufacturer"] . " | EDIT_BUTTON_FOR_" . $row["control"] . " | " . "</li>";
 
-	    while($assignmentrow = mssql_fetch_array($assignmentresult))
+	    while($assignmentrow = sqlsrv_fetch_array($assignmentresult))
 	    {
 	    
 	      echo " && " . $assignmentrow["users.last_name"] . $assignmentrow["users.first_name"] . $assignmentrow["hardware_assignments.start_assignment"] . $assignmentrow["hardware_assignments.end_assignment"];
 	    
 	    }
 
-	    while($commentrow = mssql_fetch_array($commentresult))
+	    while($commentrow = sqlsrv_fetch_array($commentresult))
 	    {
 	    
 	      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
@@ -143,7 +143,7 @@ if (isset($_POST['submit'])){
     $serverName = "sql05train1.gordon.edu";
     $connectionInfo = array(
     'Database' => 'CTSEquipment');
-    $conn = mssql_connect($serverName, $connectionInfo);    
+    $conn = sqlsrv_connect($serverName, $connectionInfo);    
     //display error if database cannot be accessed 
     if (!$conn ) 
     {
@@ -205,20 +205,19 @@ if(isset($_GET['control']))
 
   	include('open_db.php');
 
-  	$result = mssql_query($itemquery);
-  	$commentresult = mssql_query($commentquery);
-  	$assignmentresult = mssql_query($assignmentquery);
+  	$result = sqlsrv_query($itemquery);
+  	$commentresult = sqlsrv_query($commentquery);
+  	$assignmentresult = sqlsrv_query($assignmentquery);
 
   	include('close_db.php');
 
 	// If a computer matches this control number, return its data
-  	$numRows = mssql_num_rows($result); 
+  	$numRows = sqlsrv_num_rows($result); 
   	if($numRows > 0)
   	{
 
-  	$row = mssql_fetch_array($result);
-  	$commentrow = mssql_fetch_array($commentresult);
-  	$assignmentrow = mssql_fetch_array($commentresult);
+  	$row = sqlsrv_fetch_array($result);
+  	$assignmentrow = sqlsrv_fetch_array($commentresult);
 ?>
 <div class="large-12 columns">
 <h1>New Equipment Item</h1>
@@ -372,6 +371,28 @@ if(isset($_GET['control']))
 		<input type="submit" name="submit" value="Done" class="button expand" formmethod="post">
 		</div>
 	</div>
+
+	<!-- Comment area: still needs the logic for adding the comment to the records -->
+
+	<div class="large-10 columns">
+	<div class="row" align="center">
+	<label>Comments
+        <textarea placeholder="Add your comment here..."></textarea>
+    </label>
+    <input type="submit" name="submitComment" value="Dummy Comment Button" class="button expand">
+	<?php
+
+	while($commentrow = mssql_fetch_array($commentresult))
+    {
+
+      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
+    
+    }
+
+	?>
+	</div>
+	</div>
+
 </form>
 </div>;
 
