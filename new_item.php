@@ -54,11 +54,15 @@ if (isset($_POST['submit'])){
     $serverName = "sql05train1.gordon.edu";
     $connectionInfo = array(
     'Database' => 'CTSEquipment');
-    $conn = mssql_connect($serverName, $connectionInfo);    
+    $conn = sqlsrv_connect($serverName, $connectionInfo);    
     //display error if database cannot be accessed 
     if (!$conn ) 
     {
-        die('Unable to connect or select database!');
+        echo('<div data-alert class="alert-box warning">
+        	  Sorry! Database is unavailable. 
+        	  <a href="#" class="close">&times;</a>
+        	</div>');
+        echo( print_r( sqlsrv_errors(), true));
     }
     //assign form input to variables
     $controlNumber = $_POST['controlNumber'];
@@ -79,12 +83,12 @@ if (isset($_POST['submit'])){
     $assignmentType = $_POST['assignmentType'];
 
     //SQL query to insert variables above into table
-    $sql = " INSERT INTO dbo.computer ([control],[manufacturer],[model],[serialNumber],[ram],[hdSize],[partNumber],[equipmentType],[warrantyLength],[accountNumber],[purchaseDate],[purchasePrice],[replacementYear],[userName],[department],[assignmentType])VALUES('$controlNumber','$manufacturer','$model','$serialNumber','$ram','$hdSize','$partNumber','$equipmentType','$warrantyLength','$accountNumber','$purchaseDate','$purchasePrice','$replacementYear','$userName','$department','$assignmentType')";
+    $sql = " INSERT INTO dbo.computers ([control],[manufacturer],[model],[serialNumber],[ram],[hdSize],[partNumber],[computer_type],[warrantyLength],[accountNumber],[purchase_date],[purchasePrice],[replacementYear],[userName],[department],[assignmentType])VALUES('$controlNumber','$manufacturer','$model','$serialNumber','$ram','$hdSize','$partNumber','$equipmentType','$warrantyLength','$accountNumber','$purchaseDate','$purchasePrice','$replacementYear','$userName','$department','$assignmentType')";
     $result = sqlsrv_query($sql, $conn);
     //if the query cant be executed
     if(!$result)
     {
-        echo sqlsrv_error();
+        echo print_r( sqlsrv_errors(), true);
         exit;
     }
     // close the connection
@@ -92,11 +96,12 @@ if (isset($_POST['submit'])){
     sqlsrv_close( $conn);
     echo "Data successfully inserted";
 }
+else {
 ?>
 
 <div class="large-12 columns">
 <h1>New Equipment Item</h1>
-<form data-abide action="$_SERVER['PHP_SELF']" method="POST">
+<form data-abide type="submit" name="submit" enctype='multipart/form-data' action="new_item.php" method="POST">
 	<fieldset>
 		<legend>Equipment Info</legend>
 
@@ -249,12 +254,13 @@ if (isset($_POST['submit'])){
 </div>
 
 <?php
-}
-// Faculty
-if($_SESSION['access']=="2" ) {
-// Faculty should not have access to this page. 
-header('Location: home.php');
-}
-//footer
-include('footer.php')
+	}
+	}
+	// Faculty
+	if($_SESSION['access']=="2" ) {
+	// Faculty should not have access to this page. 
+	header('Location: home.php');
+	}
+	//footer
+	include('footer.php')
 ?>
