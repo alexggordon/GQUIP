@@ -53,6 +53,7 @@ header('Location: login.php');
   <script src="js/foundation/foundation.js"></script>
   <script src="js/foundation/foundation.topbar.js"></script>
   <script src="js/foundation/foundation.dropdown.js"></script>
+  <script src="js/foundation/foundation.abide.js"></script>
 
 </head>
 <body>
@@ -84,6 +85,8 @@ if($_SESSION['access']=="3" ) {
           <li><a href="departments.php">Departments</a></li>
           <li class="divider"></li>
           <li><a href="users.php">Users</a></li>
+          <li class="divider"></li>
+          <li><a href="new_item.php">New Item</a></li>
           <li class="divider"></li>
           <li><a href="#">Advanced Search</a></li>
           <li class="divider"></li>
@@ -241,6 +244,8 @@ if($_SESSION['access']=="1" ) {
           <li><a href="departments.php">Departments</a></li>
           <li class="divider"></li>
           <li><a href="users.php">Software</a></li>
+          <li class="divider"></li>
+          <li><a href="new_item.php">New Item</a></li>
           <li class="divider"></li>
           <li><a href="#">Advanced Search</a></li>
           <li class="divider"></li>

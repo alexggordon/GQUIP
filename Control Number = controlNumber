@@ -1,0 +1,14 @@
+Control Number = controlNumber
+Manufacturer = manufactuer
+Model = model
+Serial Number = serialNumber
+Memory Amount = ram
+Hard Drive Size = hdSize
+Part Number = partNumber
+EquipmentType = equipmentType
+WarrantyLength = warrantyLength
+Purchasing Account Number = accountNumber
+Purchasing Price = purchasePrice
+
+
+
