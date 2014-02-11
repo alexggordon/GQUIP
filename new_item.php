@@ -1,3 +1,20 @@
+<!--- 
+CONCERNS:
+1: Is the "printer" option in assignment_type specifically referring to printer servers? (If not
+	... I don't see a reason to have it, we can just rely on cameron_id being null/not null or add
+	... a printer option to computer_type)
+2: Is warranty_end being calculated as purchase_date + warranty_length at the computer's addition
+	... to the database?
+3: Why are there two separate input fields for replacement_year?
+4: Doesn't the new item page at least need the ip_address, cameron_id, and warranty_type columns
+	... in addition to what is already there?
+5: Are some bits of information (like stuff for comments and possibly null fields) not going to be
+	... on the new_item page?
+6: For a computer, is the legacy_user_id (changed the name of the column for clarity) ALWAYS going
+	... to be in the user_id column for the user table?
+7: See my comments marked with <!!!> for in the create_tables file
+-->
+
 <?php
 include('header.php');
 if(!isset($_SESSION['user'])) {

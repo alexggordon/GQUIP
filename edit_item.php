@@ -1,4 +1,4 @@
-/* <COMMENT>
+<!--
 
 <?php
 include('config.php');
@@ -79,8 +79,7 @@ if($_SESSION['access']=="1" ) {
 
 }
 
-</COMMENT>
-*/
+-->
 
 
 <?php
@@ -160,7 +159,6 @@ if (isset($_POST['submit'])){
     $partNumber = $_POST['partNumber'];
     $equipmentType = $_POST['equipmentType'];
     $warrantyLength = $_POST['warrantyLength'];
-    $warrantyEnd = $_POST['warrantyEnd'];			//New
     $warrantyType = $_POST['warrantyType'];			//New
     $accountNumber = $_POST['accountNumber'];
     $purchaseDate = $_POST['purchaseDate'];
@@ -349,13 +347,12 @@ if(isset($_GET['control']))
 			<div class="large-3 columns">		
 				<label>Assignment Type</label>
 				<select class="medium" name="assignmentType" required>
-				    <option DISABLED selected>Assignment Type</option>
-				    <?php // <!!!> what column is used for kiosk and printer data? ?>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.dedicated\"]" == "1") {echo "selected";} ?> value="1">Dedicated Computer</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.special\"]" == "1") {echo "selected";} ?> value="2">Special</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.lab\"]" == "1") {echo "selected";} ?> value="3">Lab</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.\"]" == "4") {echo "selected";} ?> value="4">Kiosk</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.\"]" == "5") {echo "selected";} ?> value="5">Printer</option>
+				    <option DISABLED>Assignment Type</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "1") {echo "selected";} ?> value="1">Dedicated Computer</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "2") {echo "selected";} ?> value="2">Special</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "3") {echo "selected";} ?> value="3">Lab</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "4") {echo "selected";} ?> value="4">Kiosk</option>
+				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "5") {echo "selected";} ?> value="5">Printer</option>
 				</select>
 			</div>
 			<div class="large-3 columns">
