@@ -1,7 +1,7 @@
 <?php
 // This class is modeled after the idea of having an automatically generated pagination data page. 
 class Paginator{
-    // Gloabl Variables
+    // Instance Variables
     var $items_per_page;
     var $items_total;
     var $current_page;
@@ -12,6 +12,7 @@ class Paginator{
     var $limit;
     var $return;
     var $default_items_per_page = 25;
+    // change to constant 
     
 
     // Overall there are 5 methods for the on the class. 
@@ -28,7 +29,7 @@ class Paginator{
     {
         $this->current_page = 1;
         $this->middle_of_variable = 7;
-        $this->items_per_page = (!empty($_GET['ipp'])) ? $_GET['ipp']:$tiis->default_Items_per_page;
+        $this->items_per_page = (!empty($_GET['ipp'])) ? $_GET['ipp']:$this->default_Items_per_page;
     }
 
     // This function is the engine of Paginator.
@@ -41,7 +42,7 @@ class Paginator{
         //Consult the parameters and see if all pages are being requested at once
         if($_GET['ipp'] == 'All')
         {
-            $this->number_of_pages = ceil($this->items_total/$this->deiault_Items_per_page);
+            $this->number_of_pages = ceil($this->items_total/$this->default_items_per_page);
             $this->items_per_page = $this->default_items_per_page;
         }
         // Not asking for all pages. Find out the number of links we will need for the number of pages. 
