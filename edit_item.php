@@ -107,7 +107,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 // [memory] [varchar](25) NULL,
 // [hard_drive] [varchar](25) NULL,
 // [warranty_length] [varchar](25) NOT NULL,
-// [warranty_end] [varchar](25) NOT NULL,
+// [warranty_start] [varchar](25) NOT NULL,
 // [warranty_type] [varchar](25) NULL,
 // [replacement_year] [varchar](25) NOT NULL,
 // [computer_type] [varchar](25) NULL,

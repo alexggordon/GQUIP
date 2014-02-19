@@ -1,4 +1,13 @@
 <?php
+
+// file: login.php
+// created by: Alex Gordon, Elliott Staude
+// date: 02-19-2014
+// purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
+// part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
+// 
+//
+
 // include the domain authentication function
 include("authenticate.php");
 
@@ -30,14 +39,14 @@ if(isset($_POST['userLogin'])){
     }
 }
 // output error to user
-if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br /-->";
+if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br />";
 // output logout success
 if (isset($_GET['out']))
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-<!--Designed and Written by Alex Gordon and Elliott Staude, Copy write 2013, Gordon College-->
+<!--Designed and Written by Alex Gordon and Elliott Staude, copyright 2013, Gordon College-->
 <head>
 	<meta charset="utf-8" />
 
