@@ -19,7 +19,7 @@ PRIMARY KEY (id))
 
 
 
-CREATE SYNONYM CTSEquipment.dbo.users for #<???> what is the name of the schema in AD?
+CREATE SYNONYM CTSEquipment.dbo.users for ???; # <!!!> what is the name of the schema in AD?
 
 
 
@@ -30,18 +30,18 @@ CREATE TABLE [dbo].[computers](
 	[serial_num] [varchar](25) NULL,
 	[model] [varchar](25) NOT NULL,
 	[manufacturer] [varchar](25) NOT NULL,
-	[purchase_date] [varchar](25) NOT NULL,
+	[purchase_date] [date] NOT NULL,
 	[purchase_price] [varchar](25) NOT NULL,
 	[purchase_acct] [varchar](25) NOT NULL,
 	[usage_status] [varchar](25) NULL,
 	[memory] [varchar](25) NULL,
 	[hard_drive] [varchar](25) NULL,
+	[warranty_start] [date](25) NOT NULL,
 	[warranty_length] [varchar](25) NOT NULL,
-	[warranty_end] [varchar](25) NOT NULL,
 	[warranty_type] [varchar](25) NULL,
 	[replacement_year] [varchar](25) NOT NULL,
 	[computer_type] [varchar](25) NULL,
-	[user_id] [varchar](25) NULL,
+	[legacy_user_id] [varchar](25) NULL,
 	[cameron_id] [varchar](25) NULL,
 	[part_number] [varchar](25) NULL,
 	[ip_address] [varchar](25) NULL,
@@ -75,15 +75,15 @@ CREATE TABLE [dbo].[hardware_assignments]
 [control] [varchar](45) NOT NULL,
 [control_ts] [date] NOT NULL,
 [department_id] [varchar](45),
-[fullorpart] [bit] NOT NULL,
-[dedicated] [bit] NOT NULL,
-[primary_computer] [bit] NOT NULL,
+[fullorpart] [bit] NOT NULL,						# <!!!> need re-clarification of what this is, thanks
+[primary_computer] [bit] NOT NULL,					# <!!!> need re-clarification of what this is, thanks
 [replace_with_recycled] [bit] NOT NULL,
 [nextneed_macpc] [bit] NOT NULL,
 [nextneed_laptopdesktop] [bit] NOT NULL,
-[special] [bit] NOT NULL,
 [start_assignment] [date] NOT NULL,
-[lab] [bit] NOT NULL,
+[assignment_type] [int] NOT NULL,					# <!!!> assignment_type takes place of dedicated, special, and lab: 
+													# <!!!> 1 = dedicated, 2 = special, 3 = lab, 4 = kiosk, 5 = printer
+													# <!!!> (is the printer option needed?)
 [end_assignment] [date],
 [nextneed_note] [text],
 PRIMARY KEY (id, last_updated_at))
