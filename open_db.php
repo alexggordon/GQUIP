@@ -1,14 +1,12 @@
 <?php
-$myServer = "admintrainsql.gordon.edu";
-$myUser = "alex.gordon@gordon.edu";
-$myPass = "7132a8b2p45kldr69_";
-$myDB = "CTSEquipment"; 
 
 
-$dbhandle = mssql_connect($myServer, $myUser, $myPass);
-	// or die("Couldn't connect to $myServer"); 
+
+$serverName = "sql05train1.gordon.edu";
+$connectionInfo = array(
+'Database' => 'CTSEquipment');
+$conn = sqlsrv_connect( $serverName, $connectionInfo);
 
 //select a database to work with
-$selected = mssql_select_db($myDB, $dbhandle); 
 // or die("Couldn't open database $myDB");
 ?>

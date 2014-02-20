@@ -48,16 +48,10 @@ if (!empty($_FILES)) {
         sqlsrv_configure("LogSeverity", SQLSRV_LOG_SEVERITY_ALL);
 
         // connect to the server
-        $conn = sqlsrv_connect('GQUIP.gordon.edu', array
-        (
-        'UID' => 'alex.gordon',
-        'PWD' => '7132a8b2p45kldr69_',
-        'Database' => 'CTSEquipment',
-        'CharacterSet' => 'UTF-8',
-        'MultipleActiveResultSets' => true,
-        'ConnectionPooling' => true,
-        'ReturnDatesAsStrings' => true,
-        ));
+        $serverName = "sql05train1.gordon.edu";
+        $connectionInfo = array(
+        'Database' => 'CTSEquipment');
+        $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
         if ($conn === FALSE) {
             // if the function can't connect, get the last error and report it. 

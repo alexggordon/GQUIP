@@ -1,4 +1,4 @@
 <?php
 //close the connection
-mssql_close($dbhandle);
+sqlsrv_close( $conn);
 ?>

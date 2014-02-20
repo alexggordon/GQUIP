@@ -1,8 +1,6 @@
 <?php
 
-
-//$connectionInfo = array("UID" => "alex.gordon", "PWD" => "7132a8b2p45kldr69_");
-//$serverName = '(local)';
+// working as of 2/12/14
 $serverName = "sql05train1.gordon.edu";
 $connectionInfo = array(
 'Database' => 'CTSEquipment');
@@ -23,5 +21,5 @@ else
 //-----------------------------------------------
 
 /* Close the connection. */
-//sqlsrv_close( $conn);
+sqlsrv_close( $conn);
 ?>
