@@ -1,6 +1,22 @@
 <?php
+// file: paginate.php
+// created by: Alex Gordon, Elliott Staude
+// date: 02-10-2014
+// purpose: setting up the index formatting of multiple pages' worth of data for the GQUIP database
+// part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
+// 
+//
+
 // This class is modeled after the idea of having an automatically generated pagination data page. 
 class Paginator{
+    // Constants
+    const VARIABLE_MIDDLE = 7;
+    const SMALL_ITEMS_PER_PAGE = 10;
+    const DEFAULT_ITEMS_PER_PAGE = 25;
+    const BIG_ITEMS_PER_PAGE = 50;
+    const GIANT_ITEMS_PER_PAGE = 100;
+
+
     // Instance Variables
     var $items_per_page;
     var $items_total;
@@ -11,8 +27,7 @@ class Paginator{
     var $high;
     var $limit;
     var $return;
-    var $default_items_per_page = 25;
-    // change to constant 
+    
     
 
     // Overall there are 5 methods for the on the class. 
@@ -28,29 +43,40 @@ class Paginator{
     function Paginator()
     {
         $this->current_page = 1;
-        $this->middle_of_variable = 7;
-        $this->items_per_page = (!empty($_GET['ipp'])) ? $_GET['ipp']:$this->default_Items_per_page;
+        $this->middle_of_variable = Constants::VARIABLE_MIDDLE;
+        $this->items_per_page = (!empty($_GET['ipp'])) ? $_GET['ipp']:Constants::DEFAULT_ITEMS_PER_PAGE;
     }
 
     // This function is the engine of Paginator.
     // This is the prime rib of the function.  
-    // The Chris Blatchley of computer droppers
-    // The Thaddeus Bond of narcolepsy
-    // The Elliott Staude of Caffine. 
+    // The Chris Blatchley of computer droppers.
+    // The Thaddeus Bond of narcolepsy.
+    // The Elliott Staude of caffiene.
+    // The Alex Gordon of casually ignoring one's own proficiency at spilling caffiene.
+    // We digress.
+
+    // paginate does a few things:
+    // firstly, it observes what value, if any, the user has supplied to set how many items should
+    // ... be displayed on each page
+    // secondly, it makes sure that if such a value exists, it is a valid numeric value and not
+    // ... an illegal value
+    // thirdly, if the number of results is high enough, it segments the data into pages appropriately
+    // ... and (depending on the number of results per page and number of pages) creates an index of
+    // ... different page "tabs" and a link to the final tab as needed
     function paginate()
     {
         //Consult the parameters and see if all pages are being requested at once
         if($_GET['ipp'] == 'All')
         {
-            $this->number_of_pages = ceil($this->items_total/$this->default_items_per_page);
-            $this->items_per_page = $this->default_items_per_page;
+            $this->number_of_pages = ceil($this->items_total/Constants::DEFAULT_ITEMS_PER_PAGE);
+            $this->items_per_page = Constants::DEFAULT_ITEMS_PER_PAGE;
         }
         // Not asking for all pages. Find out the number of links we will need for the number of pages. 
         // This is based on the number of items per page and the total number of items. 
         // Also throws in some error checking to see if 
         else
         {
-            if(!is_numeric($this->items_per_page) OR $this->items_per_page <= 0) $this->items_per_page = $this->default_items_per_page;
+            if(!is_numeric($this->items_per_page) OR $this->items_per_page <= 0) $this->items_per_page = Constants::DEFAULT_ITEMS_PER_PAGE;
             $this->number_of_pages = ceil($this->items_total/$this->items_per_page);
 
         }
@@ -66,11 +92,11 @@ class Paginator{
 
         // This gets the page number we're on and checks to make sure that its a valid number in the range. It then sets the next and previous page. 
         // Checks the number of pages. IF more than ten, add the "..."
-        if($this->number_of_pages > 10)
+        if($this->number_of_pages > Constants::SMALL_ITEMS_PER_PAGE)
         {
 
             //Get the range of pages for this section
-            $this->return = ($this->current_page != 1 And $this->items_total >= 10) ? "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$prev_page&ipp=$this->items_per_page\">« Previous</a> ":"<span class=\"inactive\" href=\"#\">« Previous</span> ";
+            $this->return = ($this->current_page != 1 And $this->items_total >= Constants::SMALL_ITEMS_PER_PAGE) ? "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$prev_page&ipp=$this->items_per_page\">« Previous</a> ":"<span class=\"inactive\" href=\"#\">« Previous</span> ";
             $this->start_range = $this->current_page - floor($this->middle_of_variable/2);
             $this->end_range = $this->current_page + floor($this->middle_of_variable/2);
 
@@ -111,8 +137,8 @@ class Paginator{
             }
 
             //Assemble all the page's parts
-            $this->return .= (($this->current_page != $this->number_of_pages And $this->items_total >= 10) And ($_GET['page'] != 'All')) ? "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$next_page&ipp=$this->items_per_page\">Next »</a>\n":"<span class=\"inactive\" href=\"#\">» Next</span>\n";
-            $this->return .= ($_GET['page'] == 'All') ? "<a class=\"current\" style=\"margin-left:10px\" href=\"#\">All</a> \n":"<a class=\"paginate\" style=\"margin-left:10px\" href=\"$_SERVER[PHP_SELF]?page=1&ipp=All\">All</a> \n";
+            $this->return .= (($this->current_page != $this->number_of_pages And $this->items_total >= Constants::SMALL_ITEMS_PER_PAGE) And ($_GET['page'] != 'All')) ? "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$next_page&ipp=$this->items_per_page\">Next »</a>\n":"<span class=\"inactive\" href=\"#\">» Next</span>\n";
+            $this->return .= ($_GET['page'] == 'All') ? "<a class=\"current\" style=\"margin-left:Constants::SMALL_ITEMS_PER_PAGEpx\" href=\"#\">All</a> \n":"<a class=\"paginate\" style=\"margin-left:Constants::SMALL_ITEMS_PER_PAGEpx\" href=\"$_SERVER[PHP_SELF]?page=1&ipp=All\">All</a> \n";
 
         }
         // This displays the range. Essentially, if the last page is number 208, and we're on page one, then it will show links to page 2,3,4,5,6,7,8,9 and then the last page. 
@@ -143,7 +169,7 @@ class Paginator{
     {
 
         $items = '';
-        $ipp_array = array(10,25,50,100,'All');
+        $ipp_array = array(Constants::SMALL_ITEMS_PER_PAGE,Constants::DEFAULT_ITEMS_PER_PAGE,Constants::BIG_ITEMS_PER_PAGE,Constants::GIANT_ITEMS_PER_PAGE,'All');
         foreach($ipp_array as $ipp_opt)    $items .= ($ipp_opt == $this->items_per_page) ? "<option selected value=\"$ipp_opt\">$ipp_opt</option>\n":"<option value=\"$ipp_opt\">$ipp_opt</option>\n";
         return "<span class=\"paginate\">Items per page:</span><select class=\"paginate\" onchange=\"window.location='$_SERVER[PHP_SELF]?page=1&ipp='+this[this.selectedIndex].value;return false\">$items</select>\n";
 
