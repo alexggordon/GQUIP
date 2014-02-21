@@ -4,6 +4,7 @@
 // created by: Alex Gordon, Elliott Staude
 // date: 02-19-2014
 // purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
+//
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
 // 
 
@@ -49,6 +50,7 @@ if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<
 // created by: Alex Gordon, Elliott Staude
 // date: 02-19-2014
 // purpose: this file's operation checks a user's credentials against the records contained within Active Directory
+//
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
 // 
 // function: authenticate_with_ad
@@ -105,7 +107,7 @@ function authenticate_with_ad($user, $password) {
 		$info = ldap_get_entries($ldap, $result);
 		ldap_unbind($ldap);
 
-		// check groups that are associated with a user to see which groups
+		// check each group that is associated with a user to see which permissions set they should be granted
         foreach($info[0]['memberof'] as $grps) {
             
             // Check against the stored groups to see if the person logging in is a user
