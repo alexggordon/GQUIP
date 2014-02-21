@@ -40,8 +40,6 @@ if(isset($_POST['userLogin'])){
 }
 // output error to user
 if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br />";
-// output logout success
-if (isset($_GET['out']))
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->

@@ -32,7 +32,7 @@ function authenticate_with_ad($user, $password) {
 	// Active Directory server: the location of the records that will be queried against
 	$ldap_host = "Elder2.gordon.edu";
 
-	$ldap_dn = "OU=Students,OU=Gordon College,DC=gordon,DC=edu";
+	$ldap_dn = "OU=Gordon College,DC=gordon,DC=edu";
 
 	// Active Directory user group: the name of the group one must be a part of to gain basic access to GQUIP
 	$ldap_user_group = "CTS-Helpdesk-Students";
@@ -61,14 +61,6 @@ function authenticate_with_ad($user, $password) {
 
 		// check groups
         foreach($info[0]['memberof'] as $grps) {
-            // extract Group name from string
-            $temp = substr($grps, 0, stripos($grps, ","));
-
-            // strip the CN= and change to lowercase for easy handling
-            $temp = strtolower(str_replace("CN=", "", $temp));
-
-            // create a group array to check for access
-            $groups[] .= $temp;
             
             // regular User
             if (strpos($grps, $ldap_user_group)) { $access = USER_ACCESS; break; }
