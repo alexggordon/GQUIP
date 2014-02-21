@@ -7,10 +7,6 @@
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
 // 
 //
-
-session_start();
-
-
 // function: authenticate_with_ad
 // @param $user: the username that the function must to verify
 // @param $password: the password that the function must to verify
@@ -18,9 +14,12 @@ session_start();
 // - whether the user is legitimate based upon the groups the user is part of in the Active
 // - Directory records
 
+
+session_start();
+
 // Constants
 	// Symbolic constants for different levels of access
-	const NO_ACCESS = 0;
+    const NO_ACCESS = 0;
     const USER_ACCESS = 1;
     const FACULTY_ACCESS = 2;
     const MANAGER_ACCESS = 3;
