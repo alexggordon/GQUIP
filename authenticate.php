@@ -53,19 +53,20 @@ function authenticate_with_ad($user, $password) {
 		// Make sure that the user exists in the groups
 		$filter = "(sAMAccountName=" . $user . ")";
 		$attr = array("memberof");
-		
+
 		// The actual check is performed here
 		$result = ldap_search($ldap, $ldap_dn, $filter, $attr) or exit("Unable to search LDAP server");
 		$info = ldap_get_entries($ldap, $result);
 		ldap_unbind($ldap);
+		$access = 0;
 
 		// check groups
         foreach($info[0]['memberof'] as $grps) {
             
             // regular User
-            if (strpos($grps, $ldap_user_group)) { $access = USER_ACCESS; break; }
-            if (strpos($grps, $ldap_faculty_group)) { $access = FACULTY_ACCESS; break; }
-            if (strpos($grps, $ldap_manager_group)) { $access = MANAGER_ACCESS; }
+            if (!(strpos($grps, $ldap_user_group) === false)) { $access = max([$access, USER_ACCESS]); }
+            if (!(strpos($grps, $ldap_faculty_group) === false)) { $access = max([$access, FACULTY_ACCESS]); }
+            if (!(strpos($grps, $ldap_manager_group) === false)) { $access = max([$access, MANAGER_ACCESS]); }
         
         }
 		if ($access != NO_ACCESS) {
