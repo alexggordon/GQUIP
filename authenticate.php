@@ -64,9 +64,9 @@ function authenticate_with_ad($user, $password) {
         foreach($info[0]['memberof'] as $grps) {
             
             // regular User
-            if (!(strpos($grps, $ldap_user_group) === false)) { $access = max([$access, USER_ACCESS]); }
-            if (!(strpos($grps, $ldap_faculty_group) === false)) { $access = max([$access, FACULTY_ACCESS]); }
-            if (!(strpos($grps, $ldap_manager_group) === false)) { $access = max([$access, MANAGER_ACCESS]); }
+            if (strpos($grps, $ldap_user_group) !== false) { $access = max([$access, USER_ACCESS]); }
+            if (strpos($grps, $ldap_faculty_group) !== false) { $access = max([$access, FACULTY_ACCESS]); }
+            if (strpos($grps, $ldap_manager_group) !== false) { $access = max([$access, MANAGER_ACCESS]); }
         
         }
 		if ($access != NO_ACCESS) {
