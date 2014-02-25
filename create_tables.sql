@@ -1,19 +1,19 @@
 CREATE TABLE CTSEquipment.dbo.users
 (id int NOT NULL,
-department varchar(45) NOT NULL,
-first_name varchar(45) NOT NULL,
-middle_name varchar(45),
-last_name varchar(45) NOT NULL,
-email varchar(45),
-role VARCHAR(45) NOT NULL,
-building VARCHAR(45) NOT NULL,
+department VARCHAR(255) NOT NULL,
+first_name VARCHAR(255) NOT NULL,
+middle_name VARCHAR(255),
+last_name VARCHAR(255) NOT NULL,
+email VARCHAR(255),
+role VARCHAR(255) NOT NULL,
+building VARCHAR(255) NOT NULL,
 room INT NOT NULL,
-phone VARCHAR(45),
-barcode VARCHAR(45),
-active VARCHAR(45) NOT NULL,
+phone VARCHAR(255),
+barcode VARCHAR(255),
+active VARCHAR(255) NOT NULL,
 on_campus BIT NOT NULL,
-state VARCHAR(45),
-country VARCHAR(45) NOT NULL,
+state VARCHAR(255),
+country VARCHAR(255) NOT NULL,
 zip INT NULL,
 PRIMARY KEY (id))
 
@@ -65,9 +65,9 @@ CREATE TABLE [dbo].[hardware_assignments]
 ([id] [int] NOT NULL,
 [user_id] [int],
 [last_updated_by] [int] NOT NULL,
-[control] [varchar](45) NOT NULL,
+[control] [varchar](255) NOT NULL,
 [control_ts] [date] NOT NULL,
-[department_id] [varchar](45),
+[department_id] [varchar](255),
 [fullorpart] [bit] NOT NULL,						# <!!!> need re-clarification of what this is, thanks
 [primary_computer] [bit] NOT NULL,					# <!!!> need re-clarification of what this is, thanks
 [replace_with_recycled] [bit] NOT NULL,
@@ -134,8 +134,8 @@ GO
 CREATE TABLE [dbo].[software]
 ([id] [int] NOT NULL,
 [last_updated_by] [int] NOT NULL,
-[name] [varchar](45) NOT NULL,
-[software_type] [varchar](45) NOT NULL,
+[name] [varchar](255) NOT NULL,
+[software_type] [varchar](255) NOT NULL,
 PRIMARY KEY (id, last_updated_by))
 
 
@@ -156,7 +156,7 @@ CREATE TABLE [dbo].[licenses]
 [last_updated_by] [int] NOT NULL,
 [user_id] [int] NOT NULL,
 [software] [int] NOT NULL,
-[software_ts] [date](45) NOT NULL,
+[software_ts] [date] NOT NULL,
 PRIMARY KEY (id))
 
 
@@ -185,51 +185,51 @@ GO
 
 CREATE TABLE [dbo].[FacStaff] (
   ID INT NOT NULL,
-  last_updated_by VARCHAR(45) NOT NULL,
-  OnCampusDepartment VARCHAR(45) NOT NULL,
-  Dept VARCHAR(45) NOT NULL,
-  Type VARCHAR(45) NOT NULL,
+  last_updated_by VARCHAR(255) NOT NULL,
+  OnCampusDepartment VARCHAR(255) NOT NULL,
+  Dept VARCHAR(255) NOT NULL,
+  Type VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
-  FirstName VARCHAR(45) NOT NULL,
-  LastName VARCHAR(45) NOT NULL,
-  Email VARCHAR(45) NOT NULL,
+  FirstName VARCHAR(255) NOT NULL,
+  LastName VARCHAR(255) NOT NULL,
+  Email VARCHAR(255) NOT NULL,
   PRIMARY KEY (id))
 
 
 CREATE TABLE IF NOT EXISTS mydb.computers (
-  control VARCHAR(45) NOT NULL,
-  legacy_department VARCHAR(45) NOT NULL,
-  last_updated_by VARCHAR(45) NOT NULL,
+  control VARCHAR(255) NOT NULL,
+  legacy_department VARCHAR(255) NOT NULL,
+  last_updated_by VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
-  serial VARCHAR(45) NOT NULL,
-  model VARCHAR(45) NOT NULL,
-  manufacturer VARCHAR(45) NOT NULL,
+  serial VARCHAR(255) NOT NULL,
+  model VARCHAR(255) NOT NULL,
+  manufacturer VARCHAR(255) NOT NULL,
   purchase_date DATETIME NOT NULL,
   purchase_price FLOAT NOT NULL,
-  purchase_acct VARCHAR(45) NOT NULL,
-  usage_status VARCHAR(45) NOT NULL,
+  purchase_acct VARCHAR(255) NOT NULL,
+  usage_status VARCHAR(255) NOT NULL,
   memory INT NULL,
   hard_drive INT NULL,
-  warranty_length VARCHAR(45) NULL,
-  warranty_start VARCHAR(45) NULL,
-  warranty_type VARCHAR(45) NULL,
+  warranty_length VARCHAR(255) NULL,
+  warranty_start VARCHAR(255) NULL,
+  warranty_type VARCHAR(255) NULL,
   replacement_year YEAR NULL,
-  computer_type VARCHAR(45) NULL,
-  legacy_userid VARCHAR(45) NULL,
-  cameron_id VARCHAR(45) NULL,
-  part_number VARCHAR(45) NULL,
-  ip_address VARCHAR(45) NULL,
+  computer_type VARCHAR(255) NULL,
+  legacy_userid VARCHAR(255) NULL,
+  cameron_id VARCHAR(255) NULL,
+  part_number VARCHAR(255) NULL,
+  ip_address VARCHAR(255) NULL,
   PRIMARY KEY (control))
 ENGINE = InnoDB
 
 CREATE TABLE IF NOT EXISTS mydb.hardware_assignments (
   id INT NOT NULL,
   user_id INT NULL,
-  last_updated_by VARCHAR(45) NOT NULL,
-  control VARCHAR(45) NOT NULL,
-  department_id VARCHAR(45) NOT NULL,
+  last_updated_by VARCHAR(255) NOT NULL,
+  control VARCHAR(255) NOT NULL,
+  department_id VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
   fullorpart TINYINT(1) NOT NULL,
@@ -257,7 +257,7 @@ ENGINE = InnoDB
 
 CREATE TABLE IF NOT EXISTS mydb.comments (
   id INT NOT NULL,
-  user_name VARCHAR(45) NOT NULL,
+  user_name VARCHAR(255) NOT NULL,
   computer_id INT NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
@@ -271,4 +271,58 @@ CREATE TABLE IF NOT EXISTS mydb.comments (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 
+#<!!!> other 'island' of tables
+
+#software table creation
+
+CREATE TABLE [dbo].[software]
+(
+id int NOT NULL,
+last_updated_by VARCHAR(255) NOT NULL,
+name VARCHAR(255) NOT NULL,
+software_type VARCHAR(255) NOT NULL,
+PRIMARY KEY (id, last_updated_by)
+)
+
+#students table creation
+
+CREATE TABLE [dbo].[students]
+(
+id int NOT NULL,
+first_name VARCHAR(255) NOT NULL,
+middle_name VARCHAR(255) NOT NULL,
+last_name int NOT NULL,
+email VARCHAR(255) NOT NULL,
+PRIMARY KEY (id)
+)
+
+#licenses table creation
+
+CREATE TABLE [dbo].[licenses]
+(
+id int NOT NULL,
+last_updated_by VARCHAR(255) NOT NULL,
+user_id int NOT NULL,
+software_id int NOT NULL,
+PRIMARY KEY (id)
+)
+
+#creation of foreign key constraint for user_id - a row in students must have an id corresponding to this value
+ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_students] FOREIGN KEY([user_id])
+REFERENCES [dbo].[students] ([id])
+GO
+
+
+#creation of foreign key constraint for software - a row in software must have an id corresponding to this value
+ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_software] FOREIGN KEY([software_id])
+REFERENCES [dbo].[software] ([id])
+GO
+
+#application of the first of the above foreign key constraints
+ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_students]
+GO
+
+#application of the second of the above foreign key constraints
+ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_software]
+GO
 
