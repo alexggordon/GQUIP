@@ -183,6 +183,8 @@ GO
 
 #<!!!> NEW STUFF
 
+
+#FacStaff table creation
 CREATE TABLE [dbo].[FacStaff] (
   ID INT NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
@@ -194,10 +196,11 @@ CREATE TABLE [dbo].[FacStaff] (
   FirstName VARCHAR(255) NOT NULL,
   LastName VARCHAR(255) NOT NULL,
   Email VARCHAR(255) NOT NULL,
-  PRIMARY KEY (id))
+  PRIMARY KEY (id)
+  )
 
-
-CREATE TABLE IF NOT EXISTS mydb.computers (
+#computers table creation
+CREATE TABLE [dbo].computers (
   control VARCHAR(255) NOT NULL,
   legacy_department VARCHAR(255) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
@@ -217,14 +220,14 @@ CREATE TABLE IF NOT EXISTS mydb.computers (
   warranty_type VARCHAR(255) NULL,
   replacement_year YEAR NULL,
   computer_type VARCHAR(255) NULL,
-  legacy_userid VARCHAR(255) NULL,
   cameron_id VARCHAR(255) NULL,
   part_number VARCHAR(255) NULL,
   ip_address VARCHAR(255) NULL,
-  PRIMARY KEY (control))
-ENGINE = InnoDB
+  PRIMARY KEY (control)
+  )
 
-CREATE TABLE IF NOT EXISTS mydb.hardware_assignments (
+#hardware_assignments table creation
+CREATE TABLE [dbo].hardware_assignments (
   id INT NOT NULL,
   user_id INT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
@@ -240,36 +243,54 @@ CREATE TABLE IF NOT EXISTS mydb.hardware_assignments (
   start_assignment DATETIME NOT NULL,
   end_assignment DATETIME NULL,
   nextneed_note TEXT NULL,
-  PRIMARY KEY (id),
-  INDEX fk_Hardware_assignment_User1_idx (user_id ASC),
-  INDEX fk_Hardware_assignment_Computer1_idx (control ASC),
-  CONSTRAINT fk_Hardware_assignment_User1
-    FOREIGN KEY (user_id)
-    REFERENCES mydb.FacStaff (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_Hardware_assignment_Computer1
-    FOREIGN KEY (control)
-    REFERENCES mydb.computers (control)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
+  PRIMARY KEY (id)
+  )
 
-CREATE TABLE IF NOT EXISTS mydb.comments (
+#creation of foreign key constraint for computer_id - a row in computers must have an id corresponding to this value
+ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_computers] FOREIGN KEY([computer_id])
+REFERENCES [dbo].[computers] ([control])
+
+#creation of foreign key constraint for user_id - a row in FacStaff must have an id corresponding to this value
+ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_FacStaff] FOREIGN KEY([user_id])
+REFERENCES [dbo].[FacStaff] ([ID])
+
+#application of the first of the above foreign key constraints
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_computers]
+
+#application of the second of the above foreign key constraints
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_FacStaff]
+
+CREATE TABLE [dbo].comments (
   id INT NOT NULL,
   user_name VARCHAR(255) NOT NULL,
   computer_id INT NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
   body TEXT NOT NULL,
-  PRIMARY KEY (id),
-  INDEX fk_Comment_Computer1_idx (computer_id ASC),
-  CONSTRAINT fk_Comment_Computer1
-    FOREIGN KEY (computer_id)
-    REFERENCES mydb.computers (control)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
+  PRIMARY KEY (id)
+  )
+
+#creation of foreign key constraint for computer_id - a row in computers must have an id corresponding to this value
+ALTER TABLE dbo.comments WITH CHECK ADD CONSTRAINT [fk_comments_computers] FOREIGN KEY([computer_id])
+REFERENCES [dbo].[computers] ([control])
+
+#application of the above foreign key constraint
+ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [fk_comments_computers]
+
+CREATE TABLE [dbo].changes (
+  computer_id INT NOT NULL,
+  last_updated_at DATETIME NOT NULL,
+  created_at DATETIME NOT NULL,
+  body TEXT NOT NULL,
+  PRIMARY KEY (computer_id, created_at)
+  )
+
+#creation of foreign key constraint for computer_id - a row in computers must have an id corresponding to this value
+ALTER TABLE dbo.changes WITH CHECK ADD CONSTRAINT [fk_changes_computers] FOREIGN KEY([computer_id])
+REFERENCES [dbo].[computers] ([control])
+
+#application of the above foreign key constraint
+ALTER TABLE [dbo].[changes] CHECK CONSTRAINT [fk_changes_computers]
 
 #<!!!> other 'island' of tables
 
