@@ -1,4 +1,13 @@
 <?php
+
+// file: home.php
+// created by: Alex Gordon, Elliott Staude
+// date: 02-27-2014
+// purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
+// part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
+// 
+//
+
 // Test Commment
 include('header.php');
 if(!isset($_SESSION['user'])) {
@@ -11,9 +20,7 @@ if($_SESSION['access']=="3" ) {
   //The set of SQL queries for the page is put together before connecting
   //to the database to cut back on overhead
 
-  $query = "SELECT * FROM computers 
-  WHERE control IN 
-  (SELECT Max(last_updated_at) FROM computers GROUP BY control) 
+  $query = "SELECT * FROM computers
   ORDER BY last_updated_at DESC;";
 
   //A connection to the database is established through the script open_db
@@ -36,32 +43,67 @@ if($_SESSION['access']=="3" ) {
   while($row = mssql_fetch_array($result))
   {
 
+    //Get the rows from hardware assignments, comments, and changes based on the "control" column
     $cur_control = $row["control"];
-    $assignmentquery = "SELECT * FROM hardware_assignments JOIN users ON users.id = hardware_assignments.user_id WHERE hardware_assignments.control = $cur_control ORDER BY control;";
 
-    $commentquery = "SELECT * FROM comments JOIN users WHERE comments.computer = $cur_control ORDER BY comment.created_at;";
+    //List of users assigned this unit over its lifespan
+    $assignmentquery = "SELECT * 
+    FROM hardware_assignments JOIN FacStaff ON FacStaff.ID = hardware_assignments.user_id ORDER BY control;";
 
+    //List of comments made on this unit over its lifespan
+    $commentquery = "SELECT * 
+    FROM comments JOIN FacStaff WHERE comments.computer_id = $cur_control ORDER BY comment.created_at;";
+
+    //List of changes made to this unit over its lifespan
+    $changequery = "SELECT * 
+    FROM changes JOIN computers WHERE changes.computer_id = $cur_control ORDER BY changes.created_at;";
+
+    //Open the connection
     include('open_db.php');
 
+    //Ask for the data relevant to the 3 queries related to this specific unit
     $assignmentresult = mssql_query($assignmentquery);
 
     $commentresult = mssql_query($commentquery);
 
+    $changeresult = mssql_query($changequery);
+
+    //Close the connection
     include('close_db.php');
 
+    //Create the data for this specific unit
     echo "<li>" . $row["control"] . $row["model"] . $row["manufacturer"] . " | EDIT_BUTTON_FOR_" . $row["control"] . " | " . "</li>";
 
+    //Output the assignment data for each of the computer's assignments
     while($assignmentrow = mssql_fetch_array($assignmentresult))
     {
-    
-      echo " && " . $assignmentrow["users.last_name"] . $assignmentrow["users.first_name"] . $assignmentrow["hardware_assignments.start_assignment"] . $assignmentrow["hardware_assignments.end_assignment"];
+
+      //Form is similar to:
+      //User: Smith, J.; Start of assignment: 05/05/2000:19:22:28.289; End of assignment: 05/20/2000:11:20:46.94
+      echo " User: " . $assignmentrow["users.last_name"] . ", " . $assignmentrow["users.first_name"] . 
+      " Start of assignment: " . $assignmentrow["hardware_assignments.start_assignment"] .
+      "; End of assignment: ". $assignmentrow["hardware_assignments.end_assignment"];
     
     }
 
-    while($commentrow = mssql_fetch_array($commentresult))
+    //Output the assignment data for each of the computer's changes
+    while($changerow = mssql_fetch_array($changeresult))
     {
     
-      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
+      //Form is similar to:
+      // Change history: <LOTS OF ROWS OF TEXT HERE>; Change made: 05/05/2000:19:22:28.289
+      echo " Change history: " . $changerow["changes.text"] . "; Change made: " . $changerow["changes.created_at"];
+    
+    }
+
+    //Output the assignment data for each of the computer's comments
+    while($commentrow = mssql_fetch_array($commentresult))
+    {
+
+      //Form is similar to:
+      //J. Smith: I'm commenting on this unit! Posted at: 05/20/2000:11:20:46.94
+      echo $commentrow["users.first_name"] . " " . $commentrow["users.last_name"] . ": " . 
+      $commentrow["comment.text"] . " Posted at: "$commentrow["comment.created_at"];
     
     }
 
