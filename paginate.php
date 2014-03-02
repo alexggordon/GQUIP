@@ -96,7 +96,7 @@ class Paginator{
         {
 
             //Get the range of pages for this section
-            $this->return = ($this->current_page != 1 And $this->items_total >= Constants::SMALL_ITEMS_PER_PAGE) ? "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$prev_page&ipp=$this->items_per_page\">« Previous</a> ":"<span class=\"inactive\" href=\"#\">« Previous</span> ";
+            $this->return = ($this->current_page != 1 And $this->items_total >= Constants::SMALL_ITEMS_PER_PAGE) ? "<a class=\"pagination\" href=\"$_SERVER[PHP_SELF]?page=$prev_page&ipp=$this->items_per_page\">« Previous</a> ":"<span class=\"inactive\" href=\"#\">« Previous</span> ";
             $this->start_range = $this->current_page - floor($this->middle_of_variable/2);
             $this->end_range = $this->current_page + floor($this->middle_of_variable/2);
 
@@ -128,7 +128,7 @@ class Paginator{
                 {
 
                     //Partial assembly
-                    $this->return .= ($i == $this->current_page And $_GET['page'] != 'All') ? "<a title=\"Go to page $i of $this->number_of_pages\" class=\"current\" href=\"#\">$i</a> ":"<a class=\"paginate\" title=\"Go to page $i of $this->number_of_pages\" href=\"$_SERVER[PHP_SELF]?page=$i&ipp=$this->items_per_page\">$i</a> ";
+                    $this->return .= ($i == $this->current_page And $_GET['page'] != 'All') ? "<a title=\"Go to page $i of $this->number_of_pages\" class=\"current\" href=\"#\">$i</a> ":"<a class=\"pagination\" title=\"Go to page $i of $this->number_of_pages\" href=\"$_SERVER[PHP_SELF]?page=$i&ipp=$this->items_per_page\">$i</a> ";
 
                 }
 
@@ -137,8 +137,8 @@ class Paginator{
             }
 
             //Assemble all the page's parts
-            $this->return .= (($this->current_page != $this->number_of_pages And $this->items_total >= Constants::SMALL_ITEMS_PER_PAGE) And ($_GET['page'] != 'All')) ? "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$next_page&ipp=$this->items_per_page\">Next »</a>\n":"<span class=\"inactive\" href=\"#\">» Next</span>\n";
-            $this->return .= ($_GET['page'] == 'All') ? "<a class=\"current\" style=\"margin-left:Constants::SMALL_ITEMS_PER_PAGEpx\" href=\"#\">All</a> \n":"<a class=\"paginate\" style=\"margin-left:Constants::SMALL_ITEMS_PER_PAGEpx\" href=\"$_SERVER[PHP_SELF]?page=1&ipp=All\">All</a> \n";
+            $this->return .= (($this->current_page != $this->number_of_pages And $this->items_total >= Constants::SMALL_ITEMS_PER_PAGE) And ($_GET['page'] != 'All')) ? "<a class=\"pagination\" href=\"$_SERVER[PHP_SELF]?page=$next_page&ipp=$this->items_per_page\">Next »</a>\n":"<span class=\"inactive\" href=\"#\">» Next</span>\n";
+            $this->return .= ($_GET['page'] == 'All') ? "<a class=\"current\" style=\"margin-left:Constants::SMALL_ITEMS_PER_PAGEpx\" href=\"#\">All</a> \n":"<a class=\"pagination\" style=\"margin-left:Constants::SMALL_ITEMS_PER_PAGEpx\" href=\"$_SERVER[PHP_SELF]?page=1&ipp=All\">All</a> \n";
 
         }
         // This displays the range. Essentially, if the last page is number 208, and we're on page one, then it will show links to page 2,3,4,5,6,7,8,9 and then the last page. 
@@ -150,12 +150,12 @@ class Paginator{
             {
 
                 //Partial assembly
-                $this->return .= ($i == $this->current_page) ? "<a class=\"current\" href=\"#\">$i</a> ":"<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=$i&ipp=$this->items_per_page\">$i</a> ";
+                $this->return .= ($i == $this->current_page) ? "<a class=\"current\" href=\"#\">$i</a> ":"<a class=\"pagination\" href=\"$_SERVER[PHP_SELF]?page=$i&ipp=$this->items_per_page\">$i</a> ";
 
             }
 
             //Assemble all the page's parts
-            $this->return .= "<a class=\"paginate\" href=\"$_SERVER[PHP_SELF]?page=1&ipp=All\">All</a> \n";
+            $this->return .= "<a class=\"pagination\" href=\"$_SERVER[PHP_SELF]?page=1&ipp=All\">All</a> \n";
         }
         
         $this->low = ($this->current_page-1) * $this->items_per_page;
@@ -171,7 +171,7 @@ class Paginator{
         $items = '';
         $ipp_array = array(Constants::SMALL_ITEMS_PER_PAGE,Constants::DEFAULT_ITEMS_PER_PAGE,Constants::BIG_ITEMS_PER_PAGE,Constants::GIANT_ITEMS_PER_PAGE,'All');
         foreach($ipp_array as $ipp_opt)    $items .= ($ipp_opt == $this->items_per_page) ? "<option selected value=\"$ipp_opt\">$ipp_opt</option>\n":"<option value=\"$ipp_opt\">$ipp_opt</option>\n";
-        return "<span class=\"paginate\">Items per page:</span><select class=\"paginate\" onchange=\"window.location='$_SERVER[PHP_SELF]?page=1&ipp='+this[this.selectedIndex].value;return false\">$items</select>\n";
+        return "<span class=\"pagination\">Items per page:</span><select class=\"pagination\" onchange=\"window.location='$_SERVER[PHP_SELF]?page=1&ipp='+this[this.selectedIndex].value;return false\">$items</select>\n";
 
     }
 
@@ -185,7 +185,7 @@ class Paginator{
             $option .= ($i==$this->current_page) ? "<option value=\"$i\" selected>$i</option>\n":"<option value=\"$i\">$i</option>\n";
 
         }
-        return "<span class=\"paginate\">Page:</span><select class=\"paginate\" onchange=\"window.location='$_SERVER[PHP_SELF]?page='+this[this.selectedIndex].value+'&ipp=$this->items_per_page';return false\">$option</select>\n";
+        return "<span class=\"pagination\">Page:</span><select class=\"pagination\" onchange=\"window.location='$_SERVER[PHP_SELF]?page='+this[this.selectedIndex].value+'&ipp=$this->items_per_page';return false\">$option</select>\n";
 
     }
 
