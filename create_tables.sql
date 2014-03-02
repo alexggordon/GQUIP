@@ -347,3 +347,11 @@ GO
 ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_software]
 GO
 
+#<!!!> TABLE altercation statements for ID columns in FacStaff and students
+
+alter table FacStaff
+alter column ID nvarchar(255)
+
+alter table students
+alter column id varchar(255)
+
