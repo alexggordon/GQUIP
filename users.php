@@ -35,21 +35,11 @@ while($row = mssql_fetch_array($result))
   //and does the same thing as above, but within this loop iteration
 
   $cur_user_id = $row["id"];
-  $licensequery = "SELECT * 
-  FROM Licenses
-  JOIN Software
-  ON Licenses.software_id = Software.id
-  WHERE Licenses.user_id = $cur_user_id
-  ORDER BY name;";
+  $licensequery = "SELECT * FROM Licenses JOIN Software ON Licenses.software_id = Software.id WHERE Licenses.user_id = $cur_user_id ORDER BY name;";
 
   include('open_db.php');
 
   $licenseresult = mssql_query($licensequery);
-
-  include('close_db.php');
-
-  //The user's data is included here
-  echo "<li>" . $row["last_name"] . $row["first_name"] . $row["role"] . $row["department"] . $row["auth"] . " | EDIT_BUTTON_FOR_" . $row["last_name"] . $row["first_name"] . " | " . "</li>";
 
   //The user's licensed software data is included here
   while($licenserow = mssql_fetch_array($licenseresult))
@@ -60,27 +50,51 @@ while($row = mssql_fetch_array($result))
   }
 
 }
+// If user or administrator
+if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
-//The following segments consult with the permissions of the user and
-//accordingly render the page and/or allow the user to perform certain
-//actions based on the permissions level
+  echo "<li>" . $row["last_name"] . $row["first_name"] . $row["role"] . $row["department"] . $row["auth"] . " | EDIT_BUTTON_FOR_" . $row["last_name"] . $row["first_name"] . " | " . "</li>";
 
-// Manager
-if($_SESSION['access']=="3" ) {
-?>
+
+  ?>
+
+
+
+  <div class="row">
+    <div class="large-10 large-centered columns">
+  <table cellspacing="0">
+   <thead>
+    <tr>
+      <th>Control</th>
+      <th>Model</th>
+      <th>Manufacturer</th>
+    <th>Department</th>
+    <th>User</th>
+    <th>Assignment</th>
+    <th>Options</th>
+    </tr>
+    </thead>
+      <tr id="computer_3232" class="index-row false">
+      <td><a href="computerdummydata.html">04180</a></td>
+      <td>X300</td>
+      <td>Lenovo</td>
+      <td>President's Office</td>
+      <td>Lindsay                       , D               M</td>
+      <td>Full-Time Shared Non-standard</td>
+      <td class="hide_for_printing"><a href="edit.html" class="button">Edit</a></td>
+    </tr>
+    </table>
+
+  //The following segments consult with the permissions of the user and
+  //accordingly render the page and/or allow the user to perform certain
+  //actions based on the permissions level
+
 
 
 <?php
 }
 // Faculty
 if($_SESSION['access']=="2" ) {
-?>
-
-
-<?php
-}
-// User
-if($_SESSION['access']=="1" ) {
 ?>
 
 <?php
