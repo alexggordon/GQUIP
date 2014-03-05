@@ -5,8 +5,6 @@
 
 
 <?php
-// Include Login information
-include('config.php');
 // Check if the user is logged in
 if(!isset($_SESSION['user'])) {
 // User not logged in, send to login screen
@@ -60,6 +58,7 @@ header('Location: login.php');
 
 
 <?php 
+// <?php echo $_SESSION['user']; 
 // User is a Manager
 if($_SESSION['access']=="3" ) {
 ?>
@@ -72,32 +71,31 @@ if($_SESSION['access']=="3" ) {
       <ul class="title-area">
         <!-- Title Area -->
         <li class="name">
-          <h1><a href="home.php">GQUIP. Welcome <?php echo $_SESSION['user']; ?></a></h1>
+          <h1><a href="home.php">GQUIP</a></h1>
         </li>
         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
       </ul>
 
       <section class="top-bar-section">
-      <li class="has-dropdown">
-        <a href="#">Equipment</a>
-        <ul class="dropdown">
-        <li><a href="new_item.php">New Item</a></li>
-              <li><label>Manage Faculty</label></li>
-              <li><a href="#">Add a Faculty Computer Option</a></li>
-              <li><a href="#">See Software Distribution</a></li>
-          <li class="divider"></li>
-          <li><a href="csv_import.php">Mass Import</a></li>
-        </ul>
-      </li>
+
         <!-- Left Nav Section -->
         <ul class="left">
+        <li class="has-dropdown">
+          <a href="#">Equipment</a>
+          <ul class="dropdown">
+          <li><a href="new_item.php">New Item</a></li>
+                <li><label>Manage Faculty</label></li>
+                <li><a href="#">Add a Faculty Computer Option</a></li>
+                <li><a href="#">See Software Distribution</a></li>
+            <li class="divider"></li>
+            <li><a href="csv_import.php">Mass Import</a></li>
+          </ul>
+        </li>
           <li class="divider"></li>
           <li><a href="departments.php">Departments</a></li>
           <li class="divider"></li>
           <li><a href="users.php">Users</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Advanced Search</a></li>
           <li class="divider"></li>
 
           <li class="has-dropdown">
