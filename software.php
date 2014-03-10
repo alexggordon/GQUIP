@@ -8,7 +8,7 @@ if(!isset($_SESSION['user'])) {
 //The set of SQL queries for the page is put together before connecting
 //to the database to cut back on overhead
 
-$query = "SELECT * 
+$query = "SELECT *
 FROM Software
 ORDER BY name;";
 
@@ -19,53 +19,58 @@ include('open_db.php');
 //The mssql_query function allows PHP to make a query against the database
 //and returns the resulting data
 
-$result = mssql_query($query);
+$result = sqlsrv_query($query);
 
-//The connection to the database is closed through the script close_db
+$numRows = sqlsrv_num_rows($result); 
 
-include('close_db.php');
+// If user or administrator
+if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+  ?>
+  <div class="row">
+    <div class="large-10 large-centered columns">
+    <h1>Software</h1>
+    </div>
+    </div>
+  <div class="row">
+  	<a href="new_software.php">Add software item</a>
+    <div class="large-10 large-centered columns">
+  <table cellspacing="0">
+   <thead>
+    <tr>
+      <th>Software ID</th>
+      <th>Name</th>
+      <th>Software type</th>
+      <th>Last updated at</th>
+    </tr>
+    </thead>
 
-$numRows = mssql_num_rows($result); 
-echo "<h1>" . $numRows . " Row" . ($numRows == 1 ? "" : "s") . " Returned </h1>"; 
+  <?php
 
-//display the results 
-while($row = mssql_fetch_array($result))
-{
+  while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))
+  {
+     echo "<tr><td>" . $row['ID'] . "</td><td>" . $row['name'] . "</td><td>" . $row['software_type'] . "</td><td>" . $row['last_updated_at'] . "</td><a href=\"edit_software.php\">Edit</a></tr>";
+  }
+  
+  ?>
 
-  echo "<li>" . $row["name"] . $row["software_type"] . $row["last_updated_by"] . " | EDIT_BUTTON_FOR_" . $row["name"] . " | " . "</li>";
-
-}
-
-//The following segments consult with the permissions of the user and
-//accordingly render the page and/or allow the user to perform certain
-//actions based on the permissions level
-
-
-// Manager
-if($_SESSION['access']=="3" ) {
-?>
-
-
+  </table>
+  </div>
+  </div>
 <?php
 }
 // Faculty
 if($_SESSION['access']=="2" ) {
 ?>
 
-
-<?php
-}
-// User
-if($_SESSION['access']=="1" ) {
-?>
-
 <?php
 }
 ?>
 
 
-
-
 <?php
+//The connection to the database is closed through the script close_db
+
+include('close_db.php');
+
 include('footer.php')
 ?>
