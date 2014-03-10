@@ -8,7 +8,8 @@ if(!isset($_SESSION['user'])) {
 //The set of SQL queries for the page is put together before connecting
 //to the database to cut back on overhead
 
-$query = "SELECT * FROM Departments ORDER BY name;";
+$populationQuery = "SELECT DISTINCT department_id
+FROM hardware_assignments;";
 
 //A connection to the database is established through the script open_db
 
@@ -17,20 +18,10 @@ include('open_db.php');
 //The mssql_query function allows PHP to make a query against the database
 //and returns the resulting data
 
-$result = mssql_query($query);
+$populationResult = sqlsrv_query($conn, $populationQuery);
 
-//The connection to the database is closed through the script close_db
+$securityArray[] = array(0 => "unassigned");
 
-include('close_db.php');
-
-$numRows = mssql_num_rows($result); 
-// echo "<h1>" . $numRows . " Row" . ($numRows == 1 ? "" : "s") . " Returned </h1>"; 
-
-//display the results 
-while($row = mssql_fetch_array($result))
-{
-  // echo "<li>" . $row["name"] . $row["full_name"] . $row["last_updated_by"] . " | EDIT_BUTTON_FOR_" . $row["name"] . " | " . "</li>";
-}
 
 //The following segments consult with the permissions of the user and
 //accordingly render the page and/or allow the user to perform certain
@@ -38,64 +29,66 @@ while($row = mssql_fetch_array($result))
 
 // Manager
 if($_SESSION['access']=="3" ) {
-?>
-<br> 
-
-<div class="row">
-	<div class="large-12 columns">
-		<form>
-		<fieldset>
-			<legend>Departments</legend>
-			
-		</fieldset>
-		</form>
-	</div>
-</div>
-
-<?php
 }
+
 // Faculty
 if($_SESSION['access']=="2" ) {
-?>
-<br> 
-
-<div class="row">
-	<div class="large-12 columns">
-		<form>
-		<fieldset>
-			<legend>Departments</legend>
-			
-		</fieldset>
-		</form>
-	</div>
-</div>
-
-<?php
 }
+
 // User
 if($_SESSION['access']=="1" ) {
-?>
-
-<br> 
-
-<div class="row">
-	<div class="large-12 columns">
-		<form>
-		<fieldset>
-			<legend>Departments</legend>
-			
-		</fieldset>
-		</form>
-	</div>
-</div>
-
-<?php
 }
 ?>
 
-
-
+<form method="post" action="">
+<div class="row">
+<div class="small-6 columns">
+<select name="departmentChoice" id="departmentChoice">
+<option value="unassigned" selected="selected">Unassigned units</option>
 
 <?php
+
+while($row = sqlsrv_fetch_array($populationResult))
+{
+	echo "<option value=\"" . $row["department_id"] . "\">" . $row["department_id"] . "</option>\n";
+	// Use an array to get all legal values for the department search
+	$securityArray[] = $row["department_id"];
+}
+
+?>
+
+</select>
+</div>
+<input type="submit" name="Search">
+</div>
+</form>
+
+<?php
+
+$searchingDepartment = $_POST['departmentChoice'];
+
+// Make sure the department used as the search parameter is valid
+if (in_array($searchingDepartment, $securityArray))
+{
+	$departmentQuery = "SELECT *
+	FROM hardware_assignments
+	WHERE department_id = $searchingDepartment
+	AND assignment_end IS NULL;";
+
+	$departmentResult = sqlsrv_query($conn, $departmentQuery);
+
+	while($row = sqlsrv_fetch_array($departmentResult))
+	{
+		echo $row['id'] . " - assignment of unit " . $row['control'] . " to user " . $row['user_id'] . "\n";
+	}
+}
+else
+{
+	echo "ERROR! Department not valid; please input a valid department name for getting information.";
+}
+
+//The connection to the database is closed through the script close_db
+include('close_db.php');
+
 include('footer.php')
 ?>
