@@ -20,6 +20,9 @@ include('open_db.php');
 
 $populationResult = sqlsrv_query($conn, $populationQuery);
 
+//This array gets all the possible departments that a search could target if
+//it were valid
+
 $securityArray[] = array(0 => "unassigned");
 
 
@@ -27,17 +30,12 @@ $securityArray[] = array(0 => "unassigned");
 //accordingly render the page and/or allow the user to perform certain
 //actions based on the permissions level
 
-// Manager
-if($_SESSION['access']=="3" ) {
-}
-
 // Faculty
 if($_SESSION['access']=="2" ) {
 }
 
-// User
-if($_SESSION['access']=="1" ) {
-}
+// User or Manager 
+if($_SESSION['access']=="1" || $_SESSION['access']=="3") {
 ?>
 
 <form method="post" action="">
@@ -86,7 +84,7 @@ else
 {
 	echo "ERROR! Department not valid; please input a valid department name for getting information.";
 }
-
+}
 //The connection to the database is closed through the script close_db
 include('close_db.php');
 
