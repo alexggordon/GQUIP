@@ -1,5 +1,6 @@
 <!-- header.php  -->
 <?php
+include 'symbolic_values.php';
 session_start();
  ?>
 <!-- Every user class gets this header -->
@@ -49,7 +50,7 @@ session_start();
 <?php 
 // <?php echo $_SESSION['user']; 
 // User is a Manager
-if($_SESSION['access']=="3" ) {
+if($_SESSION['access']==ADMIN_PERMISSION ) {
 ?>
 
 <!-- Administrator Navigation Bar.  -->
@@ -133,7 +134,7 @@ if($_SESSION['access']=="3" ) {
 <?php
 }
 // User is a Faculty Member
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 ?>
 
 <!-- Faculty Navigation Bar  -->
@@ -194,7 +195,7 @@ if($_SESSION['access']=="2" ) {
 <?php
 }
 // User
-if($_SESSION['access']=="1" ) {
+if($_SESSION['access']==USER_PERMISSION ) {
 ?>
 <!-- Administrator Navigation Bar.  -->
 <!DOCTYPE html>
