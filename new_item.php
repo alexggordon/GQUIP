@@ -130,7 +130,7 @@ else {
 			</div>
 			<div class="large-4 columns">
 				<label>Manufacturer</label>
-					<input type="text" name="manufactuer" placeholder="Lenovo" required>
+					<input type="text" name="manufacturer" placeholder="Lenovo" required>
 			</div>
 			<div class="large-4 columns">
 				<label>Model</label>

@@ -227,6 +227,20 @@ CREATE TABLE [dbo].computers (
   )
 
 #hardware_assignments table creation
+ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_computers] FOREIGN KEY([controla])
+REFERENCES [dbo].[computers] ([control])
+GO
+
+ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_FacStaff] FOREIGN KEY([user_id])
+REFERENCES [dbo].[FacandStaff] ([ID])
+GO
+
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_computers]
+GO
+
+ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_FacStaff]
+GO
+
 CREATE TABLE [dbo].hardware_assignments (
   id INT NOT NULL,
   user_id INT NULL,
@@ -302,7 +316,7 @@ id int NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
 name VARCHAR(255) NOT NULL,
 software_type VARCHAR(255) NOT NULL,
-PRIMARY KEY (id, last_updated_by)
+PRIMARY KEY (id)
 )
 
 #students table creation
@@ -312,7 +326,7 @@ CREATE TABLE [dbo].[students]
 id int NOT NULL,
 first_name VARCHAR(255) NOT NULL,
 middle_name VARCHAR(255) NOT NULL,
-last_name int NOT NULL,
+last_name VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
 PRIMARY KEY (id)
 )
