@@ -6,10 +6,9 @@
 // purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
 // 
-
 include('header.php');
 if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
+  header('Location: login.php');
 }
 
 // 
@@ -21,7 +20,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
   include('open_db.php');
 
-  $result = mssql_query($query);
+  $result = sqlsrv_query($query);
 
   $numRows = mssql_num_rows($result); 
 
@@ -62,6 +61,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 <?php
 }
 if($_SESSION['access']=="2" ) {
+
 ?>
 
 

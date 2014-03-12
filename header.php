@@ -1,18 +1,7 @@
 <!-- header.php  -->
-<!--  -->
-
-
-
-
 <?php
-// Check if the user is logged in
-if(!isset($_SESSION['user'])) {
-// User not logged in, send to login screen
-header('Location: login.php');
-}
-?>
-
-
+session_start();
+ ?>
 <!-- Every user class gets this header -->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
