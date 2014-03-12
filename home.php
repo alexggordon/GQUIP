@@ -11,23 +11,30 @@ if(!isset($_SESSION['user'])) {
   header('Location: login.php');
 }
 
-// 
+  //The following segments consult with the permissions of the user and
+  //accordingly render the page and/or allow the user to perform certain
+  //actions based on the permissions level
+  
 if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
 // Query
   $query = "SELECT * FROM computers
-  ORDER BY last_updated_at DESC;";
+  ORDER BY control;";
 
   include('open_db.php');
 
-  $result = sqlsrv_query($query);
+  $result = sqlsrv_query($conn, $query);
 
-  $numRows = mssql_num_rows($result); 
-
+  $numRows = sqlsrv_num_rows($result); 
 
   ?>
 
 
+  <div class="row">
+    <div class="large-10 large-centered columns">
+    <h1>Home</h1>
+    </div>
+  </div>
 
   <div class="row">
     <div class="large-10 large-centered columns">
@@ -54,12 +61,11 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     </tr>
     </table>
 
-  //The following segments consult with the permissions of the user and
-  //accordingly render the page and/or allow the user to perform certain
-  //actions based on the permissions level
+
 
 <?php
 }
+
 if($_SESSION['access']=="2" ) {
 
 ?>
