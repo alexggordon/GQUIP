@@ -23,7 +23,7 @@ $result = sqlsrv_query($conn, $query);
 $numRows = sqlsrv_num_rows($result); 
 
 // If user or administrator
-if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
   ?>
   <div class="row">
     <div class="large-10 large-centered columns">
@@ -59,7 +59,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 <?php
 }
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 ?>
 
 <?php

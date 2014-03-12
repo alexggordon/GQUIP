@@ -15,7 +15,7 @@ if(!isset($_SESSION['user'])) {
   //accordingly render the page and/or allow the user to perform certain
   //actions based on the permissions level
   
-if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
 
 // Query
   $query = "SELECT * FROM computers
@@ -66,7 +66,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 <?php
 }
 
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 
 ?>
 

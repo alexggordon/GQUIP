@@ -9,12 +9,6 @@
 
 // This class is modeled after the idea of having an automatically generated pagination data page. 
 class Paginator{
-    // Constants
-    const VARIABLE_MIDDLE = 7;
-    const SMALL_ITEMS_PER_PAGE = 10;
-    const DEFAULT_ITEMS_PER_PAGE = 25;
-    const BIG_ITEMS_PER_PAGE = 50;
-    const GIANT_ITEMS_PER_PAGE = 100;
 
 
     // Instance Variables

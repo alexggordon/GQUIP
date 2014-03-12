@@ -79,7 +79,7 @@ CREATE TABLE [dbo].[hardware_assignments]
 													# <!!!> (is the printer option needed?)
 [end_assignment] [date],
 [nextneed_note] [text],
-PRIMARY KEY (id, last_updated_at))
+PRIMARY KEY (id))
 
 
 ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_assignments_users_1] FOREIGN KEY([user_id])

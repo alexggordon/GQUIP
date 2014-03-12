@@ -32,11 +32,11 @@ $securityArray[0] = "unassigned";
 //actions based on the permissions level
 
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 }
 
 // User or Manager 
-if($_SESSION['access']=="1" || $_SESSION['access']=="3") {
+if($_SESSION['access']==USER_PERMISSION || $_SESSION['access']==ADMIN_PERMISSION) {
 ?>
 
   <div class="row">
