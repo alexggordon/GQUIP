@@ -1,4 +1,4 @@
-<?php 
+<?php session_start();
 include 'header.php';
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
@@ -8,8 +8,9 @@ if(!isset($_SESSION['user'])) {
 //The set of SQL queries for the page is put together before connecting
 //to the database to cut back on overhead
 
-$populationQuery = "SELECT DISTINCT department_id
-FROM hardware_assignments;";
+$populationQuery = "SELECT DISTINCT OnCampusDepartment
+FROM FacandStaff
+WHERE FacandStaff.OnCampusDepartment IS NOT NULL;";
 
 //A connection to the database is established through the script open_db
 
@@ -23,7 +24,7 @@ $populationResult = sqlsrv_query($conn, $populationQuery);
 //This array gets all the possible departments that a search could target if
 //it were valid
 
-$securityArray[] = array(0 => "unassigned");
+$securityArray[0] = "unassigned";
 
 
 //The following segments consult with the permissions of the user and
@@ -38,55 +39,72 @@ if($_SESSION['access']=="2" ) {
 if($_SESSION['access']=="1" || $_SESSION['access']=="3") {
 ?>
 
-<form method="post" action="">
-<div class="row">
-<div class="small-6 columns">
-<select name="departmentChoice" id="departmentChoice">
-<option value="unassigned" selected="selected">Unassigned units</option>
+  <div class="row">
+    <div class="large-10 large-centered columns">
+    <h1>Departments</h1>
+    </div>
+  </div>
+
+  	<div class="row">
+    <div class="large-10 large-centered columns">
+  	<table cellspacing="0">
+
+	<form method="post" action="">
+	<select name="departmentChoice" id="departmentChoice">
+	<option value="unassigned" selected="selected">Unassigned</option>
 
 <?php
 
 while($row = sqlsrv_fetch_array($populationResult))
 {
-	echo "<option value=\"" . $row["department_id"] . "\">" . $row["department_id"] . "</option>\n";
+	echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
 	// Use an array to get all legal values for the department search
-	$securityArray[] = $row["department_id"];
+	$securityArray[] = $row["OnCampusDepartment"];
 }
 
 ?>
 
-</select>
-</div>
-<input type="submit" name="Search">
-</div>
-</form>
+	</select>
+
+	<input type="submit" name="Search">
+
+	</form>
 
 <?php
 
-$searchingDepartment = $_POST['departmentChoice'];
+	$searchingDepartment;
 
-// Make sure the department used as the search parameter is valid
-if (in_array($searchingDepartment, $securityArray))
-{
-	$departmentQuery = "SELECT *
-	FROM hardware_assignments
-	WHERE department_id = $searchingDepartment
-	AND assignment_end IS NULL;";
-
-	$departmentResult = sqlsrv_query($conn, $departmentQuery);
-
-	while($row = sqlsrv_fetch_array($departmentResult))
+	if (isset($_POST['departmentChoice']))
 	{
-		echo $row['id'] . " - assignment of unit " . $row['control'] . " to user " . $row['user_id'] . "\n";
+		$searchingDepartment = $_POST['departmentChoice'];
+
+		// Make sure the department used as the search parameter is valid
+		if (in_array($searchingDepartment, $securityArray))
+		{
+			/* <!!!> WE NEED HARDWARE_ASSIGNMENTS FOR THIS TO WORK </!!!> $departmentQuery = "SELECT *
+			FROM hardware_assignments;";
+
+			$departmentResult = sqlsrv_query($conn, $departmentQuery);
+
+			while($row = sqlsrv_fetch_array($departmentResult))
+			{
+				echo $row['id'] . " - assignment of unit " . $row['control'] . " to user " . $row['user_id'] . "\n";
+			}*/
+		}
+		else
+		{
+			echo "ERROR! " . $_POST['departmentChoice'] . " is not a valid department; please input a valid department name for getting information.";
+		}
 	}
-}
-else
-{
-	echo "ERROR! Department not valid; please input a valid department name for getting information.";
-}
 }
 //The connection to the database is closed through the script close_db
 include('close_db.php');
+?>
 
+  </table>
+  </div>
+  </div>
+
+<?php
 include('footer.php')
 ?>

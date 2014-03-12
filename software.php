@@ -1,6 +1,5 @@
 <?php
-include('config.php');
-include('header.php')
+include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
 }
@@ -19,7 +18,7 @@ include('open_db.php');
 //The mssql_query function allows PHP to make a query against the database
 //and returns the resulting data
 
-$result = sqlsrv_query($query);
+$result = sqlsrv_query($conn, $query);
 
 $numRows = sqlsrv_num_rows($result); 
 
@@ -32,10 +31,10 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     </div>
     </div>
   <div class="row">
-  	<a href="new_software.php">Add software item</a>
     <div class="large-10 large-centered columns">
   <table cellspacing="0">
-   <thead>
+    <a href="new_software.php" class="button expand">Add software item</a>
+    <thead>
     <tr>
       <th>Software ID</th>
       <th>Name</th>
@@ -56,6 +55,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   </table>
   </div>
   </div>
+  
 <?php
 }
 // Faculty
