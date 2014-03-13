@@ -3,8 +3,11 @@ include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
 }
+
 // Manager or User
 if($_SESSION['access']==ADMIN_PERMISSION) {
+
+$itemID = $_GET['edit'];
 
 if (isset($_POST['submit'])){
 
@@ -26,13 +29,13 @@ if (isset($_POST['submit'])){
         echo( print_r( sqlsrv_errors(), true));
     }
     //assign form input to variables
-    $id = $_POST['id'];
     $name = $_POST['name'];
     $software_type = $_POST['software_type'];
 
     //SQL query to insert variables above into table
-    $sql = " INSERT INTO dbo.software ([INDEX_ID],[last_updated_by],[name],[software_type])VALUES('$id','$last_updated_by','$name','$software_type')";
+    $sql = "UPDATE dbo.software SET index_id = $itemID, last_updated_by = '$last_updated_by', name = '$name', software_type = '$software_type' WHERE software.index_id = $itemID;";
     $result = sqlsrv_query($conn, $sql);
+    
     //if the query cant be executed
     if(!$result)
     {
@@ -42,36 +45,49 @@ if (isset($_POST['submit'])){
     // close the connection
 
     sqlsrv_close( $conn);
-    echo "Data successfully inserted";
+    echo "Data successfully modified";
+    echo "<a class=\"button\" href=\"software.php\">OK</a>";
 }
 else {
+	
+	include 'open_db.php';
+	
+
+	$editQuery = "SELECT * FROM software WHERE software.index_id = $itemID;";
+	$editResult = sqlsrv_query($conn, $editQuery);
+	if(!$editResult)
+	{
+		echo print_r( sqlsrv_errors(), true);
+		exit;
+	}
+	$item = sqlsrv_fetch_array($editResult, SQLSRV_FETCH_ASSOC);
+	
 ?>
 
 <div class="large-12 columns">
-<h1>New Software</h1>
-<form data-abide type="submit" name="submit" enctype='multipart/form-data' action="new_software.php" method="POST">
+<h1>Editing Software</h1>
+<form data-abide type="submit" name="submit" enctype='multipart/form-data' <?php echo "action=\"edit_software.php?edit=" . $itemID . "\""; ?> method="POST">
 	<fieldset>
 		<legend>Software Info</legend>
 
 		<div class="row">
 			<div class="large-4 columns">
 				<label>ID</label>
-					<input type="number" name="id" placeholder="1100101" required>
-				<small class="error">A valid ID is required for this software.</small>
+					<label name="id"><?php echo $itemID; ?></label>
 			</div>
 			<div class="large-4 columns">
 				<label>Name</label>
-					<input type="text" name="name" placeholder="Microsoft Office" required>
+					<input type="text" name="name" <?php echo "value=\"" . $item['name'] . "\""; ?> required>
 			</div>
 			<div class="large-4 columns">
 				<label>Software type</label>
-					<input type="text" name="software_type" placeholder="Document editing package" required>
+					<input type="text" name="software_type" <?php echo "value=\"" . $item['software_type'] . "\""; ?> required>
 			</div>
 		</div>
 	</fieldset>
 		<div class="large-12 columns">
 		<div class="row" align="center">
-		<input type="submit" name="submit" value="Create New Item" class="button" formmethod="post" action="software.php">
+		<input type="submit" name="submit" value="Save Item" class="button" formmethod="post">
 		<a class="button" href="software.php">Cancel</a>
 		</div>
 	</div>

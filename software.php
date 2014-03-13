@@ -39,7 +39,8 @@ if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSIO
       <th>Software ID</th>
       <th>Name</th>
       <th>Software type</th>
-      <th>Last updated at</th>
+      <th>Last updated by</th>
+      <th></th>
     </tr>
     </thead>
 
@@ -47,7 +48,7 @@ if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSIO
 
   while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))
   {
-     echo "<tr><td>" . $row['ID'] . "</td><td>" . $row['name'] . "</td><td>" . $row['software_type'] . "</td><td>" . $row['last_updated_at'] . "</td><a href=\"edit_software.php\">Edit</a></tr>";
+     echo "<tr><td>" . $row['index_id'] . "</td><td>" . $row['name'] . "</td><td>" . $row['software_type'] . "</td><td>" . $row['last_updated_by'] . "</td><td><a class=\"tiny button\" href=\"edit_software.php?edit=" . $row['index_id'] . "\">Edit</a></td></tr>";
   }
   
   ?>
@@ -66,11 +67,10 @@ if($_SESSION['access']==FACULTY_PERMISSION ) {
 }
 ?>
 
-
 <?php
 //The connection to the database is closed through the script close_db
 
 include('close_db.php');
 
-include('footer.php')
+include('footer.php');
 ?>
