@@ -14,7 +14,8 @@ if (!isset($_POST['departmentChoice']))
 //to the database to cut back on overhead
 
 $populationQuery = "SELECT DISTINCT OnCampusDepartment
-FROM FacStaff;";
+FROM FacStaff
+WHERE OnCampusDepartment IS NOT NULL;";
 
 //A connection to the database is established through the script open_db
 
@@ -43,29 +44,32 @@ if($_SESSION['access']=="2" ) {
 if($_SESSION['access']=="1" || $_SESSION['access']=="3") {
 ?>
 
-<form method="post" action="">
-<div class="row">
-<div class="large-6 columns">
-<select name="departmentChoice" id="departmentChoice">
-<option value="unassigned" selected="selected">Unassigned units</option>
+<div class="large-12 columns">
+	<h1>Departments</h1>
 
-<?php
+	<form method="post" action="">
+		<div class="row">
+			<div class="large-6 columns">
+				<select name="departmentChoice" id="departmentChoice">
+					<option value="unassigned" selected="selected">Unassigned units</option>
 
-while($row = sqlsrv_fetch_array($populationResult))
-{
-	echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
-	// Use an array to get all legal values for the department search
-	$securityArray[] = $row["OnCampusDepartment"];
-}
+					<?php
 
-?>
+					while($row = sqlsrv_fetch_array($populationResult))
+					{
+						echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
+						// Use an array to get all legal values for the department search
+						$securityArray[] = $row["OnCampusDepartment"];
+					}
 
-</select>
+					?>
+
+				</select>
+			</div>
+			<input type="submit" name="Search" class="small button">
+		</div>
+	</form>
 </div>
-<input type="submit" name="Search" class="button">
-</div>
-</form>
-
 <?php
 
 $searchingDepartment = $_POST['departmentChoice'];
