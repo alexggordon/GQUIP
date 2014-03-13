@@ -77,12 +77,12 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     <th width="200">Email</th>
     </tr>
     </thead>
-
+<a href=""></a>
   <?php
 
   foreach($page as $row)
   {
-     echo "<tr><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[0] . "</td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
+     echo "<tr><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
   }
 
  //$row['index'] the index here is a field name
