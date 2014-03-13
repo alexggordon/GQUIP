@@ -57,7 +57,7 @@ while($row = sqlsrv_fetch_array($populationResult))
 
 </select>
 </div>
-<input type="submit" name="Search">
+<input type="submit" name="Search" class="button postfix">
 </div>
 </form>
 

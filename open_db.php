@@ -1,7 +1,5 @@
 <?php
 
-
-
 $serverName = "sql05train1.gordon.edu";
 $connectionInfo = array(
 'Database' => 'CTSEquipment');

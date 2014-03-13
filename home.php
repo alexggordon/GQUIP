@@ -54,11 +54,11 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     </tr>
     </table>
 
-  //The following segments consult with the permissions of the user and
-  //accordingly render the page and/or allow the user to perform certain
-  //actions based on the permissions level
-
 <?php
+//The following segments consult with the permissions of the user and
+//accordingly render the page and/or allow the user to perform certain
+//actions based on the permissions level
+
 }
 if($_SESSION['access']=="2" ) {
 
