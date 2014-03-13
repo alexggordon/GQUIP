@@ -6,26 +6,37 @@ include('open_db.php');
 if(!isset($_SESSION['user'])) {
   header('Location: login.php');
 }
-// queries
+// query 1, for total number of items from DB
 $countQuery = "SELECT ID FROM dbo.gordonstudents";
 $count = sqlsrv_query($conn, $countQuery, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
 if ( !$count )
   die( print_r( sqlsrv_errors(), true));
 $num_rows = sqlsrv_num_rows( $count );
 
-
+// query 2, for all items we need
 $query = "SELECT  ID, FirstName, LastName, Email, Class FROM dbo.gordonstudents ORDER BY FirstName ASC";
 $result = sqlsrv_query($conn, $query, array(), array( "Scrollable" => 'static' ));
 if ( !$result )
   die( print_r( sqlsrv_errors(), true));
 
-
-
+// 
 // data for pagination
+
+// This is the syntax we pass to the paginator.php to give us our numbers
+// the left page link
+$aLeft = 'users.php?&page=';
+// the right page link. If blank, then left will be used. 
+$aRight = '';
+// do we want to show the fancy arrows?
+$sArrows = TRUE;
+// the number of items in the database
 $num_rows = sqlsrv_num_rows( $count );
+// rows of items per page
 $rowsPerPage = 25;
+// number of pages equals number of items divided by how many we show per page
 $numOfPages = ceil($num_rows/$rowsPerPage);
 
+// some quick math to find out what page we're on
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
     if ($page == 0) {
@@ -37,27 +48,18 @@ if (isset($_GET['page'])) {
   $pageNum = 1;
 }
 
+// This finds out our current starting place (or item)
 if (isset($_GET['page'])) {
   $pCurrent = $_GET['page'];
 } else {
   $pCurrent = 0;
 }
 
-$aLeft = 'users.php?&page=';
-$aRight = '';
 
-$sMultiplier = 25;
-$sArrows = TRUE;
-
-
-
-// get page, this parses the page info
+// gets the correct SQL Data. This makes a call to the getPage.php function
 $page = getPage($result, $pageNum, $rowsPerPage);
 
-
-
-
-
+// If faculty or user
 if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   ?>
   <div class="row">
@@ -66,7 +68,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     </div>
     </div>
   <div class="row">
-    <div class="large-10 large-centered columns">
+    <div class="large-12 large-centered columns">
   <table cellspacing="0">
    <thead>
     <tr>
@@ -84,11 +86,8 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   {
      echo "<tr><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
   }
-
- //$row['index'] the index here is a field name
   
   ?>
-
   </table>
   </div>
   </div>
@@ -96,9 +95,10 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   <div class="large-9 large-centered columns">
 <?php
 
+// Spit out the pagination info. This makes a call to the paginate.php function. 
+echo PHPagination($pCurrent, $num_rows, $aLeft, $aRight, $rowsPerPage, $sArrows);
 
-echo PHPagination($pCurrent, $num_rows, $aLeft, $aRight, $sMultiplier, $sArrows);
-
+// close the database connection
 sqlsrv_close( $conn );
 
 }
@@ -112,10 +112,7 @@ if($_SESSION['access']=="2" ) {
 
 <?php
 }
-?>
 
 
-
-<?php
 include('footer.php')
 ?>

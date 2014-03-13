@@ -11,8 +11,8 @@ function PHPagination($pCurrent, $pEnd, $PHPagi_urlPre, $PHPagi_urlPost, $PHPagi
 // LAYOUT SETTINGS - CHANGE TO SUIT YOUR NEEDS //
 /////////////////////////////////////////////////
 	
-	$PHPagi_htmlPre = '<ul class="pagination">';     // Precedes pagination output. Default is '<div class="PHPagination">'.
-	$PHPagi_htmlPost = '</ul>';                        // Suceeds pagination output. Default is '</div>'.
+	$PHPagi_htmlPre = '<div class="pagination-centered"><ul class="pagination">';     // Precedes pagination output. Default is '<div class="PHPagination">'.
+	$PHPagi_htmlPost = '</ul></div>';                        // Suceeds pagination output. Default is '</div>'.
 	$PHPagi_htmlDivider = ' ';                          // Separates results. Default is '|'.
 	$PHPagi_htmlOmission = '<li class="unavailable"><a href="">&hellip;</a></li>';                  // Replaces omitted results. Default is '$hellip;'.
 	$PHPagin_sPage1 = ' <strong>Page ';                 // Goes before current page. Default is ' <strong>Page '.
