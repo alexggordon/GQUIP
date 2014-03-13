@@ -99,6 +99,7 @@ if (isset($_POST['submit'])){
     $department = $_POST['department'];
     $assignmentType = $_POST['assignmentType'];
 
+    
     //SQL query to insert variables above into table
     $sql = " INSERT INTO dbo.computers ([control],[manufacturer],[model],[serialNumber],[ram],[hdSize],[partNumber],[computer_type],[warrantyLength],[accountNumber],[purchase_date],[purchasePrice],[replacementYear],[userName],[department],[assignmentType])VALUES('$control','$manufacturer','$model','$serial_num','$memory','$hard_drive','$part_number','$computer_type','$warranty_length','$purchase_acct','$purchase_date','$purchase_price','$replacement_year','$userName','$department','$assignmentType')";
     $result = sqlsrv_query($sql, $conn);

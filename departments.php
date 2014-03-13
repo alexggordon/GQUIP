@@ -1,5 +1,6 @@
 <?php 
 include 'header.php';
+include('open_db.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
 }
@@ -13,7 +14,6 @@ FROM hardware_assignments;";
 
 //A connection to the database is established through the script open_db
 
-include('open_db.php');
 
 //The mssql_query function allows PHP to make a query against the database
 //and returns the resulting data
