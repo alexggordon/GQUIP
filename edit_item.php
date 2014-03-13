@@ -56,21 +56,21 @@ if(isset($_GET['control']))
 
 
 // Manager
-if($_SESSION['access']=="3" ) {
+if($_SESSION['access']==ADMIN_PERMISSION ) {
 ?>
 
 
 <?php
 }
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 ?>
 
 
 <?php
 }
 // User
-if($_SESSION['access']=="1" ) {
+if($_SESSION['access']==USER_PERMISSION ) {
 ?>
 
 <?php
@@ -92,7 +92,7 @@ if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
 }
 // Manager or User
-if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
 // 
 // [control] [varchar](45) NOT NULL,
 // [department] [varchar](45) NOT NULL,
@@ -408,7 +408,7 @@ if(isset($_GET['control']))
 	}
 }
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 // Faculty should not have access to this page. 
 header('Location: home.php');
 }

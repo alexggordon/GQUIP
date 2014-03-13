@@ -44,9 +44,9 @@ function authenticate_with_ad($user, $password) {
             $groups[] .= $temp;
             
             // regular User
-            if (strpos($grps, $ldap_user_group)) { $access = 1; break; }
-            if (strpos($grps, $ldap_faculty_group)) { $access = 2; break; }
-            if (strpos($grps, $ldap_manager_group)) { $access = 3; }
+            if (strpos($grps, $ldap_user_group)) { $access = USER_PERMISSION; break; }
+            if (strpos($grps, $ldap_faculty_group)) { $access = FACULTY_PERMISSION; break; }
+            if (strpos($grps, $ldap_manager_group)) { $access = ADMIN_PERMISSION; }
         
         }
 		if ($access != 0) {

@@ -38,7 +38,15 @@ $numOfPages = ceil($num_rows/$rowsPerPage);
 
 
 
+<<<<<<< HEAD
 if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+=======
+include('open_db.php');
+$result = sqlsrv_query($conn,
+                       $query);
+// If user or administrator
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
+>>>>>>> FETCH_HEAD
   ?>
   <div class="row">
     <div class="large-10 large-centered columns">
@@ -98,7 +106,7 @@ sqlsrv_close( $conn );
 </div>
 <?php
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 ?>
 
 <?php

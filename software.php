@@ -18,12 +18,12 @@ include('open_db.php');
 //The mssql_query function allows PHP to make a query against the database
 //and returns the resulting data
 
-$result = sqlsrv_query($query);
+$result = sqlsrv_query($conn, $query);
 
 $numRows = sqlsrv_num_rows($result); 
 
 // If user or administrator
-if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
   ?>
   <div class="row">
     <div class="large-10 large-centered columns">
@@ -31,10 +31,10 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     </div>
     </div>
   <div class="row">
-  	<a href="new_software.php">Add software item</a>
     <div class="large-10 large-centered columns">
   <table cellspacing="0">
-   <thead>
+    <a href="new_software.php" class="button expand">Add software item</a>
+    <thead>
     <tr>
       <th>Software ID</th>
       <th>Name</th>
@@ -55,10 +55,11 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   </table>
   </div>
   </div>
+  
 <?php
 }
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 ?>
 
 <?php

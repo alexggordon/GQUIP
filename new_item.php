@@ -21,7 +21,7 @@ if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
 }
 // Manager or User
-if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
 // 
 // [control] [varchar](45) NOT NULL,
 // [department] [varchar](45) NOT NULL,
@@ -130,7 +130,7 @@ else {
 			</div>
 			<div class="large-4 columns">
 				<label>Manufacturer</label>
-					<input type="text" name="manufactuer" placeholder="Lenovo" required>
+					<input type="text" name="manufacturer" placeholder="Lenovo" required>
 			</div>
 			<div class="large-4 columns">
 				<label>Model</label>
@@ -274,7 +274,7 @@ else {
 	}
 	}
 	// Faculty
-	if($_SESSION['access']=="2" ) {
+	if($_SESSION['access']==FACULTY_PERMISSION ) {
 	// Faculty should not have access to this page. 
 	header('Location: home.php');
 	}

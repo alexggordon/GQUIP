@@ -4,7 +4,7 @@ if(!isset($_SESSION['user'])) {
     header('Location: login.php');
 }
 // Manager
-if($_SESSION['access']=="3" ) {
+if($_SESSION['access']==ADMIN_PERMISSION ) {
 
 $self = $_SERVER['PHP_SELF'];
 $request = $_SERVER['REQUEST_METHOD'];
@@ -167,14 +167,14 @@ header( "Location: test.php?success=1" );
 <?php
 }
 // Faculty
-if($_SESSION['access']=="2" ) {
+if($_SESSION['access']==FACULTY_PERMISSION ) {
 
 // Faculty can not access this page
 header('Location: home.php');
 
 }
 // User
-if($_SESSION['access']=="1" ) {
+if($_SESSION['access']==USER_PERMISSION ) {
 
 // User can not access this page
 header('Location: home.php');
