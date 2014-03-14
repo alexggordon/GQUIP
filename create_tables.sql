@@ -181,40 +181,44 @@ GO
 ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_software_1]
 GO
 
-#<!!!> NEW STUFF
+#
+
+<UPDATED TABLES>
 
 
-#FacStaff table creation
+
+
+
 CREATE TABLE [dbo].[FacStaff] (
-  ID INT NOT NULL,
-  last_updated_by VARCHAR(255) NOT NULL,
-  OnCampusDepartment VARCHAR(255) NOT NULL,
-  Dept VARCHAR(255) NOT NULL,
-  Type VARCHAR(255) NOT NULL,
-  last_updated_at DATETIME NOT NULL,
-  created_at DATETIME NOT NULL,
-  FirstName VARCHAR(255) NOT NULL,
-  LastName VARCHAR(255) NOT NULL,
-  Email VARCHAR(255) NOT NULL,
+  ID NVARCHAR(255) NOT NULL,
+  OnCampusDepartment VARCHAR(255) NULL,
+  Dept VARCHAR(255) NULL,
+  Type VARCHAR(255) NULL,
+  FirstName VARCHAR(255) NULL,
+  LastName VARCHAR(255) NULL,
+  Email VARCHAR(255) NULL,
   PRIMARY KEY (id)
   )
 
-#computers table creation
+
+
+
+
 CREATE TABLE [dbo].computers (
+  computer_id int NOT NULL AUTO INCREMENT,
   control VARCHAR(255) NOT NULL,
-  legacy_department VARCHAR(255) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
-  serial VARCHAR(255) NOT NULL,
+  serial_num VARCHAR(255) NULL,
   model VARCHAR(255) NOT NULL,
   manufacturer VARCHAR(255) NOT NULL,
   purchase_date DATETIME NOT NULL,
   purchase_price FLOAT NOT NULL,
   purchase_acct VARCHAR(255) NOT NULL,
   usage_status VARCHAR(255) NOT NULL,
-  memory INT NULL,
-  hard_drive INT NULL,
+  memory INT NOT NULL,
+  hard_drive INT NOT NULL,
   warranty_length VARCHAR(255) NULL,
   warranty_start VARCHAR(255) NULL,
   warranty_type VARCHAR(255) NULL,
@@ -223,12 +227,37 @@ CREATE TABLE [dbo].computers (
   cameron_id VARCHAR(255) NULL,
   part_number VARCHAR(255) NULL,
   ip_address VARCHAR(255) NULL,
-  PRIMARY KEY (control)
+  inventoried TINYINT NOT NULL DEFAULT '0',
+  PRIMARY KEY (computer_id)
   )
 
-#hardware_assignments table creation
-ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_computers] FOREIGN KEY([controla])
-REFERENCES [dbo].[computers] ([control])
+
+
+
+
+CREATE TABLE [dbo].hardware_assignments (
+  id INT NOT NULL AUTO INCREMENT,
+  user_id NVARCHAR(255) NOT NULL,
+  last_updated_by VARCHAR(255) NOT NULL,
+  computer int NOT NULL,
+  department_id VARCHAR(255) NOT NULL,
+  last_updated_at DATETIME NOT NULL,
+  created_at DATETIME NOT NULL,
+  fullorpart TINYINT NOT NULL,
+  primary_computer TINYINT NOT NULL,
+  replace_with_recycled TINYINT NOT NULL,
+  nextneed_macpc TINYINT NOT NULL,
+  nextneed_laptopdesktop TINYINT NOT NULL,
+  start_assignment DATETIME NOT NULL,
+  end_assignment DATETIME NULL,
+  assignment_type VARCHAR(255) NOT NULL,
+  nextneed_note TEXT NULL,
+  PRIMARY KEY (id)
+  )
+GO
+
+ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_computers] FOREIGN KEY([computer])
+REFERENCES [dbo].[computers] ([computer_id])
 GO
 
 ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_FacStaff] FOREIGN KEY([user_id])
@@ -241,131 +270,104 @@ GO
 ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_FacStaff]
 GO
 
-CREATE TABLE [dbo].hardware_assignments (
-  id INT NOT NULL,
-  user_id INT NULL,
-  last_updated_by VARCHAR(255) NOT NULL,
-  control VARCHAR(255) NOT NULL,
-  department_id VARCHAR(255) NOT NULL,
-  last_updated_at DATETIME NOT NULL,
-  created_at DATETIME NOT NULL,
-  fullorpart TINYINT(1) NOT NULL,
-  primary_computer TINYINT(1) NOT NULL,
-  replace_with_recycled TINYINT(1) NOT NULL,
-  nextneed_macpc TINYINT(1) NOT NULL,
-  nextneed_laptopdesktop TINYINT(1) NOT NULL,
-  start_assignment DATETIME NOT NULL,
-  end_assignment DATETIME NULL,
-  nextneed_note TEXT NULL,
-  PRIMARY KEY (id)
-  )
 
-#creation of foreign key constraint for computer_id - a row in computers must have an id corresponding to this value
-ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_computers] FOREIGN KEY([computer_id])
-REFERENCES [dbo].[computers] ([control])
 
-#creation of foreign key constraint for user_id - a row in FacStaff must have an id corresponding to this value
-ALTER TABLE dbo.hardware_assignments WITH CHECK ADD CONSTRAINT [fk_hardware_FacStaff] FOREIGN KEY([user_id])
-REFERENCES [dbo].[FacStaff] ([ID])
 
-#application of the first of the above foreign key constraints
-ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_computers]
-
-#application of the second of the above foreign key constraints
-ALTER TABLE [dbo].[hardware_assignments] CHECK CONSTRAINT [fk_hardware_FacStaff]
 
 CREATE TABLE [dbo].comments (
-  id INT NOT NULL,
+  index_id INT NOT NULL AUTO INCREMENT,
   user_name VARCHAR(255) NOT NULL,
   computer_id INT NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
   body TEXT NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (index_id)
   )
 
-#creation of foreign key constraint for computer_id - a row in computers must have an id corresponding to this value
 ALTER TABLE dbo.comments WITH CHECK ADD CONSTRAINT [fk_comments_computers] FOREIGN KEY([computer_id])
-REFERENCES [dbo].[computers] ([control])
+REFERENCES [dbo].[computers] ([computer_id])
 
-#application of the above foreign key constraint
 ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [fk_comments_computers]
+
+
+
+
 
 CREATE TABLE [dbo].changes (
   computer_id INT NOT NULL,
-  last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
+  creator VARCHAR(255) NOT NULL,
   body TEXT NOT NULL,
   PRIMARY KEY (computer_id, created_at)
-  )
+)
+GO
 
-#creation of foreign key constraint for computer_id - a row in computers must have an id corresponding to this value
 ALTER TABLE dbo.changes WITH CHECK ADD CONSTRAINT [fk_changes_computers] FOREIGN KEY([computer_id])
-REFERENCES [dbo].[computers] ([control])
+REFERENCES [dbo].[computers] ([computer_id])
+GO
 
-#application of the above foreign key constraint
 ALTER TABLE [dbo].[changes] CHECK CONSTRAINT [fk_changes_computers]
+GO
 
-#<!!!> other 'island' of tables
 
-#software table creation
+
+
 
 CREATE TABLE [dbo].[software]
 (
-id int NOT NULL,
+index_id int NOT NULL AUTO INCREMENT,
 last_updated_by VARCHAR(255) NOT NULL,
 name VARCHAR(255) NOT NULL,
 software_type VARCHAR(255) NOT NULL,
 PRIMARY KEY (id)
 )
+GO
 
-#students table creation
+
+
+
 
 CREATE TABLE [dbo].[students]
 (
-id int NOT NULL,
-first_name VARCHAR(255) NOT NULL,
-middle_name VARCHAR(255) NOT NULL,
-last_name VARCHAR(255) NOT NULL,
-email VARCHAR(255) NOT NULL,
+id VARCHAR(255) NOT NULL,
+FirstName VARCHAR(255) NULL,
+MiddleName VARCHAR(255) NULL,
+LastName VARCHAR(255) NULL,
+Class VARCHAR(255) NULL,
+Email VARCHAR(255) NULL,
+grad_student CHAR(1) NULL,
 PRIMARY KEY (id)
 )
+GO
 
-#licenses table creation
+
+
+
 
 CREATE TABLE [dbo].[licenses]
 (
-id int NOT NULL,
+index_id int NOT NULL AUTO INCREMENT,
 last_updated_by VARCHAR(255) NOT NULL,
-user_id int NOT NULL,
+date_sold DATETIME NOT NULL,
+id VARCHAR(255) NOT NULL,
+seller VARCHAR(255) NOT NULL,
 software_id int NOT NULL,
-PRIMARY KEY (id)
+PRIMARY KEY (index_id)
 )
 
-#creation of foreign key constraint for user_id - a row in students must have an id corresponding to this value
-ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_students] FOREIGN KEY([user_id])
+ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_students] FOREIGN KEY([id])
 REFERENCES [dbo].[students] ([id])
 GO
 
-
-#creation of foreign key constraint for software - a row in software must have an id corresponding to this value
 ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_software] FOREIGN KEY([software_id])
-REFERENCES [dbo].[software] ([id])
+REFERENCES [dbo].[software] ([index_id])
 GO
 
-#application of the first of the above foreign key constraints
 ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_students]
 GO
 
-#application of the second of the above foreign key constraints
 ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_software]
 GO
 
-#<!!!> TABLE altercation statements for ID columns in FacStaff and students
 
-alter table FacStaff
-alter column ID nvarchar(255)
-
-alter table students
-alter column id varchar(255)
 
