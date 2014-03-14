@@ -181,15 +181,13 @@ GO
 ALTER TABLE [dbo].[licenses] CHECK CONSTRAINT [fk_licenses_software_1]
 GO
 
-#
-
-<UPDATED TABLES>
+#<UPDATED TABLES>
 
 
+#These first two just describe, they are actually created further down the line with a select into
 
 
-
-CREATE TABLE [dbo].[FacStaff] (
+CREATE TABLE [dbo].[FacandStaff] (
   ID NVARCHAR(255) NOT NULL,
   OnCampusDepartment VARCHAR(255) NULL,
   Dept VARCHAR(255) NULL,
@@ -197,15 +195,96 @@ CREATE TABLE [dbo].[FacStaff] (
   FirstName VARCHAR(255) NULL,
   LastName VARCHAR(255) NULL,
   Email VARCHAR(255) NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (ID)
   )
 
 
 
 
 
+CREATE TABLE [dbo].[gordonstudents]
+(
+id VARCHAR(255) NOT NULL,
+FirstName VARCHAR(255) NULL,
+MiddleName VARCHAR(255) NULL,
+LastName VARCHAR(255) NULL,
+Class VARCHAR(255) NULL,
+Email VARCHAR(255) NULL,
+grad_student CHAR(1) NULL,
+PRIMARY KEY (id)
+)
+GO
+
+
+#Beyond here is where the real SQL begins
+
+
+DROP TABLE hardware_assignments
+GO
+
+DROP TABLE changes
+GO
+
+DROP TABLE comments
+GO
+
+DROP TABLE computers
+GO
+
+DROP TABLE FacandStaff
+GO
+
+DROP TABLE licenses
+GO
+
+DROP TABLE software
+GO
+
+DROP TABLE gordonstudents
+GO
+
+
+
+
+
+SELECT FacStaff.ID, FacStaff.OnCampusDepartment, FacStaff.Dept, 
+    FacStaff.Type, FacStaff.FirstName, FacStaff.LastName,
+    FacStaff.Email
+INTO dbo.FacandStaff
+FROM dbo.FacStaff
+GO
+
+UPDATE FacandStaff SET ID='NULL' WHERE ID IS NULL
+GO
+
+ALTER TABLE FacandStaff ALTER COLUMN ID NVARCHAR(15) NOT NULL
+GO
+
+ALTER TABLE FacandStaff 
+ADD CONSTRAINT PK_FacandStaff_ID PRIMARY KEY CLUSTERED (ID)
+GO
+
+
+
+
+
+SELECT students.id, students.Class, students.Email, 
+    students.grad_student, students.FirstName, students.MiddleName,
+    students.LastName
+INTO dbo.gordonstudents
+FROM dbo.students
+GO
+
+ALTER TABLE gordonstudents
+ADD CONSTRAINT PK_gordonstudents_id PRIMARY KEY CLUSTERED (id)
+GO
+
+
+
+
+
 CREATE TABLE [dbo].computers (
-  computer_id int NOT NULL AUTO INCREMENT,
+  computer_id int NOT NULL,
   control VARCHAR(255) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
@@ -222,7 +301,7 @@ CREATE TABLE [dbo].computers (
   warranty_length VARCHAR(255) NULL,
   warranty_start VARCHAR(255) NULL,
   warranty_type VARCHAR(255) NULL,
-  replacement_year YEAR NULL,
+  replacement_year VARCHAR(255) NULL,
   computer_type VARCHAR(255) NULL,
   cameron_id VARCHAR(255) NULL,
   part_number VARCHAR(255) NULL,
@@ -236,8 +315,8 @@ CREATE TABLE [dbo].computers (
 
 
 CREATE TABLE [dbo].hardware_assignments (
-  id INT NOT NULL AUTO INCREMENT,
-  user_id NVARCHAR(255) NOT NULL,
+  id INT NOT NULL,
+  user_id NVARCHAR(15) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
   computer int NOT NULL,
   department_id VARCHAR(255) NOT NULL,
@@ -275,7 +354,7 @@ GO
 
 
 CREATE TABLE [dbo].comments (
-  index_id INT NOT NULL AUTO INCREMENT,
+  index_id INT NOT NULL,
   user_name VARCHAR(255) NOT NULL,
   computer_id INT NOT NULL,
   last_updated_at DATETIME NOT NULL,
@@ -315,28 +394,11 @@ GO
 
 CREATE TABLE [dbo].[software]
 (
-index_id int NOT NULL AUTO INCREMENT,
+index_id int NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
 name VARCHAR(255) NOT NULL,
 software_type VARCHAR(255) NOT NULL,
-PRIMARY KEY (id)
-)
-GO
-
-
-
-
-
-CREATE TABLE [dbo].[students]
-(
-id VARCHAR(255) NOT NULL,
-FirstName VARCHAR(255) NULL,
-MiddleName VARCHAR(255) NULL,
-LastName VARCHAR(255) NULL,
-Class VARCHAR(255) NULL,
-Email VARCHAR(255) NULL,
-grad_student CHAR(1) NULL,
-PRIMARY KEY (id)
+PRIMARY KEY (index_id)
 )
 GO
 
@@ -346,7 +408,7 @@ GO
 
 CREATE TABLE [dbo].[licenses]
 (
-index_id int NOT NULL AUTO INCREMENT,
+index_id int NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
 date_sold DATETIME NOT NULL,
 id VARCHAR(255) NOT NULL,
@@ -356,7 +418,7 @@ PRIMARY KEY (index_id)
 )
 
 ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_students] FOREIGN KEY([id])
-REFERENCES [dbo].[students] ([id])
+REFERENCES [dbo].[gordonstudents] ([id])
 GO
 
 ALTER TABLE dbo.licenses WITH CHECK ADD CONSTRAINT [fk_licenses_software] FOREIGN KEY([software_id])
