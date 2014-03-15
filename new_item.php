@@ -229,7 +229,7 @@ else {
 		</div>
 	</fieldset>
 	<fieldset>
-		<legend>User Info</legend>
+		<legend>Hardware Assignment Info</legend>
 		<div class="row">
 			<div class="large-3 columns">
 				<label>User Name</label>
@@ -238,11 +238,37 @@ else {
 				    <option value="1">PHP GOES HERE</option>
 				</select>
 			</div>
+			
+
+<?php 
+include('open_db.php');
+$populationQuery = "SELECT DISTINCT OnCampusDepartment
+FROM FacStaff
+WHERE OnCampusDepartment IS NOT NULL;";
+
+//The sqlsrv_query function allows PHP to make a query against the database
+//and returns the resulting data
+
+$populationResult = sqlsrv_query($conn, $populationQuery);
+
+//This array gets all the possible departments that a search could target if
+//it were valid
+
+$securityArray[0] = "unassigned";
+
+ ?>
 			<div class="large-3 columns">
-				<label>Department</label>
+			<label>Department</label>
 				<select class="medium" name="department" required>
-				    <option DISABLED selected>Department</option>
-				    <option value="1">PHP GOES HERE</option>
+					<option DISABLED selected>Department</option>
+					<?php
+					while($row = sqlsrv_fetch_array($populationResult))
+					{
+						echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
+						// Use an array to get all legal values for the department search
+						$securityArray[] = $row["OnCampusDepartment"];
+					}
+					?>
 				</select>
 			</div>
 			<div class="large-3 columns">		
