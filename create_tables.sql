@@ -285,10 +285,10 @@ GO
 
 CREATE TABLE [dbo].computers (
   computer_id INT IDENTITY NOT NULL,
-  control VARCHAR(255) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
+  control VARCHAR(255) NOT NULL,
   serial_num VARCHAR(255) NULL,
   model VARCHAR(255) NOT NULL,
   manufacturer VARCHAR(255) NOT NULL,
@@ -316,17 +316,15 @@ CREATE TABLE [dbo].computers (
 
 CREATE TABLE [dbo].hardware_assignments (
   id INT IDENTITY NOT NULL,
-  user_id NVARCHAR(15) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
-  computer int NOT NULL,
-  department_id VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
-  fullorpart TINYINT NOT NULL,
+  user_id NVARCHAR(15) NOT NULL,
+  computer int NOT NULL,
+  department_id VARCHAR(255) NOT NULL,
+  full_time TINYINT NOT NULL,
   primary_computer TINYINT NOT NULL,
   replace_with_recycled TINYINT NOT NULL,
-  nextneed_macpc TINYINT NOT NULL,
-  nextneed_laptopdesktop TINYINT NOT NULL,
   start_assignment DATETIME NOT NULL,
   end_assignment DATETIME NULL,
   assignment_type VARCHAR(255) NOT NULL,
@@ -355,10 +353,11 @@ GO
 
 CREATE TABLE [dbo].comments (
   index_id INT IDENTITY NOT NULL,
-  user_name VARCHAR(255) NOT NULL,
-  computer_id INT NOT NULL,
+  last_updated_by VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
+  computer_id INT NOT NULL,
+  user_name VARCHAR(255) NOT NULL,
   body TEXT NOT NULL,
   PRIMARY KEY (index_id)
   )
@@ -374,6 +373,8 @@ ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [fk_comments_computers]
 
 CREATE TABLE [dbo].changes (
   computer_id INT NOT NULL,
+  last_updated_by VARCHAR(255) NOT NULL,
+  last_updated_at DATETIME NOT NULL,
   created_at DATETIME NOT NULL,
   creator VARCHAR(255) NOT NULL,
   body TEXT NOT NULL,
@@ -396,6 +397,8 @@ CREATE TABLE [dbo].[software]
 (
 index_id INT IDENTITY NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
+last_updated_at DATETIME NOT NULL,
+created_at DATETIME NOT NULL,
 name VARCHAR(255) NOT NULL,
 software_type VARCHAR(255) NOT NULL,
 PRIMARY KEY (index_id)
@@ -410,6 +413,8 @@ CREATE TABLE [dbo].[licenses]
 (
 index_id INT IDENTITY NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
+last_updated_at DATETIME NOT NULL,
+created_at DATETIME NOT NULL,
 date_sold DATETIME NOT NULL,
 id VARCHAR(255) NOT NULL,
 seller VARCHAR(255) NOT NULL,
