@@ -284,7 +284,7 @@ GO
 
 
 CREATE TABLE [dbo].computers (
-  computer_id int NOT NULL,
+  computer_id INT IDENTITY NOT NULL,
   control VARCHAR(255) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
   last_updated_at DATETIME NOT NULL,
@@ -315,7 +315,7 @@ CREATE TABLE [dbo].computers (
 
 
 CREATE TABLE [dbo].hardware_assignments (
-  id INT NOT NULL,
+  id INT IDENTITY NOT NULL,
   user_id NVARCHAR(15) NOT NULL,
   last_updated_by VARCHAR(255) NOT NULL,
   computer int NOT NULL,
@@ -354,7 +354,7 @@ GO
 
 
 CREATE TABLE [dbo].comments (
-  index_id INT NOT NULL,
+  index_id INT IDENTITY NOT NULL,
   user_name VARCHAR(255) NOT NULL,
   computer_id INT NOT NULL,
   last_updated_at DATETIME NOT NULL,
@@ -394,7 +394,7 @@ GO
 
 CREATE TABLE [dbo].[software]
 (
-index_id int NOT NULL,
+index_id INT IDENTITY NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
 name VARCHAR(255) NOT NULL,
 software_type VARCHAR(255) NOT NULL,
@@ -408,7 +408,7 @@ GO
 
 CREATE TABLE [dbo].[licenses]
 (
-index_id int NOT NULL,
+index_id INT IDENTITY NOT NULL,
 last_updated_by VARCHAR(255) NOT NULL,
 date_sold DATETIME NOT NULL,
 id VARCHAR(255) NOT NULL,
