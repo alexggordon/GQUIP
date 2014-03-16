@@ -7,6 +7,14 @@ if(!isset($_SESSION['user'])) {
 // Manager or User
 if($_SESSION['access']==ADMIN_PERMISSION) {
 
+
+?>
+
+<div class="large-12 large-centered columns">
+<h1>Editing License</h1>
+
+<?php
+
 $itemID = $_GET['edit'];
 
 if (isset($_POST['submit'])){
@@ -36,15 +44,13 @@ if (isset($_POST['submit'])){
 		// close the connection
 
 		sqlsrv_close($conn);
-		echo "Data successfully removed";
+		echo "<div class=\"large-8 large-centered columns\">";
+		echo "<h3 class=\"large-centered\">Data successfully removed</h3>";
 		echo "<a class=\"button\" href=\"students.php\">OK</a>";
+		echo "</div>";
 	}
 	else
 	{
-		// Set the last_updated_by value
-
-		$last_updated_by = $_SESSION['user'];
-
 		//connect to the database
 
 		include 'open_db.php';
@@ -59,11 +65,14 @@ if (isset($_POST['submit'])){
 			echo( print_r( sqlsrv_errors(), true));
 		}
 		//assign form input to variables
+		include 'dateTime.php';
+		$last_updated_by = $_SESSION['user'];
+		$last_updated_at = $dateTime;
 		$seller = $_POST['seller'];
 		$software_id = $_POST['softwareChoice'];
 
 		//SQL query to insert variables above into table
-		$sql = "UPDATE dbo.licenses SET seller = '$seller', software_id = $software_id WHERE licenses.index_id = $itemID;";
+		$sql = "UPDATE dbo.licenses SET seller = '$seller', software_id = $software_id, last_updated_by = '$last_updated_by', last_updated_at = '$last_updated_at' WHERE licenses.index_id = $itemID;";
 		$result = sqlsrv_query($conn, $sql);
 	
 		//if the query cant be executed
@@ -75,9 +84,10 @@ if (isset($_POST['submit'])){
 		// close the connection
 
 		sqlsrv_close( $conn);
-		echo "Data successfully modified";
-		echo $_POST['submit'];
-		echo "<a class=\"button\" href=\"students.php\">OK</a>";
+		echo "<div class=\"large-8 large-centered columns\">";
+		echo "<h3>Data successfully modified</h3>";
+		echo "<a class=\"button expand\" href=\"students.php\">OK</a>";
+		echo "</div>";
     }
 }
 else {
@@ -109,8 +119,6 @@ else {
 	
 ?>
 
-<div class="large-12 columns">
-<h1>Editing License</h1>
 <form data-abide type="submit" name="submit" enctype='multipart/form-data' <?php echo "action=\"edit_license.php?edit=" . $itemID . "\""; ?> method="POST">
 	<fieldset>
 		<legend>License Info</legend>
@@ -124,11 +132,11 @@ else {
 				<label>Time sold</label>
 					<label name="date_sold"><?php echo $item['date_sold']->format('Y-m-d H:i:s'); ?></label>
 			</div>
-			<div class="large-2 columns">
+			<div class="large-3 columns">
 				<label>Seller</label>
 					<input type="text" name="seller" <?php echo "value=\"" . $item['seller'] . "\""; ?> required>
 			</div>
-			<div class="large-4 columns">
+			<div class="large-6 columns">
 				<label>Software licensed</label>
 				<select name="softwareChoice" id="softwareChoice">
 
@@ -137,11 +145,7 @@ else {
 				while($row = sqlsrv_fetch_array($populationResult))
 				{
 					echo "<option value=\"" . $row["index_id"];
-					if ($row['index_id'] == $item['software_id'])
-					{
-						echo " selected";
-					}
-					echo "\">ID: " . $row["index_id"] . " - " . $row['name'] . " (" . $row['software_type'] . ")</option>\n";
+					echo "\">ID: " . $row["index_id"] . " - " . $row['name'] . " (Type: " . $row['software_type'] . ")</option>\n";
 					// Use an array to get all legal values for the department search
 					$securityArray[] = $row["index_id"];
 				}
@@ -153,19 +157,23 @@ else {
 		</div>
 	</fieldset>
 		<div class="row" align="center">
-		<input type="submit" name="submit" value="Save Item" class="button" formmethod="post">
-		<a class="button" href="students.php">Cancel</a>
-		<div class="large-3 columns">
-		<dl class="accordion" data-accordion>
-		  <dd>
-			<a href="#deletePanel">Delete</a>
-			<div id="deletePanel" class="content alert">
-				<p>Are you sure you want to delete this item? This action cannot be undone.</p>
-		  		<input type="submit" name="submit" value="Delete Item" class="button" formmethod="post">
+			<div class="large-4 columns">
+				<dl class="accordion" data-accordion>
+				  <dd>
+					<a href="#deletePanel">Delete</a>
+					<div id="deletePanel" class="content alert">
+						<p>Are you sure you want to delete this item? This action cannot be undone.</p>
+						<input type="submit" name="submit" value="Delete Item" class="button alert" formmethod="post">
+					</div>
+				  </dd>
+				</dl>
 			</div>
-		  </dd>
-		</dl>
-		</div>
+			<div class="large-4 columns">
+			<a class="button expand" href="students.php">Cancel</a>
+			</div>
+			<div class="large-4 columns">
+			<input type="submit" name="submit" value="Save Item" class="button expand" formmethod="post">
+			</div>
 		</div>
 </form>
 </div>

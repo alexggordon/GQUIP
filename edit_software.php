@@ -11,42 +11,74 @@ $itemID = $_GET['edit'];
 
 if (isset($_POST['submit'])){
 
-	// Set the last_updated_by value
+	if ($_POST['submit'] == "Delete Item")
+	{
+		include 'open_db.php';
 
-	$last_updated_by = $_SESSION['user'];
+		//display error if database cannot be accessed 
+		if (!$conn ) 
+		{
+			echo('<div data-alert class="alert-box warning">
+				  Sorry! Database is unavailable.
+				  <a href="#" class="close">&times;</a>
+				</div>');
+			echo( print_r( sqlsrv_errors(), true));
+		}    
+		$deletionSQL = "DELETE FROM dbo.software WHERE index_id = $itemID;";
 
-    //connect to the database 
+		$deletionAttempt = sqlsrv_query($conn, $deletionSQL);
 
-	include 'open_db.php';
+		if(!$deletionAttempt)
+		{
+			echo print_r( sqlsrv_errors(), true);
+			exit;
+		}
+		// close the connection
 
-    //display error if database cannot be accessed 
-    if (!$conn ) 
-    {
-        echo('<div data-alert class="alert-box warning">
-        	  Sorry! Database is unavailable.
-        	  <a href="#" class="close">&times;</a>
-        	</div>');
-        echo( print_r( sqlsrv_errors(), true));
-    }
-    //assign form input to variables
-    $name = $_POST['name'];
-    $software_type = $_POST['software_type'];
+		sqlsrv_close($conn);
+		echo "Data successfully removed";
+		echo "<a class=\"button\" href=\"students.php\">OK</a>";
+	}
+	else
+	{
 
-    //SQL query to insert variables above into table
-    $sql = "UPDATE dbo.software SET index_id = $itemID, last_updated_by = '$last_updated_by', name = '$name', software_type = '$software_type' WHERE software.index_id = $itemID;";
-    $result = sqlsrv_query($conn, $sql);
-    
-    //if the query cant be executed
-    if(!$result)
-    {
-        echo print_r( sqlsrv_errors(), true);
-        exit;
-    }
-    // close the connection
+		//connect to the database 
 
-    sqlsrv_close( $conn);
-    echo "Data successfully modified";
-    echo "<a class=\"button\" href=\"software.php\">OK</a>";
+		include 'open_db.php';
+
+		//display error if database cannot be accessed 
+		if (!$conn ) 
+		{
+			echo('<div data-alert class="alert-box warning">
+				  Sorry! Database is unavailable.
+				  <a href="#" class="close">&times;</a>
+				</div>');
+			echo( print_r( sqlsrv_errors(), true));
+		}
+		//assign form input to variables
+		include 'dateTime.php';
+		$last_updated_by = $_SESSION['user'];
+		$last_updated_at = $dateTime;
+		$name = $_POST['name'];
+		$software_type = $_POST['software_type'];
+
+		//SQL query to insert variables above into table
+		$sql = "UPDATE dbo.software SET index_id = $itemID, last_updated_by = '$last_updated_by', last_updated_at = '$last_updated_at', name = '$name', software_type = '$software_type' WHERE software.index_id = $itemID;";
+		$result = sqlsrv_query($conn, $sql);
+	
+		//if the query cant be executed
+		if(!$result)
+		{
+			echo print_r( sqlsrv_errors(), true);
+			exit;
+		}
+		// close the connection
+
+		sqlsrv_close( $conn);
+		echo "Data successfully modified";
+		echo $_POST['submit'];
+		echo "<a class=\"button\" href=\"software.php\">OK</a>";
+	}
 }
 else {
 	
@@ -85,10 +117,23 @@ else {
 			</div>
 		</div>
 	</fieldset>
-		<div class="large-12 columns">
-		<div class="row" align="center">
-		<input type="submit" name="submit" value="Save Item" class="button" formmethod="post">
-		<a class="button" href="software.php">Cancel</a>
+	<div class="row">
+		<div class="large-4 columns">
+			<dl class="accordion" data-accordion>
+			  <dd>
+				<a href="#deletePanel">Delete</a>
+				<div id="deletePanel" class="content alert">
+					<p>Are you sure you want to delete this item? This action cannot be undone.</p>
+					<input type="submit" name="submit" value="Delete Item" class="button alert" formmethod="post">
+				</div>
+			  </dd>
+			</dl>
+		</div>
+			<div class="large-4 columns">
+			<a class="button expand" href="software.php">Cancel</a>
+		</div>
+		<div class="large-4 columns">
+			<input type="submit" name="submit" value="Save Item" class="button expand" formmethod="post">
 		</div>
 	</div>
 </form>
