@@ -1,3 +1,20 @@
+<!--- 
+CONCERNS:
+1: Is the "printer" option in assignment_type specifically referring to printer servers? (If not
+	... I don't see a reason to have it, we can just rely on cameron_id being null/not null or add
+	... a printer option to computer_type)
+2: Is warranty_end being calculated as purchase_date + warranty_length at the computer's addition
+	... to the database?
+3: Why are there two separate input fields for replacement_year?
+4: Doesn't the new item page at least need the ip_address, cameron_id, and warranty_type columns
+	... in addition to what is already there?
+5: Are some bits of information (like stuff for comments and possibly null fields) not going to be
+	... on the new_item page?
+6: For a computer, is the legacy_user_id (changed the name of the column for clarity) ALWAYS going
+	... to be in the user_id column for the user table?
+7: See my comments marked with <!!!> for in the create_tables file
+-->
+
 <?php
 include('header.php');
 if(!isset($_SESSION['user'])) {
@@ -51,9 +68,10 @@ if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSIO
 
 if (isset($_POST['submit'])){
     //connect to the database 
-    
-    include 'open_db.php';
-      
+    $serverName = "sql05train1.gordon.edu";
+    $connectionInfo = array(
+    'Database' => 'CTSEquipment');
+    $conn = sqlsrv_connect($serverName, $connectionInfo);    
     //display error if database cannot be accessed 
     if (!$conn ) 
     {
@@ -64,14 +82,9 @@ if (isset($_POST['submit'])){
         echo( print_r( sqlsrv_errors(), true));
     }
     //assign form input to variables
-    include 'dateTime.php';
-	$last_updated_by = $_SESSION['user'];
-	$last_updated_at = $dateTime;
-	$created_at = $dateTime;
-    $control = $_POST['controlNumber'];
+    $controlNumber = $_POST['controlNumber'];
     $manufacturer = $_POST['manufacturer'];
     $model = $_POST['model'];
-<<<<<<< HEAD
     $serialNumber = $_POST['serialNumber'];
     $ram = $_POST['ram'];
     $hdSize = $_POST['hdSize'];
@@ -148,31 +161,6 @@ if (isset($_POST['fullTime'])) {
 
     $assignment = sqlsrv_query($conn, $insertAssignment);
     if(!$assignment)
-=======
-    $serial_number = $_POST['serialNumber'];
-    $memory = $_POST['ram'];
-    $hard_drive = $_POST['hdSize'];
-    $part_number = $_POST['partNumber'];
-    $computer_type = $_POST['equipmentType'];
-    $warranty_length = $_POST['warrantyLength'];
-    $purchase_acct = $_POST['accountNumber'];
-    $purchase_date = $_POST['purchaseDate'];
-    $purchase_price = $_POST['purchasePrice'];
-    $replacement_year = $_POST['replacementYear'];
-    $ip_address = $_POST['ip_address'];
-    $usage_status = $_POST['usage_status'];
-    $inventoried = 0;
-    if ($_POST['inventoried'] = "yes")
-	{
-		$inventoried = 1;
-	}
-    
-    //SQL query to insert variables above into table
-    $sql = "INSERT INTO dbo.computers ([control],[last_updated_by],[last_updated_at],[created_at],[manufacturer],[model],[serial_num],[memory],[hard_drive],[part_number],[computer_type],[warranty_length],[purchase_acct],[purchase_date],[purchase_price],[replacement_year],[ip_address],[usage_status],[inventoried])VALUES('$control','$last_updated_by','$last_updated_at','$created_at','$manufacturer','$model','$serial_number','$memory','$hard_drive','$part_number','$computer_type','$warranty_length','$purchase_acct','$purchase_date','$purchase_price','$replacement_year','$ip_address','$usage_status','$inventoried')";
-    $result = sqlsrv_query($conn, $sql);
-    //if the query cant be executed
-    if(!$result)
->>>>>>> FETCH_HEAD
     {
         echo print_r( sqlsrv_errors(), true);
         exit;
@@ -243,56 +231,29 @@ else {
 			</div>
 		</div>
 		<div class="row">
-<<<<<<< HEAD
 			<div class="large-3 columns">
 				<label>Part Number</label>
 					<input type="text" placeholder="4325-335", name="partNumber" required>
 			</div>
 			<div class="large-3 columns">
-=======
-			<div class="large-4 columns">
->>>>>>> FETCH_HEAD
 				<label>Equipment Type</label>
-					<select class="medium" name="equipmentType" id="equipmentType" required>
-					    <option value="1" selected>Laptop</option>
+					<select class="medium" name="equipmentType
+					" required>
+					    <option DISABLED selected>Choose an Option</option>
+					    <option value="1">Laptop</option>
 					    <option value="2">Desktop</option>
 					    <option value="3">Tablet</option>
-					    <option value="4">Printer</option>
-					    <option value="5">Other</option>
 					</select>
-			</div>
-			<div class="large-4 columns">
-				<label>IP Address (if printer)</label>
-					<input type="text" name="ip_address" id="ip_address" placeholder="192.168.1.1">
-			</div>
-			<div class="large-4 columns">
-				<label>Usage Status</label>
-					<select class="medium" name="usage_status" id="usage_status" required>
-					    <option value="in circulation" selected>In circulation</option>
-					    <option value="not in circulation">Not in circulation</option>
-					    <option value="sold">Sold</option>
-					    <option value="retired">Retired</option>
-					    <option value="5">Other</option>
-					</select>
-			</div>
-		</div>
-		<div class="row">
-			<div class="large-3 columns">
-				<label>Inventory Status</label>
-					<input type='checkbox' name='inventoried' value='yes'><span class="label radius">Is inventoried</span>
-			</div>
-			<div class="large-3 columns">
-				<label>Part Number</label>
-					<input type="text" name="partNumber" placeholder="4325-335" required>
 			</div>
 			<div class="large-3 columns">
 				<label>Warranty Length</label>
 				<select class="medium" name="warrantyLength" required>
+				    <option DISABLED selected>Length In Years</option>
 				    <option value="1">1 Year</option>
 				    <option value="2">2 Years</option>
 				    <option value="3">3 Years</option>
 				    <option value="4">4 Years</option>
-				    <option value="5" selected>Expired/None</option>
+				    <option value="5">Expired</option>
 				</select>
 			</div>
 			<div class="large-3 columns">
@@ -331,7 +292,6 @@ else {
 			</div>
 		</div>
 	</fieldset>
-	<!--
 	<fieldset>
 		<legend>Computer Assignment Info</legend>
 		<div class="row">
@@ -342,11 +302,7 @@ else {
 		FROM FacStaff
 		WHERE OnCampusDepartment IS NOT NULL;";
 
-<<<<<<< HEAD
 		$facultyQuery = "SELECT FirstName, LastName, ID
-=======
-		$facultyQuery = "SELECT FirstName, LastName
->>>>>>> FETCH_HEAD
 		FROM FacStaff ORDER by LastName ASC;";
 
 		//The sqlsrv_query function allows PHP to make a query against the database
@@ -359,47 +315,20 @@ else {
 		//it were valid
 
 		$securityArray[0] = "unassigned";
-<<<<<<< HEAD
 		 ?>
 			<div class="large-4 columns">
-=======
-
-		 ?>
-			<div class="large-3 columns">
->>>>>>> FETCH_HEAD
 				<label>User Name</label>
 				<select class="medium" name="userName" required>
 				    <option selected>User Name</option>
 				<?php
 				while($row = sqlsrv_fetch_array($facultyResult))
 				{
-<<<<<<< HEAD
 					echo "<option value=\" " . $row["ID"] . " \">" . $row["LastName"] . ", " . $row["FirstName"] . "</option>\n";
-=======
-					echo "<option value=\"" . $row["LastName"] . "" . $row["FirstName"] . "\">" . $row["LastName"] . "" . $row["FirstName"] . "</option>\n";
->>>>>>> FETCH_HEAD
 					// Use an array to get all legal values for the department search
 					// $securityArray[] = $row["OnCampusDepartment"];
 				}
 				?>
 
-<<<<<<< HEAD
-=======
-				</select>
-			</div>
-			<div class="large-3 columns">
-			<label>Department</label>
-				<select class="medium" name="department" required>
-					<option DISABLED selected>Department</option>
-					<?php
-					while($row = sqlsrv_fetch_array($populationResult))
-					{
-						echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
-						// Use an array to get all legal values for the department search
-						$securityArray[] = $row["OnCampusDepartment"];
-					}
-					?>
->>>>>>> FETCH_HEAD
 				</select>
 			</div>
 			<div class="large-4 columns">
@@ -443,7 +372,6 @@ else {
 			</div>
 		</div>
 	</fieldset>
-	-->
 		<div class="large-12 columns">
 		<div class="row" align="center">
 		<input type="submit" name="submit" value="Create New Item" class="button expand" formmethod="post">

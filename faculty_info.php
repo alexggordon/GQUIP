@@ -199,47 +199,6 @@ else {
 
 	</fieldset>
 
-	<fieldset>
-		<legend>Add an assignment</legend>
-		
-		<div class="row">
-			<div class="large-4 columns">
-				<label>Computer assigned</label>
-				<select name="computerChoice" id="computerChoice">
-
-					<?php
-
-					while($row = sqlsrv_fetch_array($populationResult))
-					{
-						echo "<option value=\"" . $row["computer_id"] . "\">ID: " . $row["computer_id"] . " - Control number: " . $row['control'] . " (" . $row['model'] . ")" . "</option>\n";
-						// Use an array to get all legal values for the computers search
-						$securityArray[] = $row["computer_id"];
-					}
-
-					?>
-
-				</select>
-			</div>
-			<div class="large-3 columns">
-				<label>Assignment stats</label>
-				<input type='checkbox' name='full_time' value='yes'><span class="label radius">Is full time assignment</span><br />
-				<input type='checkbox' name='primary_computer' value='yes'><span class="label radius">Is primary computer of the user</span><br />
-				<input type='checkbox' name='replace_with_recycled' value='yes'><span class="label radius">Replace computer with recycled unit</span><br />
-			</div>
-			<div class="large-3 columns">
-				<label>Type of assignment</label>
-				<input type='radio' name='assignment_type' value='Dedicated computer' selected>Dedicated computer<br />
-				<input type='radio' name='assignment_type' value='Special assignment'>Special assignment<br />
-				<input type='radio' name='assignment_type' value='Lab computer'>Lab computer<br />
-				<input type='radio' name='assignment_type' value='Kiosk computer'>Kiosk computer<br />
-				<input type='radio' name='assignment_type' value='Printer'>Printer<br />
-			</div>
-			<div class="large-2 columns">
-				<input type="submit" name="submit" value="Add Item" class="button expand" formmethod="post">
-			</div>
-		</div>
-
-	</fieldset>
 	<div class="large-12 columns">
 	<div class="row" align="center">
 	<a class="button" href="faculty.php">Back</a>

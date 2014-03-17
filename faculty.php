@@ -14,7 +14,7 @@ if ( !$count )
 $num_rows = sqlsrv_num_rows( $count );
 
 
-$query = "SELECT ID, FirstName, LastName, Email, Dept FROM dbo.FacandStaff ORDER BY FirstName ASC";
+$query = "SELECT ID, FirstName, LastName, Email, OnCampusDepartment FROM dbo.FacandStaff ORDER BY FirstName ASC";
 $result = sqlsrv_query($conn, $query, array(), array( "Scrollable" => 'static' ));
 if ( !$result )
   die( print_r( sqlsrv_errors(), true));
@@ -62,7 +62,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']
   ?>
   <div class="row">
     <div class="large-10 large-centered columns">
-    <h1>Faculty Users</h1>
+    <h1>Faculty</h1>
     </div>
     </div>
   <div class="row">
@@ -73,7 +73,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']
       <th width="100">First Name</th>
       <th width="100">Last Name</th>
       <th width="100">ID</th>
-      <th width="200">Dept.</th>
+      <th width="200">Department</th>
     <th width="200">Email</th>
     </tr>
     </thead>
@@ -82,11 +82,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']
 
   foreach($page as $row)
   {
-<<<<<<< HEAD
      echo "<tr><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
-=======
-     echo "<tr><td><a href=\"/faculty_info.php?id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/faculty_info.php?id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/faculty_info.php?id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
->>>>>>> FETCH_HEAD
   }
 
  //$row['index'] the index here is a field name
