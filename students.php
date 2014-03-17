@@ -24,7 +24,7 @@ if ( !$result )
 
 // This is the syntax we pass to the paginator.php to give us our numbers
 // the left page link
-$aLeft = 'users.php?&page=';
+$aLeft = 'students.php?&page=';
 // the right page link. If blank, then left will be used. 
 $aRight = '';
 // do we want to show the fancy arrows?
@@ -84,7 +84,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
   foreach($page as $row)
   {
-     echo "<tr><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/student_info?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
+     echo "<tr><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
   }
   
   ?>

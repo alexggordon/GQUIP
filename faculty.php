@@ -43,7 +43,7 @@ if (isset($_GET['page'])) {
   $pCurrent = 0;
 }
 
-$aLeft = 'users.php?&page=';
+$aLeft = 'faculty.php?&page=';
 $aRight = '';
 
 $sMultiplier = 25;
@@ -58,7 +58,7 @@ $page = getPage($result, $pageNum, $rowsPerPage);
 
 
 
-if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
+if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']=="1" ) {
   ?>
   <div class="row">
     <div class="large-10 large-centered columns">
@@ -82,7 +82,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
   foreach($page as $row)
   {
-     echo "<tr><td><a href=\"#\">" . $row[1] . "</a></td><td><a href=\"#\">" . $row[2] . "</a></td><td><a href=\"#\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
+     echo "<tr><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
   }
 
  //$row['index'] the index here is a field name
@@ -105,16 +105,6 @@ sqlsrv_close( $conn );
 ?>
 </div>
 </div>
-<?php
-// Faculty
-if($_SESSION['access']=="2" ) {
-?>
-
-<?php
-}
-?>
-
-
 
 <?php
 include('footer.php')

@@ -22,7 +22,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
   $result = sqlsrv_query($query);
 
-  $numRows = mssql_num_rows($result); 
+  $numRows = sqlsrv_num_rows($result); 
 
 
   ?>

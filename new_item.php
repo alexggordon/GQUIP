@@ -89,30 +89,94 @@ if (isset($_POST['submit'])){
     $ram = $_POST['ram'];
     $hdSize = $_POST['hdSize'];
     $partNumber = $_POST['partNumber'];
-    $equipmentType = $_POST['equipmentType'];
+
+    if (isset($_POST['equipmentType'])) {
+    	$equipmentType = $_POST['equipmentType'];
+    } else {
+    	$equipmentType = 0;
+    }
+   
+    
+
     $warrantyLength = $_POST['warrantyLength'];
     $accountNumber = $_POST['accountNumber'];
     $purchaseDate = $_POST['purchaseDate'];
     $purchasePrice = $_POST['purchasePrice'];
     $replacementYear = $_POST['replacementYear'];
-    $userName = $_POST['userName'];
+   
+
+   // assignment
     $department = $_POST['department'];
     $assignmentType = $_POST['assignmentType'];
 
-    
+
+if (isset($_POST['primaryComputer'])) {
+	$primary_computer = $_POST['primaryComputer'];
+} else {
+	$primary_computer = 0;
+}
+
+
+if (isset($_POST['fullTime'])) {
+	$full_time = $_POST['fullTime'];
+} else {
+	$full_time = 0;
+}
+
+    $notes = $_POST['notes'];
+
+    // Get the 
+    $selectFacultyStaffID = $_POST['userName'];
+
+    if (isset($_SESSION['user'])) {
+    	$lastUpdatedBy = $_SESSION['user'];
+    }
+    $timezone = new DateTimeZone("UTC");
+    $lastUpdatedAt = new DateTime("now", $timezone);
+    $lastUpdatedAtString = $lastUpdatedAt->format('Y-m-d H:i:s');
+    $createdAt = new DateTime("now", $timezone);
+    $createdAtString = $createdAt->format('Y-m-d H:i:s');
+    $startAssignment = new DateTime("now", $timezone);
+    $startAssignmentString = $startAssignment->format('Y-m-d H:i:s');
+
+
     //SQL query to insert variables above into table
-    $sql = " INSERT INTO dbo.computers ([control],[manufacturer],[model],[serialNumber],[ram],[hdSize],[partNumber],[computer_type],[warrantyLength],[accountNumber],[purchase_date],[purchasePrice],[replacementYear],[userName],[department],[assignmentType])VALUES('$control','$manufacturer','$model','$serial_num','$memory','$hard_drive','$part_number','$computer_type','$warranty_length','$purchase_acct','$purchase_date','$purchase_price','$replacement_year','$userName','$department','$assignmentType')";
-    $result = sqlsrv_query($sql, $conn);
-    //if the query cant be executed
-    if(!$result)
+    $insertComputer = " INSERT INTO dbo.computers ([last_updated_by], [last_updated_at], [created_at], [control], [serial_num], [model], [manufacturer], [purchase_date], [purchase_price], [purchase_acct], [usage_status], [memory], [hard_drive], [warranty_length], [warranty_start], [replacement_year], [computer_type], [part_number])VALUES( '$lastUpdatedBy', '$lastUpdatedAtString', '$createdAtString', '$controlNumber', '$serialNumber', '$model', '$manufacturer', '$purchaseDate', '$purchasePrice', '$accountNumber', '$assignmentType', '$ram', '$hdSize', '$warrantyLength', '$purchaseDate',  '$replacementYear', '$equipmentType', '$partNumber')";
+
+    $computer = sqlsrv_query($conn, $insertComputer);
+    if(!$computer)
     {
         echo print_r( sqlsrv_errors(), true);
         exit;
     }
-    // close the connection
+
+    $selectNewInsert = "Select computer_id from dbo.computers where control = " . $controlNumber . " ";
+    $computer_id_result = sqlsrv_query($conn, $selectNewInsert);
+    while( $row = sqlsrv_fetch_array( $computer_id_result, SQLSRV_FETCH_ASSOC) ) {
+          $computer_id = $row['computer_id'];
+    }
+
+
+    $insertAssignment = " INSERT INTO dbo.hardware_assignments ( [computer],  [last_updated_by], [last_updated_at], [created_at], [user_id], [department_id], [full_time], [primary_computer], [start_assignment], [assignment_type], [nextneed_note])VALUES('$computer_id', '$lastUpdatedBy', '$lastUpdatedAtString', '$createdAtString', $selectFacultyStaffID, '$department', '$full_time', '$primary_computer', '$startAssignmentString', '$assignmentType', '$notes')";
+
+    $assignment = sqlsrv_query($conn, $insertAssignment);
+    if(!$assignment)
+    {
+        echo print_r( sqlsrv_errors(), true);
+        exit;
+    }
 
     sqlsrv_close( $conn);
-    echo "Data successfully inserted";
+
+        ?>
+        <h1>Successfull Item Creation.</h1>
+        <div class="large-12 columns">
+    	<div class="row" align="center">
+    	<a class="button" href=" <?php echo "info.php?id=". $controlNumber ."" ?> ">Click here to view the item</a>
+    	</div>
+         </div>
+        <?php
+
 }
 else {
 ?>
@@ -169,7 +233,7 @@ else {
 		<div class="row">
 			<div class="large-3 columns">
 				<label>Part Number</label>
-					<input type="text" placeholder="4325-335" required>
+					<input type="text" placeholder="4325-335", name="partNumber" required>
 			</div>
 			<div class="large-3 columns">
 				<label>Equipment Type</label>
@@ -224,69 +288,88 @@ else {
 			</div>
 			<div class="large-3 columns">
 				<label>Replacement Year</label>
-					<input type="month" name="replacementYear">
+					<input type="text" name="replacementYear">
 			</div>
 		</div>
 	</fieldset>
 	<fieldset>
-		<legend>Hardware Assignment Info</legend>
+		<legend>Computer Assignment Info</legend>
 		<div class="row">
-			<div class="large-3 columns">
+		
+		<?php 
+		include('open_db.php');
+		$populationQuery = "SELECT DISTINCT OnCampusDepartment
+		FROM FacStaff
+		WHERE OnCampusDepartment IS NOT NULL;";
+
+		$facultyQuery = "SELECT FirstName, LastName, ID
+		FROM FacStaff ORDER by LastName ASC;";
+
+		//The sqlsrv_query function allows PHP to make a query against the database
+		//and returns the resulting data
+		$facultyResult = sqlsrv_query($conn, $facultyQuery);
+
+		$populationResult = sqlsrv_query($conn, $populationQuery);
+
+		//This array gets all the possible departments that a search could target if
+		//it were valid
+
+		$securityArray[0] = "unassigned";
+		 ?>
+			<div class="large-4 columns">
 				<label>User Name</label>
 				<select class="medium" name="userName" required>
-				    <option DISABLED selected>User Name</option>
-				    <option value="1">PHP GOES HERE</option>
+				    <option selected>User Name</option>
+				<?php
+				while($row = sqlsrv_fetch_array($facultyResult))
+				{
+					echo "<option value=\" " . $row["ID"] . " \">" . $row["LastName"] . ", " . $row["FirstName"] . "</option>\n";
+					// Use an array to get all legal values for the department search
+					// $securityArray[] = $row["OnCampusDepartment"];
+				}
+				?>
+
 				</select>
 			</div>
-			
-
-<?php 
-include('open_db.php');
-$populationQuery = "SELECT DISTINCT OnCampusDepartment
-FROM FacStaff
-WHERE OnCampusDepartment IS NOT NULL;";
-
-//The sqlsrv_query function allows PHP to make a query against the database
-//and returns the resulting data
-
-$populationResult = sqlsrv_query($conn, $populationQuery);
-
-//This array gets all the possible departments that a search could target if
-//it were valid
-
-$securityArray[0] = "unassigned";
-
- ?>
-			<div class="large-3 columns">
-			<label>Department</label>
-				<select class="medium" name="department" required>
-					<option DISABLED selected>Department</option>
-					<?php
-					while($row = sqlsrv_fetch_array($populationResult))
-					{
-						echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
-						// Use an array to get all legal values for the department search
-						$securityArray[] = $row["OnCampusDepartment"];
-					}
-					?>
-				</select>
+			<div class="large-4 columns">
+				<label>Department</label>
+					<select class="medium" name="department" required>
+						<option DISABLED selected>Department</option>
+						<?php
+						while($row = sqlsrv_fetch_array($populationResult))
+						{
+							echo "<option value=\"" . $row["OnCampusDepartment"] . "\">" . $row["OnCampusDepartment"] . "</option>\n";
+							// Use an array to get all legal values for the department search
+							$securityArray[] = $row["OnCampusDepartment"];
+						}
+						?>
+					</select>
 			</div>
-			<div class="large-3 columns">		
+			<div class="large-4 columns">		
 				<label>Assignment Type</label>
-				<select class="medium" name="assignmentType" required>
-				    <option DISABLED selected>Assignment Type</option>
-				    <option value="1">Dedicated Computer</option>
-				    <option value="2">Special</option>
-				    <option value="3">Lab</option>
-				    <option value="4">Kiosk</option>
-				    <option value="5">Printer</option>
-				</select>
+					<select class="medium" name="assignmentType" required>
+					    <option DISABLED selected>Assignment Type</option>
+					    <option value="1">Dedicated Computer</option>
+					    <option value="2">Special</option>
+					    <option value="3">Lab</option>
+					    <option value="4">Kiosk</option>
+					    <option value="5">Printer</option>
+					</select>
 			</div>
-			<div class="large-3 columns">
-				<label>Replacement Year</label>
-				<input type="month" name="replacementYear">
+		</div>
+		<div class="row">
+			<div class="large-2 columns">
+				<label>Check if Primary Computer</label>
+				<input type="checkbox" name="primaryComputer" value="1">
+			</div>	
+			<div class="large-2 columns">
+				<label>Check if Full Time Assignment?</label>
+				<input type="checkbox" name="fullTime" value="1">
 			</div>
-
+			<div class="large-8 columns">
+				<label>Notes</label>
+				<textarea name="notes"></textarea>
+			</div>
 		</div>
 	</fieldset>
 		<div class="large-12 columns">
