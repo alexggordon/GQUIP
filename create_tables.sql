@@ -310,6 +310,11 @@ CREATE TABLE [dbo].computers (
   PRIMARY KEY (computer_id)
   )
 
+ALTER TABLE dbo.computers 
+ADD CONSTRAINT control_unique UNIQUE (control)
+GO
+
+
 
 
 
@@ -322,9 +327,8 @@ CREATE TABLE [dbo].hardware_assignments (
   user_id NVARCHAR(15) NOT NULL,
   computer int NOT NULL,
   department_id VARCHAR(255) NOT NULL,
-  full_time TINYINT NOT NULL,
-  primary_computer TINYINT NOT NULL,
-  replace_with_recycled TINYINT NOT NULL,
+  full_time TINYINT NOT NULL DEFAULT '0',
+  primary_computer TINYINT NOT NULL DEFAULT '0',
   start_assignment DATETIME NOT NULL,
   end_assignment DATETIME NULL,
   assignment_type VARCHAR(255) NOT NULL,

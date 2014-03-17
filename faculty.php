@@ -62,7 +62,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']
   ?>
   <div class="row">
     <div class="large-10 large-centered columns">
-    <h1>Student Users</h1>
+    <h1>Faculty Users</h1>
     </div>
     </div>
   <div class="row">
@@ -82,7 +82,11 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']
 
   foreach($page as $row)
   {
+<<<<<<< HEAD
      echo "<tr><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/faculty_info.php?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
+=======
+     echo "<tr><td><a href=\"/faculty_info.php?id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/faculty_info.php?id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/faculty_info.php?id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
+>>>>>>> FETCH_HEAD
   }
 
  //$row['index'] the index here is a field name
