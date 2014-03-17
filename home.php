@@ -14,9 +14,10 @@ if(!isset($_SESSION['user'])) {
   //The following segments consult with the permissions of the user and
   //accordingly render the page and/or allow the user to perform certain
   //actions based on the permissions level
-  
-if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
 
+if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
+include 'paginate.php';
+include 'getPage.php';
 // Query
   $query = "SELECT hardware_assignments.id as hardware_assignment_id,
   hardware_assignments.last_updated_by as hardware_assignment_updater,
@@ -42,17 +43,59 @@ if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSIO
   ON hardware_assignments.computer = computers.computer_id
   ORDER BY control;";
 
+
+
   include('open_db.php');
 
-  $result = sqlsrv_query($conn, $query);
-  
-  if(!$result)
-  {
+
+
+  // query 2, for all items we need
+
+  $result = sqlsrv_query($conn, $query, array(), array( "Scrollable" => 'static' ));
+  if ( !$result ) {
     echo print_r( sqlsrv_errors(), true);
     exit;
   }
   
-  $numRows = sqlsrv_num_rows($result); 
+  $num_rows = sqlsrv_num_rows($result); 
+  // 
+  // data for pagination
+
+  // This is the syntax we pass to the paginator.php to give us our numbers
+  // the left page link
+  $aLeft = 'home.php?&page=';
+  // the right page link. If blank, then left will be used. 
+  $aRight = '';
+  // do we want to show the fancy arrows?
+  $sArrows = TRUE;
+  // rows of items per page
+  $rowsPerPage = 25;
+  // number of pages equals number of items divided by how many we show per page
+  $numOfPages = ceil($num_rows/$rowsPerPage);
+
+  // some quick math to find out what page we're on
+  if (isset($_GET['page'])) {
+      $page = $_GET['page'];
+      if ($page == 0) {
+        $pageNum = 1;
+      } else {
+        $pageNum = (($page / $rowsPerPage) + 1);
+      }
+  } else {
+    $pageNum = 1;
+  }
+
+  // This finds out our current starting place (or item)
+  if (isset($_GET['page'])) {
+    $pCurrent = $_GET['page'];
+  } else {
+    $pCurrent = 0;
+  }
+
+  // gets the correct SQL Data. This makes a call to the getPage.php function
+  $page = getPage($result, $pageNum, $rowsPerPage);
+
+
 
   ?>
 
@@ -68,36 +111,41 @@ if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSIO
   <table cellspacing="0">
    <thead>
     <tr>
-      <th>Computer ID</th>
-      <th>Control</th>
-      <th>Model</th>
-      <th>Manufacturer</th>
-      <th>Department</th>
-      <th>User</th>
-      <th>Assignment</th>
-      <th></th>
+      <th width="100">Control</th>
+      <th width="200">Model</th>
+      <th width="100">Manufacturer</th>
+      <th width="200">Department</th>
+      <th width="100">User ID</th>
+      <th width="100"></th>
     </tr>
     </thead>
     <?php
     
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))
-  {
-    echo "<tr><td><a href=\"edit_item.php?edit=" . $row['computer_id'] . "\">" . $row['control'] . 
-    "</a></td><td>" . $row['model'] . "</td><td>" . $row['manufacturer'] . 
-    "</td><td>" . $row['department_id'] . "</td><td>" . $row['user_id'] . 
-    "</td><td>" . $row['assignment_type'] . 
-    "</td></tr>";
-  }
+
+    foreach($page as $row)
+    {
+      echo "<tr><td><a href=\"info.php?id=" . $row[11] . "\">" . $row[11] . "</a></td><td>" . $row[16] . "</td><td>" . $row[15] . "</td><td>" . $row[9] . "</td><td>" . $row[8] . "</td><td><a class=\"button tiny\" href=\"edit_item.php?id=" . $row[11] . "\">Edit</a></td></tr>";
+    }
 
   ?>
 
     </table>
+      <div class="row">
+      <div class="large-9 large-centered columns">
+    <?php
+
+    // Spit out the pagination info. This makes a call to the paginate.php function. 
+    echo PHPagination($pCurrent, $num_rows, $aLeft, $aRight, $rowsPerPage, $sArrows);
+
+    // close the database connection
+    sqlsrv_close( $conn );
 
 
-
+    ?>
+    </div>
+    </div>
 <?php
 }
-
 if($_SESSION['access']==FACULTY_PERMISSION ) {
 
 ?>
