@@ -87,7 +87,7 @@ if($_SESSION['access']== FACULTY_PERMISSION) {
                   </ul>
             </li>
             <li class="divider"></li>
-            <li><a href="#">Advanced Search</a></li>
+            <li><a href="search.php">Advanced Search</a></li>
         </ul>
 
 
@@ -112,7 +112,7 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSIO
           <a href="#">Software</a>
           <ul class="dropdown">
                   <li><a href="software.php">Software</a></li>
-                  <li><a href="departments.php">Students</a></li>
+                  <li><a href="students.php">Students</a></li>
           </ul>
     </li>
 
@@ -133,7 +133,7 @@ if($_SESSION['access']==ADMIN_PERMISSION) {
                   <li><a href="delete.php">Mass Delete</a></li>
                   <li><label>Software</label></li>
                   <li><a href="add_software.php">Add Software</a></li>
-                  <li><a href="edit_software.php">Edit or Delete software</a></li>
+                  <li><a href="software.php">Edit or Delete software</a></li>
                   <li><label>Users</label></li>
                   <li><a href="edit_permissions.php">Edit Permissions</a></li>
           </ul>
@@ -146,7 +146,7 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSIO
 ?>
 
     <li class="divider"></li>
-    <li><a href="#">Advanced Search</a></li>
+    <li><a href="search.php">Advanced Search</a></li>
 </ul>
 
 <?php 
@@ -161,13 +161,70 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSIO
           <li class="divider hide-for-small"></li>
           <li class="divider"></li>
           <li class="has-form">
-              <form>
+              <form data-abide name="search" enctype='multipart/form-data' action="search.php" method="POST">
+        
+        <?php
+        $pageBase = explode("?", $_SERVER['REQUEST_URI']);
+        switch ($pageBase[0])
+        {       
+          case "/add_software.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
+            break;
+       // used? case "/delete_item.php":
+          case "/departments.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
+            echo "<input hidden name=\"searchTables[1]\" value=\"FacandStaff\">";
+            echo "<input hidden name=\"searchTables[2]\" value=\"hardware_assignments\">";
+            break;
+       // used? case "/details.php":
+          case "/edit_computer.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
+            echo "<input hidden name=\"searchTables[1]\" value=\"comments\">";
+            echo "<input hidden name=\"searchTables[2]\" value=\"changes\">";
+            break;
+       // used? case "/edit_item.php":
+          case "/edit_license.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"gordonstudents\">";
+            echo "<input hidden name=\"searchTables[1]\" value=\"software\">";
+            echo "<input hidden name=\"searchTables[2]\" value=\"licenses\">";
+            break;
+          case "/edit_software.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
+            break;
+          case "/faculty.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"FacandStaff\">";
+            break;
+          case "/home.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
+            echo "<input hidden name=\"searchTables[1]\" value=\"comments\">";
+            echo "<input hidden name=\"searchTables[2]\" value=\"changes\">";
+            break;
+          case "/new_item.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
+            break;
+          case "/search.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
+            break;
+          case "/software.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
+            break;
+          case "/student_info.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"gordonstudents\">";
+            echo "<input hidden name=\"searchTables[1]\" value=\"software\">";
+            echo "<input hidden name=\"searchTables[2]\" value=\"licenses\">";
+            break;
+          case "/students.php":
+            echo "<input hidden name=\"searchTables[0]\" value=\"gordonstudents\">";
+            break;
+        }
+        ?>
+        
                 <div class="row collapse">
                   <div class="small-8 columns">
-                    <input type="text">
+                    <input type="text" name="searchTerms">
                   </div>
                   <div class="small-4 columns">
-                    <a href="#" class="button">Search</a>
+                    <input type="submit" class="button" name="search" action="search.php" value="Search">
                   </div>
                 </div>
               </form>
