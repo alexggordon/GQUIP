@@ -130,12 +130,9 @@ if($_SESSION['access']==ADMIN_PERMISSION) {
                   <li><label>Equipment</label></li>
                   <li><a href="csv_import.php">Import</a></li>
                   <li><a href="export.php">Export</a></li>
-                  <li><a href="delete.php">Mass Delete</a></li>
                   <li><label>Software</label></li>
                   <li><a href="add_software.php">Add Software</a></li>
                   <li><a href="software.php">Edit or Delete software</a></li>
-                  <li><label>Users</label></li>
-                  <li><a href="edit_permissions.php">Edit Permissions</a></li>
           </ul>
     </li>
 

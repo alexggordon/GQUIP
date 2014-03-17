@@ -99,6 +99,9 @@ include 'getPage.php';
 
   ?>
 
+  <ul class="breadcrumbs">
+    <li class="current"><a href="#">Home</a></li>
+  </ul>
 
   <div class="row">
     <div class="large-10 large-centered columns">
