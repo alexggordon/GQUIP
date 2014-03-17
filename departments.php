@@ -7,7 +7,7 @@ if(!isset($_SESSION['user'])) {
 
 if (!isset($_POST['departmentChoice']))
 {
-	$_POST['departmentChoice'] = "unassigned";
+	$_POST['departmentChoice'] = "NULL";
 }
 
 //The set of SQL queries for the page is put together before connecting
@@ -29,7 +29,7 @@ $populationResult = sqlsrv_query($conn, $populationQuery);
 //This array gets all the possible departments that a search could target if
 //it were valid
 
-$securityArray[0] = "unassigned";
+$securityArray[0] = "NULL";
 
 
 //The following segments consult with the permissions of the user and
@@ -45,6 +45,11 @@ header('Location: login.php');
 if($_SESSION['access']==USER_PERMISSION || $_SESSION['access']==ADMIN_PERMISSION) {
 ?>
 
+  <ul class="breadcrumbs">
+  	<li><a href="home.php">Home</a></li>
+  	<li class="current"><a href="#">Departments</a></li>
+  </ul>
+
 <div class="large-12 columns">
 	<h1>Departments</h1>
 
@@ -52,7 +57,7 @@ if($_SESSION['access']==USER_PERMISSION || $_SESSION['access']==ADMIN_PERMISSION
 		<div class="row">
 			<div class="large-6 columns">
 				<select name="departmentChoice" id="departmentChoice">
-					<option value="unassigned" selected="selected">Unassigned units</option>
+					<option value="NULL" selected="selected">Units without a department</option>
 
 					<?php
 

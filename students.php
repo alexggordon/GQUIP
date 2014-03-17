@@ -62,6 +62,12 @@ $page = getPage($result, $pageNum, $rowsPerPage);
 // If faculty or user
 if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   ?>
+  
+  <ul class="breadcrumbs">
+    <li><a href="home.php">Home</a></li>
+    <li class="current"><a href="#">Students</a></li>
+  </ul>
+  
   <div class="row">
     <div class="large-10 large-centered columns">
     <h1>Users</h1>

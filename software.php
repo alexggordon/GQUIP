@@ -25,6 +25,12 @@ $numRows = sqlsrv_num_rows($result);
 // If user or administrator
 if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
   ?>
+  
+  <ul class="breadcrumbs">
+    <li><a href="home.php">Home</a></li>
+    <li class="current"><a href="#">Software</a></li>
+  </ul>
+  
   <div class="large-10 large-centered columns">
     <h1>Software</h1>
     <div class="row">
