@@ -2,6 +2,7 @@
 session_start();
 $_SESSION['user'] = 'alex.gordon';
 $_SESSION['access'] = '3';
+include('symbolic_values.php');
 echo "You're all set!";
 // 1 is the user login
 // 2 is the faculty login
