@@ -152,6 +152,52 @@ else {
 		</div>
 	</fieldset>
 	
+	<fieldset>
+		<legend>Hardware Assignments</legend>
+		
+		<?php
+		while($hardware_assignmentItem = sqlsrv_fetch_array($hardware_assignmentResult, SQLSRV_FETCH_ASSOC))
+		{
+		?>		
+		<div class="row">
+			<div class="large-3 columns">
+				<label>Control number</label>
+					<label name="computers_name"><?php echo $hardware_assignmentItem['control']; ?></label>
+			</div>
+			<div class="large-3 columns">
+				<label>Model</label>
+					<label name="computers_type"><?php echo $hardware_assignmentItem['model']; ?></label>
+			</div>
+			<div class="large-3 columns">
+				<label>Hard drive size</label>
+					<label name="computers_type"><?php echo $hardware_assignmentItem['hard_drive']; ?></label>
+			</div>
+			<div class="large-3 columns">
+				<label>Type of unit</label>
+					<label name="computers_type"><?php echo $hardware_assignmentItem['computer_type']; ?></label>
+			</div>						
+			<div class="large-2 columns">
+				<label>Date assigned</label>
+					<label name="date_sold"><?php echo $hardware_assignmentItem['start_assignment']->format('Y-m-d H:i:s'); ?></label>
+			</div>
+			<?php
+			if ($hardware_assignmentItem['end_assignment'] != "NULL")
+			{
+			?>
+			<div class="large-2 columns">
+				<label>Date assigned</label>
+					<label name="date_sold"><?php echo $hardware_assignmentItem['end_assignment']->format('Y-m-d H:i:s'); ?></label>
+			</div>
+			<?php
+			}
+				echo "<a href=\"edit_assignment.php?edit=" . $hardware_assignmentItem['id'] . "\" class=\"button\">Edit</a>";
+			?>
+			</div>
+		<?php
+		}
+		?>
+
+	</fieldset>
 
 	<div class="large-12 columns">
 	<div class="row" align="center">
