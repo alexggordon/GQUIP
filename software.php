@@ -35,7 +35,6 @@ if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSIO
 	  <h1>Software</h1>
 	  <div class="row">
 		  <table>
-			<a href="add_software.php" class="button expand">Add software item</a>
 			<thead>
 			<tr>
 			  <th>Software ID</th>
