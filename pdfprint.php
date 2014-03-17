@@ -1,6 +1,5 @@
 <?php
 require 'fpdf.php';
-include 'search_results.php';
 include 'symbolic_values.php';
 session_start();
 if(!isset($_SESSION['user']))
@@ -73,14 +72,14 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==USER_PERMISSION
 				$pdf->Ln();
 				foreach ($columnArray[$table] as $col)
 				{
-					$pdf->Cell($columnSizesArray[$table][$col],5,$col);
+					$pdf->Cell($columnSizesArray[$table][$col],5,$col . ",");
 				}
 				$pdf->Ln();
 				while($row['$table'] = sqlsrv_fetch_array($result['$table']))
 				{
 					foreach ( $columnArray[$table] as $tableRowValue )
 					{
-						$pdf->Cell($columnSizesArray[$table][$tableRowValue],5,$row['$table'][$tableRowValue],'LRTB',0);
+						$pdf->Cell($columnSizesArray[$table][$tableRowValue],5,$row['$table'][$tableRowValue] . ",");
 					}
 					$pdf->Ln();
 				}
