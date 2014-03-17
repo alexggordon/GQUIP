@@ -85,7 +85,6 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
     <th width="200">Email</th>
     </tr>
     </thead>
-<a href=""></a>
   <?php
 
   foreach($page as $row)
@@ -107,11 +106,12 @@ echo PHPagination($pCurrent, $num_rows, $aLeft, $aRight, $rowsPerPage, $sArrows)
 // close the database connection
 sqlsrv_close( $conn );
 
-}
+
 ?>
 </div>
 </div>
 <?php
+}
 // Faculty
 if($_SESSION['access']=="2" ) {
 ?>
