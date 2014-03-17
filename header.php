@@ -129,7 +129,6 @@ if($_SESSION['access']==ADMIN_PERMISSION) {
           <ul class="dropdown">
                   <li><label>Equipment</label></li>
                   <li><a href="csv_import.php">Import</a></li>
-                  <li><a href="export.php">Export</a></li>
                   <li><label>Software</label></li>
                   <li><a href="add_software.php">Add Software</a></li>
                   <li><a href="software.php">Edit or Delete software</a></li>
