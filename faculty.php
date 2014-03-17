@@ -99,7 +99,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="2"  OR $_SESSION['access']
   </div>
   </div>
   <div class="row">
-  <div class="large-9 large-centered columns">
+  <div class="large-12 large-centered columns">
 <?php
 
 
@@ -107,11 +107,12 @@ echo PHPagination($pCurrent, $num_rows, $aLeft, $aRight, $sMultiplier, $sArrows)
 
 sqlsrv_close( $conn );
 
-}
+
 ?>
 </div>
 </div>
 
 <?php
+}
 include('footer.php')
 ?>

@@ -98,7 +98,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   </div>
   </div>
   <div class="row">
-  <div class="large-9 large-centered columns">
+  <div class="large-12 large-centered columns">
 <?php
 
 // Spit out the pagination info. This makes a call to the paginate.php function. 
