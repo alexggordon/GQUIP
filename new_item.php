@@ -205,7 +205,7 @@ else {
 		<div class="row">
 			<div class="large-4 columns">
 				<label>Serial Number</label>
-					<input type="text" name="serialNumber" placeholder="S012345ABC">
+					<input type="text" name="serialNumber" placeholder="S012345ABC" required>
 			</div>
 			<div class="large-4 columns">			
 				<div class="row collapse">		
@@ -237,8 +237,7 @@ else {
 			</div>
 			<div class="large-3 columns">
 				<label>Equipment Type</label>
-					<select class="medium" name="equipmentType
-					" required>
+					<select class="medium" name="equipmentType" required data-invalid>
 					    <option DISABLED selected>Choose an Option</option>
 					    <option value="1">Laptop</option>
 					    <option value="2">Desktop</option>
@@ -247,7 +246,7 @@ else {
 			</div>
 			<div class="large-3 columns">
 				<label>Warranty Length</label>
-				<select class="medium" name="warrantyLength" required>
+				<select class="medium" name="warrantyLength" required data-invalid>
 				    <option DISABLED selected>Length In Years</option>
 				    <option value="1">1 Year</option>
 				    <option value="2">2 Years</option>
@@ -258,7 +257,7 @@ else {
 			</div>
 			<div class="large-3 columns">
 				<label>Warranty Start Date</label>
-					<input type="month" name="replacementYear">
+					<input type="month" name="replacementYear" required>
 			</div>
 
 		</div>
@@ -269,11 +268,11 @@ else {
 		<div class="row">
 			<div class="large-3 columns">
 				<label>Purchasing Account Number</label>
-					<input type="number" name="accountNumber" placeholder="000000-123456">
+					<input type="number" name="accountNumber" placeholder="000000-123456" required>
 			</div>
 			<div class="large-3 columns">
 				<label>Purchasing Date</label>
-					<input type="date" name="purchaseDate" placeholder="date">
+					<input type="date" name="purchaseDate" placeholder="date" required>
 			</div>
 			<div class="large-3 columns">		
 				<div class="row collapse">		
@@ -288,7 +287,7 @@ else {
 			</div>
 			<div class="large-3 columns">
 				<label>Replacement Year</label>
-					<input type="text" name="replacementYear">
+					<input type="text" name="replacementYear" required>
 			</div>
 		</div>
 	</fieldset>
@@ -318,8 +317,8 @@ else {
 		 ?>
 			<div class="large-4 columns">
 				<label>User Name</label>
-				<select class="medium" name="userName" required>
-				    <option selected>User Name</option>
+				<select class="medium" name="userName" required data-invalid>
+				    <option DISABLED selected>User Name</option>
 				<?php
 				while($row = sqlsrv_fetch_array($facultyResult))
 				{
@@ -333,7 +332,7 @@ else {
 			</div>
 			<div class="large-4 columns">
 				<label>Department</label>
-					<select class="medium" name="department" required>
+					<select class="medium" name="department" required data-invalid>
 						<option DISABLED selected>Department</option>
 						<?php
 						while($row = sqlsrv_fetch_array($populationResult))
@@ -347,7 +346,7 @@ else {
 			</div>
 			<div class="large-4 columns">		
 				<label>Assignment Type</label>
-					<select class="medium" name="assignmentType" required>
+					<select class="medium" name="assignmentType" required data-invalid>
 					    <option DISABLED selected>Assignment Type</option>
 					    <option value="1">Dedicated Computer</option>
 					    <option value="2">Special</option>
@@ -360,11 +359,11 @@ else {
 		<div class="row">
 			<div class="large-2 columns">
 				<label>Check if Primary Computer</label>
-				<input type="checkbox" name="primaryComputer" value="1">
+				<input type="checkbox" name="primaryComputer" value="1" required>
 			</div>	
 			<div class="large-2 columns">
 				<label>Check if Full Time Assignment?</label>
-				<input type="checkbox" name="fullTime" value="1">
+				<input type="checkbox" name="fullTime" value="1" required data-invalid>
 			</div>
 			<div class="large-8 columns">
 				<label>Notes</label>
