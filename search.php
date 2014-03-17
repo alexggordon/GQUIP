@@ -48,7 +48,7 @@ if($_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==USER_PERMISSION
 		echo "<ul>";
 		foreach ( $_POST['searchTables'] as $table )
 		{
-			echo "<li>", $table, "</li>";
+			echo "<li>", $tableReadableArray[$table], "</li>";
 			$query['$table'] = "SELECT *
 			FROM " . $table . " WHERE ";
 			$numberCols = count($columnArray[$table]);
@@ -71,6 +71,7 @@ if($_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==USER_PERMISSION
 		echo "Results:\n\n";
 		foreach ( $_POST['searchTables'] as $table )
 		{
+			$searchResultsArray['tables'][] = $table;
 			$result['$table'] = sqlsrv_query($conn, $query['$table']);
 			if(!$result['$table'])
 			{
@@ -87,17 +88,16 @@ if($_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==USER_PERMISSION
 				echo "<table><thead><tr>\n";
 				foreach ($columnReadableArray[$table] as $col)
 				{
+					$searchResultsArray[$table]['header'][] = $col;
 					echo "<th>" . $col . "</th>";
 				}
 				echo "</thead></tr>\n";
-				echo $query['$table'];
 				while($row['$table'] = sqlsrv_fetch_array($result['$table'], SQLSRV_FETCH_ASSOC))
 				{
-					echo $table;
-					echo $row['$table'][0];
 					echo "<tr>";
 					foreach ( $columnArray[$table] as $tableRowValue )
 					{
+						$searchResultsArray[$table]['body'][$tableRowValue][] = $row['$table'][$tableRowValue];
 						echo "<td>" . $row['$table'][$tableRowValue] . "</td>";
 					}
 					echo "</tr>";
@@ -115,14 +115,36 @@ if($_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==USER_PERMISSION
 
 			<fieldset>
 				<legend>Areas searched</legend>
-				<input type='checkbox' name='searchTables[]' value='computers'>Computers<br />
-				<input type='checkbox' name='searchTables[]' value='comments'>Comments on computers<br />
-				<input type='checkbox' name='searchTables[]' value='changes'>Computer change records<br />
-				<input type='checkbox' name='searchTables[]' value='hardware_assignments'>Hardware assignments<br />
-				<input type='checkbox' name='searchTables[]' value='FacandStaff'>Faculty<br />
-				<input type='checkbox' name='searchTables[]' value='gordonstudents'>Students<br />
-				<input type='checkbox' name='searchTables[]' value='software'>Software records<br />
-				<input type='checkbox' name='searchTables[]' value='licenses'>Licenses to students<br />
+				<div class="large-12 columns">
+					<div class="row">
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='computers'><span class="label radius">Computers</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='comments'><span class="label radius">Comments on computers</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='changes'><span class="label radius">Computer change records</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='hardware_assignments'><span class="label radius">Hardware assignments</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='FacandStaff'><span class="label radius">Faculty</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='gordonstudents'><span class="label radius">Students</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='software'><span class="label radius">Software records</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='licenses'><span class="label radius">Licenses to students</span>
+						</div>
+					</div>
+				</div>
 			</fieldset>
 
 			<fieldset>		
@@ -132,8 +154,56 @@ if($_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==USER_PERMISSION
 		
 			<input type="submit" name="submit" value="Search" class="button" formmethod="post">
 		</form>
+
 		<hr />
-	
+
+		<fieldset>
+			<legend>Create a PDF</legend>
+
+		<form data-abide type="submit" name="submit" enctype='multipart/form-data' action="pdfprint.php" method="POST">
+		
+			<fieldset>
+				<legend>Areas searched</legend>
+				<div class="large-12 columns">
+					<div class="row">
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='computers'><span class="label radius">Computers</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='comments'><span class="label radius">Comments on computers</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='changes'><span class="label radius">Computer change records</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='hardware_assignments'><span class="label radius">Hardware assignments</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='FacandStaff'><span class="label radius">Faculty</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='gordonstudents'><span class="label radius">Students</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='software'><span class="label radius">Software records</span>
+						</div>
+						<div class="large-3 columns">
+							<input type='checkbox' name='searchTables[]' value='licenses'><span class="label radius">Licenses to students</span>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset>		
+				<legend>Terms</legend>
+				<input type="text" name="searchTerms">
+			</fieldset>
+		
+			<input type="submit" name="submit" value="PDF of results" class="button" formmethod="post">
+		</form>
+		</fieldset>
 		<?php
 	
 		?>
@@ -149,5 +219,5 @@ if($_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==USER_PERMISSION
 	header('Location: home.php');
 	}
 	//footer
-	include('footer.php')
+	include('footer.php');
 ?>
