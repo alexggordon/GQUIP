@@ -1,95 +1,7 @@
-<!--
-
-<?php
-include('config.php');
-include('header.php')
-if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
-}
-
-if(isset($_GET['control']))
-{
-	$search = $_GET['control'];
-	$itemquery = "SELECT * FROM computers
-  			WHERE control IN 
-  			(SELECT Max(last_updated_at) FROM computers where control = $search);";
-
-    $commentquery = "SELECT * FROM comments JOIN users 
-    		WHERE comments.computer = $cur_control 
-    		ORDER BY comment.created_at;";
-
-  	$assignmentquery = "SELECT * FROM hardware_assignments
-  			WHERE control IN
-  			(SELECT Max(last_updated_at) FROM hardware_assignments 
-  			WHERE control = $search);";
-
-  	include('open_db.php');
-
-  	$result = sqlsrv_query($itemquery);
-  	$commentresult = sqlsrv_query($commentquery);
-  	$assignmentresult = sqlsrv_query($assignmentquery);
-
-  	include('close_db.php');
-
-	while($row = sqlsrv_fetch_array($result))
-	  {
-
-	    echo "<li>" . $row["control"] . $row["model"] . $row["manufacturer"] . " | EDIT_BUTTON_FOR_" . $row["control"] . " | " . "</li>";
-
-	    while($assignmentrow = sqlsrv_fetch_array($assignmentresult))
-	    {
-	    
-	      echo " && " . $assignmentrow["users.last_name"] . $assignmentrow["users.first_name"] . $assignmentrow["hardware_assignments.start_assignment"] . $assignmentrow["hardware_assignments.end_assignment"];
-	    
-	    }
-
-	    while($commentrow = sqlsrv_fetch_array($commentresult))
-	    {
-	    
-	      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
-	    
-	    }
-
-	  }
-}
-
-
-
-// Manager
-if($_SESSION['access']==ADMIN_PERMISSION ) {
-?>
-
-
-<?php
-}
-// Faculty
-if($_SESSION['access']==FACULTY_PERMISSION ) {
-?>
-
-
-<?php
-}
-// User
-if($_SESSION['access']==USER_PERMISSION ) {
-?>
-
-<?php
-}
-?>
-
-}
-
--->
-
-
-<?php
-include('footer.php')
-?>
-
 <?php
 include('header.php');
 if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
+    header('Location: login.php');
 }
 // Manager or User
 if($_SESSION['access']==ADMIN_PERMISSION  OR $_SESSION['access']==USER_PERMISSION ) {
@@ -159,7 +71,7 @@ if (isset($_POST['submit'])){
     $partNumber = $_POST['partNumber'];
     $equipmentType = $_POST['equipmentType'];
     $warrantyLength = $_POST['warrantyLength'];
-    $warrantyType = $_POST['warrantyType'];			//New
+    $warrantyType = $_POST['warrantyType'];         //New
     $accountNumber = $_POST['accountNumber'];
     $purchaseDate = $_POST['purchaseDate'];
     $purchasePrice = $_POST['purchasePrice'];
@@ -167,8 +79,8 @@ if (isset($_POST['submit'])){
     $userName = $_POST['userName'];
     $department = $_POST['department'];
     $assignmentType = $_POST['assignmentType'];
-    $cameronId = $_POST['cameronId'];				//New
-    $ipNumber = $_POST['ipNumber'];					//New
+    $cameronId = $_POST['cameronId'];               //New
+    $ipNumber = $_POST['ipNumber'];                 //New
 
     //SQL query to insert variables above into table
     $sql = " INSERT INTO dbo.computer ([control],[manufacturer],[model],[serialNumber],[ram],[hdSize],[partNumber],[equipmentType],[warrantyLength],[accountNumber],[purchaseDate],[purchasePrice],[replacementYear],[userName],[department],[assignmentType])VALUES('$controlNumber','$manufacturer','$model','$serialNumber','$ram','$hdSize','$partNumber','$equipmentType','$warrantyLength','$accountNumber','$purchaseDate','$purchasePrice','$replacementYear','$userName','$department','$assignmentType')";
@@ -187,225 +99,217 @@ if (isset($_POST['submit'])){
 
 if(isset($_GET['control']))
 {
-	$search = $_GET['control'];
-	$itemquery = "SELECT * FROM computers
-  			WHERE control IN 
-  			(SELECT Max(last_updated_at) FROM computers where control = $search);";
+    include 'open_db.php';
+    $search = $_GET['control'];
+    $itemquery = "SELECT * FROM computers
+            WHERE control = " . $search . " ";
 
     $commentquery = "SELECT * FROM comments JOIN users 
-    		WHERE comments.computer = $cur_control 
-    		ORDER BY comment.created_at;";
+            WHERE comments.computer = " . $search . "
+            ORDER BY comment.created_at;";
 
-  	$assignmentquery = "SELECT * FROM hardware_assignments
-  			WHERE control IN
-  			(SELECT Max(last_updated_at) FROM hardware_assignments 
-  			WHERE control = $search);";
+    $assignmentquery = "SELECT * FROM hardware_assignments
+            WHERE control IN
+            (SELECT Max(last_updated_at) FROM hardware_assignments 
+            WHERE control = " . $search . ");";
 
-  	include('open_db.php');
+    include('open_db.php');
 
-  	$result = sqlsrv_query($itemquery);
-  	$commentresult = sqlsrv_query($commentquery);
-  	$assignmentresult = sqlsrv_query($assignmentquery);
+    $result = sqlsrv_query($conn, $itemquery);
+    $commentresult = sqlsrv_query($conn, $commentquery);
+    $assignmentresult = sqlsrv_query($conn, $assignmentquery);
 
-  	include('close_db.php');
 
-	// If a computer matches this control number, return its data
-  	$numRows = sqlsrv_num_rows($result); 
-  	if($numRows > 0)
-  	{
+    // If a computer matches this control number, return its data
 
-  	$row = sqlsrv_fetch_array($result);
-  	$assignmentrow = sqlsrv_fetch_array($commentresult);
+    while($row = sqlsrv_fetch_array($result))
+    {
 ?>
 <div class="large-12 columns">
-<h1>New Equipment Item</h1>
-<form data-abide action="$_SERVER['PHP_SELF']" method="POST">
-	<fieldset>
-		<legend>Equipment Info</legend>
+<h1>Edit Equipment Item</h1>
+<form data-abide action="edit_item.php" method="POST">
+    <fieldset>
+        <legend>Equipment Info</legend>
 
-		<div class="row">
-			<div class="large-4 columns">
-				<label>Control Number</label>
-					<input type="text" name="controlNumber" value=<?="$row[\"controlNumber\"]"?> required>
-				<small class="error">A valid Control Number is required.</small>
-			</div>
-			<div class="large-4 columns">
-				<label>Manufacturer</label>
-					<input type="text" name="manufactuer" value=<?="$row[\"manufactuer\"]"?> required>
-			</div>
-			<div class="large-4 columns">
-				<label>Model</label>
-					<input type="text" name="model" value=<?="$row[\"model\"]"?> required>
-			</div>
-		</div>
-		<div class="row">
-			<div class="large-4 columns">
-				<label>Serial Number</label>
-					<input type="text" name="serialNumber" value=<?="$row[\"serial_num\"]"?>>
-			</div>
-			<div class="large-4 columns">			
-				<div class="row collapse">		
-					<label>Memory Amount </label>
-					<div class="small-9 columns">
-							<input type="number" name="ram" value=<?="$row[\"memory\"]"?> required>
-					</div>
-					<div class="small-3 columns">
-						 <span class="postfix">GB's</span >
-					</div>
-				</div>
-			</div>
-			<div class="large-4 columns">			
-				<div class="row collapse">		
-					<label>Hard Drive Size</label>
-					<div class="small-9 columns">
-							<input type="number" name="hdSize" value=<?="$row[\"hard_drive\"]"?> required>
-					</div>
-					<div class="small-3 columns">
-						 <span class="postfix">GB's</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="large-3 columns">
-				<label>Part Number</label>
-					<input type="text" value=<?="$row[\"part_number\"]"?> required>
-			</div>
-			<div class="large-3 columns">
-				<label>Equipment Type</label>
-					<select class="medium" name="equipmentType" required>	
-						<option DISABLED>Category of Computer</option>
-						<option <?php if("$row[\"computer_type\"]" == "1") {echo "selected";} ?> value="1">Laptop</option>;
-						<option <?php if("$row[\"computer_type\"]" == "2") {echo "selected";} ?> value="2">Desktop</option>;
-						<option <?php if("$row[\"computer_type\"]" == "3") {echo "selected";} ?> value="3">Tablet</option>;
-					</select>
-			</div>
-			<div class="large-3 columns">
-				<label>Warranty Length</label>
-				<select class="medium" name="warrantyLength" required>
-				    <option DISABLED>Length In Years</option>
-				    <option <?php if("$row[\"warranty_length\"]" == "1") {echo "selected";} ?> value="1">1 Year</option>
-				    <option <?php if("$row[\"warranty_length\"]" == "2") {echo "selected";} ?> value="2">2 Years</option>
-				    <option <?php if("$row[\"warranty_length\"]" == "3") {echo "selected";} ?> value="3">3 Years</option>
-				    <option <?php if("$row[\"warranty_length\"]" == "4") {echo "selected";} ?> value="4">4 Years</option>
-				    <option <?php if("$row[\"warranty_length\"]" == "5") {echo "selected";} ?> value="5">Expired</option>
-				</select>
-			</div>
-			<div class="large-3 columns">
-				<label>Warranty Start Date</label>
-					<input type="month" name="replacementYear">
-			</div>
+        <div class="row">
+            <div class="large-4 columns">
+                <label>Control Number</label>
+                    <input type="text" name="controlNumber" value=<?php echo $row["control"]; ?> required>
+                <small class="error">A valid Control Number is required.</small>
+            </div>
+            <div class="large-4 columns">
+                <label>Manufacturer</label>
+                    <input type="text" name="manufactuer" value=<?php echo $row["manufacturer"]; ?> required>
+            </div>
+            <div class="large-4 columns">
+                <label>Model</label>
+                    <input type="text" name="model" value=<?php echo $row["model"]; ?> required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-4 columns">
+                <label>Serial Number</label>
+                    <input type="text" name="serialNumber" value=<?php echo $row["serial_num"]; ?>>
+            </div>
+            <div class="large-4 columns">           
+                <div class="row collapse">      
+                    <label>Memory Amount </label>
+                    <div class="small-9 columns">
+                            <input type="number" name="ram" value=<?php echo $row["memory"]; ?> required>
+                    </div>
+                    <div class="small-3 columns">
+                         <span class="postfix">GB's</span >
+                    </div>
+                </div>
+            </div>
+            <div class="large-4 columns">           
+                <div class="row collapse">      
+                    <label>Hard Drive Size</label>
+                    <div class="small-9 columns">
+                            <input type="number" name="hdSize" value=<?php echo $row["hard_drive"]; ?> required>
+                    </div>
+                    <div class="small-3 columns">
+                         <span class="postfix">GB's</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-3 columns">
+                <label>Part Number</label>
+                    <input type="text" value=<?php echo $row["part_number"]; ?> required>
+            </div>
+            <div class="large-3 columns">
+                <label>Equipment Type</label>
+                    <select class="medium" name="equipmentType" required>   
+                        <option DISABLED>Category of Computer</option>
+                        <option <?php if($row["computer_type"] == "1") {echo "selected";} ?> value="1">Laptop</option>;
+                        <option <?php if($row["computer_type"] == "2") {echo "selected";} ?> value="2">Desktop</option>;
+                        <option <?php if($row["computer_type"] == "3") {echo "selected";} ?> value="3">Tablet</option>;
+                    </select>
+            </div>
+            <div class="large-3 columns">
+                <label>Warranty Length</label>
+                <select class="medium" name="warrantyLength" required>
+                    <option DISABLED>Length In Years</option>
+                    <option <?php if($row["warranty_length"] == "1") {echo "selected";} ?> value="1">1 Year</option>
+                    <option <?php if($row["warranty_length"] == "2") {echo "selected";} ?> value="2">2 Years</option>
+                    <option <?php if($row["warranty_length"] == "3") {echo "selected";} ?> value="3">3 Years</option>
+                    <option <?php if($row["warranty_length"] == "4") {echo "selected";} ?> value="4">4 Years</option>
+                    <option <?php if($row["warranty_length"] == "5") {echo "selected";} ?> value="5">Expired</option>
+                </select>
+            </div>
+            <div class="large-3 columns">
+                <label>Warranty Start Date</label>
+                    <input type="month" name="replacementYear">
+            </div>
 
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>Purchasing Info</legend>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Purchasing Info</legend>
 
-		<div class="row">
-			<div class="large-3 columns">
-				<label>Purchasing Account Number</label>
-					<input type="number" name="accountNumber" value=<?="$row[\"purchase_acct\"]"?>>
-			</div>
-			<div class="large-3 columns">
-				<label>Purchasing Date</label>
-					<input type="date" name="purchaseDate" value=<?="$row[\"purchase_date\"]"?>>
-			</div>
-			<div class="large-3 columns">		
-				<div class="row collapse">		
-					<label>Purchasing Price</label>
-					<div class="small-3 columns">
-						<span class="prefix">&#36;</span>
-					</div>
-					<div class="small-9 columns">
-						<input type="number" name="purchasePrice" value=<?="$row[\"purchase_price\"]"?> required>
-					</div>
-				</div>
-			</div>
-			<div class="large-3 columns">
-				<label>Replacement Year</label>
-					<input type="month" name="replacementYear" value=<?="$row[\"replacement_year\"]"?>>
-			</div>
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>User Info</legend>
-		<div class="row">
-			<div class="large-3 columns">
-				<label>User Name</label>
-				<select class="medium" name="userName" required>
-				    <option DISABLED>User Name</option>
-				    <option selected value=<?="$assignmentrow[\"users.id\"]"?>><?="$assignmentrow[\"users.first_name\"] . $assignmentrow[\"users.last_name\"]"?></option>
-				</select>
-			</div>
-			<div class="large-3 columns">
-				<label>Department</label>
-				<select class="medium" name="department" required>
-				    <option DISABLED selected><?="$assignmentrow[\"hardware_assignments.department\"]"?></option>
-				    <option value="1">PHP GOES HERE</option>
-				</select>
-			</div>
-			<div class="large-3 columns">		
-				<label>Assignment Type</label>
-				<select class="medium" name="assignmentType" required>
-				    <option DISABLED>Assignment Type</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "1") {echo "selected";} ?> value="1">Dedicated Computer</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "2") {echo "selected";} ?> value="2">Special</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "3") {echo "selected";} ?> value="3">Lab</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "4") {echo "selected";} ?> value="4">Kiosk</option>
-				    <option <?php if("$assignmentrow[\"hardware_assignments.assignment_type\"]" == "5") {echo "selected";} ?> value="5">Printer</option>
-				</select>
-			</div>
-			<div class="large-3 columns">
-				<?php // <!!!> what is this supposed to do? there is already a replacement year field ?>
-				<label>Replacement Year</label>
-				<input type="month" name="replacementYear"> 
-			</div>
+        <div class="row">
+            <div class="large-3 columns">
+                <label>Purchasing Account Number</label>
+                    <input type="number" name="accountNumber" value=<?php echo $row["purchase_acct"]; ?>>
+            </div>
+            <div class="large-3 columns">
+                <label>Purchasing Date</label>
+                    <input type="date" name="purchaseDate" value=<?php  echo $row["purchase_date"]->format('Y-m-d') ; ?>>
+            </div>
+            <div class="large-3 columns">       
+                <div class="row collapse">      
+                    <label>Purchasing Price</label>
+                    <div class="small-3 columns">
+                        <span class="prefix">&#36;</span>
+                    </div>
+                    <div class="small-9 columns">
+                        <input type="number" name="purchasePrice" value=<?php echo $row["purchase_price"]; ?> required>
+                    </div>
+                </div>
+            </div>
+            <div class="large-3 columns">
+                <label>Replacement Year</label>
+                    <input type="month" name="replacementYear" value=<?php echo $row["replacement_year"]; ?>>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>User Info</legend>
+        <div class="row">
+            <div class="large-3 columns">
+                <label>User Name</label>
+                <select class="medium" name="userName" required>
+                    <option DISABLED>User Name</option>
+                    <option selected value=<?php echo $assignmentrow["users.id"]; ?><?php  ?></option>
+                </select>
+            </div>
+            <div class="large-3 columns">
+                <label>Department</label>
+                <select class="medium" name="department" required>
+                    <option DISABLED selected><?php echo $assignmentrow["hardware_assignments.department"]; ?></option>
+                    <option value="1"></option>
+                </select>
+            </div>
+            <div class="large-3 columns">       
+                <label>Assignment Type</label>
+                <select class="medium" name="assignmentType" required>
+                    <option DISABLED>Assignment Type</option>
+                    <option <?php if($assignmentrow["hardware_assignments.assignment_type"] == "1") {echo "selected";} ?> value="1">Dedicated Computer</option>
+                    <option <?php if($assignmentrow["hardware_assignments.assignment_type"] == "2") {echo "selected";} ?> value="2">Special</option>
+                    <option <?php if($assignmentrow["hardware_assignments.assignment_type"] == "3") {echo "selected";} ?> value="3">Lab</option>
+                    <option <?php if($assignmentrow["hardware_assignments.assignment_type"] == "4") {echo "selected";} ?> value="4">Kiosk</option>
+                    <option <?php if($assignmentrow["hardware_assignments.assignment_type"] == "5") {echo "selected";} ?> value="5">Printer</option>
+                </select>
+            </div>
+            <div class="large-3 columns">
+                <?php // <!!!> what is this supposed to do? there is already a replacement year field ?>
+                <label>Replacement Year</label>
+                <input type="month" name="replacementYear"> 
+            </div>
 
-		</div>
-	</fieldset>
-		<div class="large-12 columns">
-		<div class="row" align="center">
-		<input type="submit" name="submit" value="Done" class="button expand" formmethod="post">
-		</div>
-	</div>
+        </div>
+    </fieldset>
+        <div class="large-12 columns">
+        <div class="row" align="center">
+        <input type="submit" name="submit" value="Update" class="button expand" formmethod="post">
+        </div>
+    </div>
 
-	<!-- Comment area: still needs the logic for adding the comment to the records -->
-
-	<div class="large-10 columns">
-	<div class="row" align="center">
-	<label>Comments
+    <!-- Comment area: still needs the logic for adding the comment to the records -->
+<!-- 
+    <div class="large-12 columns">
+    <div class="row" align="center">
+    <label>Comments
         <textarea placeholder="Add your comment here..."></textarea>
     </label>
-    <input type="submit" name="submitComment" value="Dummy Comment Button" class="button expand">
-	<?php
+    <input type="submit" name="submitComment" value="Dummy Comment Button" class="button expand"> -->
+    <?php
 
-	while($commentrow = mssql_fetch_array($commentresult))
-    {
+    // while($commentrow = mssql_fetch_array($commentresult))
+ //    {
 
-      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
+ //      echo " && " . $commentrow["users.first_name"] . $commentrow["users.last_name"] . $commentrow["comment.created_at"] . $commentrow["comment.text"];
     
-    }
+ //    }
 
-	?>
-	</div>
-	</div>
+    ?>
+    </div>
+    </div>
 
 </form>
-</div>;
+</div>
 
 <?php
-		}
-		else
-		{
-			// If there are no rows for this query, redirect to the home page.
-			header('Location: home.php');
-		}
-	}
-	else
-	{
-		// If the user does not set a control value, redirect to the home page.
-		header('Location: home.php');
-	}
+        }
+
+    }
+    else
+    {
+        // If the user does not set a control value, redirect to the home page.
+        // header('Location: home.php');
+    }
 }
 // Faculty
 if($_SESSION['access']==FACULTY_PERMISSION ) {

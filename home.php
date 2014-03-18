@@ -127,7 +127,7 @@ include 'getPage.php';
 
     foreach($page as $row)
     {
-      echo "<tr><td><a href=\"info.php?id=" . $row[11] . "\">" . $row[11] . "</a></td><td>" . $row[16] . "</td><td>" . $row[15] . "</td><td>" . $row[9] . "</td><td>" . $row[8] . "</td><td><a class=\"button tiny\" href=\"edit_item.php?id=" . $row[11] . "\">Edit</a></td></tr>";
+      echo "<tr><td><a href=\"info.php?id=" . $row[11] . "\">" . $row[11] . "</a></td><td>" . $row[16] . "</td><td>" . $row[15] . "</td><td>" . $row[9] . "</td><td>" . $row[8] . "</td><td><a class=\"button tiny\" href=\"edit_item.php?control=" . $row[11] . "\">Edit</a></td></tr>";
     }
 
   ?>

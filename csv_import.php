@@ -5,7 +5,6 @@ if(!isset($_SESSION['user'])) {
 }
 // Manager
 if($_SESSION['access']==ADMIN_PERMISSION ) {
-
 $self = $_SERVER['PHP_SELF'];
 $request = $_SERVER['REQUEST_METHOD'];
 
@@ -39,7 +38,7 @@ if (!empty($_FILES)) {
     // connect to sql server. 
     function connect() {
         if (!function_exists('sqlsrv_num_rows')) { // Insure sqlsrv_1.1 is loaded.
-            die ('sqlsrv_1.1 is not available');
+            die ('sqlsrv is not available');
         }
 
         // server configurations
@@ -106,11 +105,17 @@ if (!empty($_FILES)) {
     $conn = connect();
 
     // prepare the query statement. It is done in this form for easy modification. 
-    $query = "INSERT Records values ( ? , ? , ? )";
+    $query = "INSERT dbo.computers values ( ? , ? , ? )";
     $param1 = null; // this will hold col1 from the CSV
     $param2 = null; // this will hold col2 from the CSV
-	$param3 = null; // this will hold col3 from the CSV
-    $params = array( $param1, $param2, $param3 );
+    $param3 = null; // this will hold col3 from the CSV
+    $param4 = null; // this will hold col3 from the CSV
+    $param5 = null; // this will hold col3 from the CSV
+    $param6 = null; // this will hold col3 from the CSV
+    $param7 = null; // this will hold col3 from the CSV
+    $param8 = null; // this will hold col3 from the CSV
+
+    $params = array( $param1, $param2, $param3, $param4, $param5, $param6, $param7, $param8 );
     $prep = prepare ( $conn, $query, $params );
     //$result = execute ( $prep );
 

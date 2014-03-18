@@ -38,7 +38,7 @@ $securityArray[0] = "NULL";
 
 // Faculty
 if($_SESSION['access']==FACULTY_PERMISSION ) {
-header('Location: login.php');
+header('Location: home.php');
 }
 
 // User or Manager 
