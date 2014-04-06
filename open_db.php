@@ -1,5 +1,11 @@
 <?php
-
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
 $serverName = "sql05train1.gordon.edu";
 $connectionInfo = array(
 'Database' => 'CTSEquipment');

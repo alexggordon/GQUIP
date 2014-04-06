@@ -1,4 +1,12 @@
 <?php
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
+
 
     // Stuff specifically for Paginate
     const PAGE_VARIABLE_MIDDLE = 7;

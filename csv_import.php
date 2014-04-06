@@ -1,4 +1,13 @@
 <?php
+// *************************************************************
+// file: csv_import.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: The purpose of CSV import class is to import a CSV document into the database. This allows a user to add a significant amount of data to the database without 
+// adding everything manually. 
+// 
+// *************************************************************
+
 include('header.php');
 if(!isset($_SESSION['user'])) {
     header('Location: login.php');

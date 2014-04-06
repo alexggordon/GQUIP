@@ -1,5 +1,11 @@
 <?php 
-
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
 include('header.php');
 include('getPage.php');
 include ('paginate.php');

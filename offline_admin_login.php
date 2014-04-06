@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: offline_admin_login.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: Allows the user to bypass the authentication system to be authenticated as an admin. 
+// 
+// *************************************************************
 session_start();
 $_SESSION['user'] = 'alex.gordon';
 $_SESSION['access'] = '3';

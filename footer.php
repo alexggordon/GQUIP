@@ -1,3 +1,12 @@
+<?php 
+// *************************************************************
+// file: footer.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose:  The purpose of the footer is to display a dynamic copyright year and to show general links to CTS websites. 
+// 
+// *************************************************************
+ ?>
   <footer class="row">
     <div class="large-12 columns">
       <hr />

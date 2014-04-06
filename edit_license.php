@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: edit_license.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: The page used to edit information on a software license item.
+// 
+// *************************************************************
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
 session_start();
 $_SESSION['user'] = 'alex.gordon';
 $_SESSION['access'] = '1';

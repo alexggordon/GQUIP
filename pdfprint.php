@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
 require 'fpdf.php';
 include 'symbolic_values.php';
 session_start();

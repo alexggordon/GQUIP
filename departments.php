@@ -1,4 +1,11 @@
 <?php 
+// *************************************************************
+// file: departments.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: A page used for displaying the data of all computers currently in use by a member of a given department. 
+// 
+// *************************************************************
 include 'header.php';
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
