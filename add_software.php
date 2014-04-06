@@ -1,4 +1,8 @@
 <?php
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
 // *************************************************************
 // file: add_software.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +10,11 @@
 // purpose: The page used to add software item content to GQUIP’s database.
 // 
 // *************************************************************
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

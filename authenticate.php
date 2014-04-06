@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
 <?php 
 session_start();
 // *************************************************************
@@ -7,6 +11,12 @@ session_start();
 // purpose:  This serves as the backend for our two-part login system. This page connects to the elder1 Active Directory database using the username and password passed to 
 // the function and checks the AD groups that the user is in. 
 // *************************************************************
+<<<<<<< HEAD
+=======
+=======
+<?php session_start();
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 
 function authenticate_with_ad($user, $password) {
 	// Active Directory server

@@ -1,4 +1,8 @@
 <?php
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
 // *************************************************************
 // file: config.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +10,12 @@
 // purpose: Config.php expires the session after a certain amount of time. It’s just an auto logout feature to make sure you don’t stay logged in for weeks at a time. 
 // 
 // *************************************************************
+<<<<<<< HEAD
+=======
+=======
+session_start();
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 
 // this will check for inactivity period. The second number is in seconds
 define('SESSION_EXPIRE',21600);

@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: symbolic_values.php
 // created by: Alex Gordon, Elliott Staude
@@ -7,6 +8,19 @@
 // 
 // *************************************************************
 
+=======
+<<<<<<< HEAD
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
+
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 
     // Stuff specifically for Paginate
     const PAGE_VARIABLE_MIDDLE = 7;

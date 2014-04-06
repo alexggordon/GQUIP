@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: paginate.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,18 @@
 // purpose: The paginate class serves as a method of paginating large amounts of SQL Data. The paginate class takes a count of the SQL data in the data to be returned and 
 // then displays this data in an organized fashion. It also returned an HTML number bar at the bottom of the page. 
 // *************************************************************
+=======
+<<<<<<< HEAD
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 
 ///////////////////////////////////////////////////////////////
 // PHPagination v1.0 by Dan Palka, the most powerful wizard. //

@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: pdfprint.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,18 @@
 // purpose: A general purpose page that allows users to print out search data in PDF format, or copy-paste a selection of search data into a .csv file
 // 
 // *************************************************************
+=======
+<<<<<<< HEAD
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 require 'fpdf.php';
 include 'symbolic_values.php';
 session_start();

@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: student_info.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,18 @@
 // purpose: This page shows info about an individual student and allows easy access to the software assigned to them and contact information. 
 // 
 // *************************************************************
+=======
+<<<<<<< HEAD
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

@@ -1,4 +1,8 @@
 <?php 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
 // *************************************************************
 // file: departments.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +10,11 @@
 // purpose: A page used for displaying the data of all computers currently in use by a member of a given department. 
 // 
 // *************************************************************
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 include 'header.php';
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

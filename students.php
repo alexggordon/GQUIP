@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: students.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,18 @@
 // purpose: A page used for displaying the data of and relevant to all students currently in Gordon College’s Active Directory.
 // 
 // *************************************************************
+=======
+<<<<<<< HEAD
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
+>>>>>>> FETCH_HEAD
 include('header.php');
 include('getPage.php');
 include ('paginate.php');
