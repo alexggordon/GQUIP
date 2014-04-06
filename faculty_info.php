@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: faculty_info.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,8 @@
 // purpose: This page shows info about an individual faculty member and allows easy access to the computers assigned to them and contact information. 
 // 
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

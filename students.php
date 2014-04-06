@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: 
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,8 @@
 // purpose: 
 // 
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 include('getPage.php');
 include ('paginate.php');

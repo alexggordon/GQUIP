@@ -16,6 +16,7 @@ CONCERNS:
 -->
 
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: new_item.php
 // created by: Alex Gordon, Elliott Staude
@@ -23,6 +24,8 @@ CONCERNS:
 // purpose: The page used to add equipment item content to GQUIP’s database. 
 // 
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

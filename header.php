@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 // *************************************************************
 // file: header.php
@@ -9,6 +10,12 @@
 include 'symbolic_values.php';
 session_start();
 include("config.php");
+=======
+<!-- header.php  -->
+<?php
+include 'symbolic_values.php';
+session_start();
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
  ?>
 <!-- Every user class gets this header -->
 
@@ -27,11 +34,30 @@ include("config.php");
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/top_bar_fix.css">
+<<<<<<< HEAD
   <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css">
   <!-- End responsive table css -->
   <!-- Responsive table JS -->
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/responsive-tables.js"></script>
+=======
+
+  <!-- Responsive table css -->
+<!--   <link rel="stylesheet" href="css/globals.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/grid.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/forms.css"> -->
+<!--   <link rel="stylesheet" href="css/orbit.css">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/app.css"> -->
+  <link rel="stylesheet" href="css/responsive-tables.css">
+  <!-- End responsive table css -->
+  <!-- Responsive table JS -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/responsive-tables.js"></script>
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
   <!-- End responsive table JS -->
 
   <script src="js/foundation/foundation.js"></script>

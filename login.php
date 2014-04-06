@@ -1,11 +1,19 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
+=======
+
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 // file: login.php
 // created by: Alex Gordon, Elliott Staude
 // date: 02-19-2014
 // purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
+<<<<<<< HEAD
 // *************************************************************
+=======
+// 
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 //
 
 // include the domain authentication function

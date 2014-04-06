@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: 
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,9 @@
 // purpose: 
 // 
 // *************************************************************
+=======
+
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 $serverName = "sql05train1.gordon.edu";
 $connectionInfo = array(
 'Database' => 'CTSEquipment');

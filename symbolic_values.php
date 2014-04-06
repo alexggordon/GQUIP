@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: 
 // created by: Alex Gordon, Elliott Staude
@@ -7,6 +8,8 @@
 // 
 // *************************************************************
 
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 
     // Stuff specifically for Paginate
     const PAGE_VARIABLE_MIDDLE = 7;

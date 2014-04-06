@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: csv_import.php
 // created by: Alex Gordon, Elliott Staude
@@ -8,6 +9,8 @@
 // 
 // *************************************************************
 
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 if(!isset($_SESSION['user'])) {
     header('Location: login.php');

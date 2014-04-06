@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: Faculty.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,8 @@
 // purpose: A page used for displaying the data of and relevant to all faculty and staff members currently in Gordon College’s Active Directory.
 // 
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 include('getPage.php');
 include ('paginate.php');

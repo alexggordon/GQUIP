@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: edit_item.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,8 @@
 // purpose: The page used to edit information on an equipment item. This loads all the data from the database into a page that allows easy editing. 
 // 
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 if(!isset($_SESSION['user'])) {
     header('Location: login.php');

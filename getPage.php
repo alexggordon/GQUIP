@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: getPage.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,8 @@
 // purpose: The get page function works in tandem with the paginate php function (see paginate.php). It’s goal is to take the page number returned from paginate.php function 
 // and then get the corresponding SQL data from the database.
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('open_db.php');
 function getPage($query, $pageNum, $rowsPerPage)
 {

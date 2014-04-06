@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // *************************************************************
 // file: new_software.php
 // created by: Alex Gordon, Elliott Staude
@@ -6,6 +7,8 @@
 // purpose:  The page used to add software item content to GQUIP’s database.
 // 
 // *************************************************************
+=======
+>>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
