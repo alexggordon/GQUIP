@@ -1,11 +1,12 @@
 <?php
-
+// *************************************************************
 // file: home.php
 // created by: Alex Gordon, Elliott Staude
 // date: 02-27-2014
 // purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
-// 
+// *************************************************************
+
 include('header.php');
 if(!isset($_SESSION['user'])) {
   header('Location: login.php');
@@ -111,7 +112,7 @@ include 'getPage.php';
 
   <div class="row">
     <div class="large-10 large-centered columns">
-  <table cellspacing="0">
+  <table cellspcing= "0" class="responsive">
    <thead>
     <tr>
       <th width="100">Control</th>

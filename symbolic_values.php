@@ -1,4 +1,12 @@
 <?php
+// *************************************************************
+// file: symbolic_values.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: The symbolic values page defines most important aspects of GQUIP. This file mainly defines the user classes and other sitewide aspects that might change. 
+// 
+// *************************************************************
+
 
     // Stuff specifically for Paginate
     const PAGE_VARIABLE_MIDDLE = 7;

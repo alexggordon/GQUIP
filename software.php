@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: Software.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: A page used for displaying the data of all varieties of software that can be licensed out by Gordon College to a Gordon student.
+// 
+// *************************************************************
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

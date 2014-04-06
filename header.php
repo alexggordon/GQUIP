@@ -1,7 +1,14 @@
-<!-- header.php  -->
 <?php
+// *************************************************************
+// file: header.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: The purpose of the header file is to manage general php imports and to display a dynamic nav bar depending on your user class. This nav bar also facilitates use of 
+// the in-page search function. 
+// *************************************************************
 include 'symbolic_values.php';
 session_start();
+include("config.php");
  ?>
 <!-- Every user class gets this header -->
 
@@ -20,22 +27,11 @@ session_start();
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/top_bar_fix.css">
-
-  <!-- Responsive table css -->
-<!--   <link rel="stylesheet" href="css/globals.css">
-  <link rel="stylesheet" href="css/typography.css">
-  <link rel="stylesheet" href="css/grid.css">
-  <link rel="stylesheet" href="css/ui.css">
-  <link rel="stylesheet" href="css/forms.css"> -->
-<!--   <link rel="stylesheet" href="css/orbit.css">
-  <link rel="stylesheet" href="css/reveal.css">
-  <link rel="stylesheet" href="css/mobile.css">
-  <link rel="stylesheet" href="css/app.css"> -->
-  <link rel="stylesheet" href="css/responsive-tables.css">
+  <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css">
   <!-- End responsive table css -->
   <!-- Responsive table JS -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/responsive-tables.js"></script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/responsive-tables.js"></script>
   <!-- End responsive table JS -->
 
   <script src="js/foundation/foundation.js"></script>

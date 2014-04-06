@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: pdfprint.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: A general purpose page that allows users to print out search data in PDF format, or copy-paste a selection of search data into a .csv file
+// 
+// *************************************************************
 require 'fpdf.php';
 include 'symbolic_values.php';
 session_start();

@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: page_template.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: 
+// 
+// *************************************************************
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

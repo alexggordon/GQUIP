@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file:  offline_user_login.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: Allows the user to bypass the authentication system to be authenticated as a user. 
+// 
+// *************************************************************
 session_start();
 $_SESSION['user'] = 'alex.gordon';
 $_SESSION['access'] = '1';

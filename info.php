@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: info.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose:  The purpose of this page is to display all the information about an equipment item. 
+// 
+// *************************************************************
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: 
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: A general-use search page for finding data in a given section of the GQUIP database by table.
+// 
+// *************************************************************
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

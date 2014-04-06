@@ -1,4 +1,12 @@
 <?php
+// *************************************************************
+// file: fpdf.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: An existing library file for the creation of PDFs in PHP used by the developers of GQUIP for generating printout data
+// 
+// *************************************************************
+
 /*******************************************************************************
 * FPDF                                                                         *
 *                                                                              *

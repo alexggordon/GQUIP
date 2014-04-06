@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: student_info.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: This page shows info about an individual student and allows easy access to the software assigned to them and contact information. 
+// 
+// *************************************************************
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');

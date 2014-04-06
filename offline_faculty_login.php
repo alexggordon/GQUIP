@@ -1,4 +1,11 @@
 <?php
+// *************************************************************
+// file: offline_faculty_login.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: Allows the user to bypass the authentication system to be authenticated as a faculty or staff. 
+// 
+// *************************************************************
 session_start();
 $_SESSION['user'] = 'alex.gordon';
 $_SESSION['access'] = '2';

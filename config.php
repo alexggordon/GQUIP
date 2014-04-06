@@ -1,5 +1,11 @@
 <?php
-session_start();
+// *************************************************************
+// file: config.php
+// created by: Alex Gordon, Elliott Staude
+// date: 04-6-2014
+// purpose: Config.php expires the session after a certain amount of time. It’s just an auto logout feature to make sure you don’t stay logged in for weeks at a time. 
+// 
+// *************************************************************
 
 // this will check for inactivity period. The second number is in seconds
 define('SESSION_EXPIRE',21600);
