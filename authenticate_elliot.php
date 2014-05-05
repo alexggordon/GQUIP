@@ -22,6 +22,7 @@ session_start();
     const NO_ACCESS = 0;
     const USER_ACCESS = 1;
     const FACULTY_ACCESS = 2;
+    const STAFF_ACCESS = 2;
     const MANAGER_ACCESS = 3;
     // Domain, for purposes of constructing $user
     const USER_DOMAIN = "@gordon.edu";
@@ -38,10 +39,13 @@ function authenticate_with_ad($user, $password) {
 	$ldap_user_group = "CTS-Helpdesk-Students";
 
 	// Active Directory faculty group: the name of the group one must be a part of to edit GQUIP data
-	$ldap_faculty_group = "CTS-SG";
+	$ldap_faculty_group = "faculty-sg";
+
+	// Active Directory staff group: the name of the group one must be a part of to edit GQUIP data
+	$ldap_staff_group = "staff-sg";
 
 	// Active Directory administrator: the name of the group one must be a part of for full access to GQUIP
-	$ldap_manager_group = "ST-ISG";
+	$ldap_manager_group = "cet-admin";
 
 	// Connect to active directory
 	$ldap = ldap_connect($ldap_host);
@@ -66,6 +70,7 @@ function authenticate_with_ad($user, $password) {
             // regular User
             if (strpos($grps, $ldap_user_group) !== false) { $access = max($access, USER_ACCESS); }
             if (strpos($grps, $ldap_faculty_group) !== false) { $access = max($access, FACULTY_ACCESS); }
+            if (strpos($grps, $ldap_faculty_group) !== false) { $access = max($access, STAFF_ACCESS); }
             if (strpos($grps, $ldap_manager_group) !== false) { $access = max($access, MANAGER_ACCESS); }
         
         }

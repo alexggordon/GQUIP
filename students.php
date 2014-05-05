@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 // *************************************************************
 // file: students.php
 // created by: Alex Gordon, Elliott Staude
@@ -7,22 +7,13 @@
 // purpose: A page used for displaying the data of and relevant to all students currently in Gordon College’s Active Directory.
 // 
 // *************************************************************
-=======
-<<<<<<< HEAD
-// *************************************************************
-// file: 
-// created by: Alex Gordon, Elliott Staude
-// date: 04-6-2014
-// purpose: 
-// 
-// *************************************************************
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+// include nav bar and other default page items
 include('header.php');
 include('getPage.php');
-include ('paginate.php');
+include('paginate.php');
 include('open_db.php');
+// check the session to see if the person is authenticated
 if(!isset($_SESSION['user'])) {
   header('Location: login.php');
 }
@@ -33,8 +24,59 @@ if ( !$count )
   die( print_r( sqlsrv_errors(), true));
 $num_rows = sqlsrv_num_rows( $count );
 
+// Set up ordering
+
+// Find the requested content ordering
+// When the sorting is the same kind as before, then "reverse" the ordering from previous
+$sortMarker;
+$orderingWatch;
+if (isset($_GET['sorting']))
+{
+    $sortMarker = $_GET['sorting'];
+    switch ($sortMarker)
+    {   
+      case "FirstName":
+        $orderingWatch = "case when FirstName is null then 1 else 0 end, FirstName";
+        break;    
+      case "FlipFirstName":
+        $orderingWatch = "FirstName DESC";
+        break;
+      case "LastName":
+        $orderingWatch = "case when LastName is null then 1 else 0 end, LastName";
+        break;
+      case "FlipLastName":
+        $orderingWatch = "LastName DESC";
+        break;
+      case "ID":
+        $orderingWatch = "case when ID is null then 1 else 0 end, ID";
+        break;
+      case "FlipID":
+        $orderingWatch = "ID DESC";
+        break;
+      case "Class":
+        $orderingWatch = "case when Class is null then 1 else 0 end, Class";
+        break;
+      case "FlipClass":
+        $orderingWatch = "Class DESC";
+        break;
+      case "Email":
+        $orderingWatch = "case when Email is null then 1 else 0 end, Email";
+        break;
+      case "FlipEmail":
+        $orderingWatch = "Email DESC";
+        break;
+    }
+}
+else
+{
+    $sortMarker = "LastName";
+    $orderingWatch = "case when LastName is null then 1 else 0 end, LastName";
+}
+
 // query 2, for all items we need
-$query = "SELECT  ID, FirstName, LastName, Email, Class FROM dbo.gordonstudents ORDER BY FirstName ASC";
+$query = "SELECT ID, FirstName, LastName, Email, Class 
+          FROM dbo.gordonstudents 
+          ORDER BY " . $orderingWatch . ";";
 $result = sqlsrv_query($conn, $query, array(), array( "Scrollable" => 'static' ));
 if ( !$result )
   die( print_r( sqlsrv_errors(), true));
@@ -44,7 +86,7 @@ if ( !$result )
 
 // This is the syntax we pass to the paginator.php to give us our numbers
 // the left page link
-$aLeft = 'students.php?&page=';
+$aLeft = 'students.php?sorting=' . $sortMarker . '&page=';
 // the right page link. If blank, then left will be used. 
 $aRight = '';
 // do we want to show the fancy arrows?
@@ -83,26 +125,22 @@ $page = getPage($result, $pageNum, $rowsPerPage);
 if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
   ?>
   
-  <ul class="breadcrumbs">
-  	<li><a href="home.php">Home</a></li>
-  	<li class="current"><a href="#">Students</a></li>
-  </ul>
   
   <div class="row">
     <div class="large-10 large-centered columns">
-    <h1>Users</h1>
-    </div>
-    </div>
-  <div class="row">
-    <div class="large-12 large-centered columns">
+    <h1>Students</h1>
+    <ul class="breadcrumbs">
+      <li><a href="home.php">Home</a></li>
+      <li class="current"><a href="#">Students</a></li>
+    </ul>
+  
   <table cellspacing="0">
    <thead>
     <tr>
-      <th width="100">First Name</th>
-      <th width="100">Last Name</th>
-      <th width="100">ID</th>
-      <th width="200">Class</th>
-    <th width="200">Email</th>
+      <th width="150"><?php if ($sortMarker == "FirstName"){echo "<a href='students.php?sorting=FlipFirstName'>";} else {echo "<a href='students.php?sorting=FirstName'>";} ?>First Name</a></th>
+      <th width="150"><?php if ($sortMarker == "LastName"){echo "<a href='students.php?sorting=FlipLastName'>";} else {echo "<a href='students.php?sorting=LastName'>";} ?>Last Name</a></th>
+      <th width="100"><?php if ($sortMarker == "Class"){echo "<a href='students.php?sorting=FlipClass'>";} else {echo "<a href='students.php?sorting=Class'>";} ?>Class</a></th>
+      <th width="300"><?php if ($sortMarker == "Email"){echo "<a href='students.php?sorting=FlipEmail'>";} else {echo "<a href='students.php?sorting=Email'>";} ?>Email</a></th>
     </tr>
     </thead>
 <a href=""></a>
@@ -110,7 +148,7 @@ if($_SESSION['access']=="3"  OR $_SESSION['access']=="1" ) {
 
   foreach($page as $row)
   {
-     echo "<tr><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[0] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
+     echo "<tr><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[1] . "</a></td><td><a href=\"/student_info.php?&id=" . $row[0] . "\">" . $row[2] . "</a></td><td>" . $row[4] . "</td><td>" . $row[3] . "</td></tr>";
   }
   
   ?>
@@ -132,13 +170,6 @@ sqlsrv_close( $conn );
 </div>
 </div>
 <?php
-// Faculty
-if($_SESSION['access']=="2" ) {
-?>
-
-<?php
-}
-
 
 include('footer.php')
 ?>

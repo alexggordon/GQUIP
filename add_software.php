@@ -1,8 +1,4 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
 // *************************************************************
 // file: add_software.php
 // created by: Alex Gordon, Elliott Staude
@@ -10,11 +6,9 @@
 // purpose: The page used to add software item content to GQUIP’s database.
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+// include nav bar and other default page items
+// include nav bar and other default page items
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
@@ -23,15 +17,16 @@ if(!isset($_SESSION['user'])) {
 if($_SESSION['access']==ADMIN_PERMISSION) {
 ?>
 
+<!-- begin content -->
 <div class="row">
-<div class="large-10 columns">
+<div class="large-10 large-centered columns">
 <h1>New Software</h1>
 
 <?php
+// if submit post request
 if (isset($_POST['submit'])){
 
     //connect to the database 
-
 	include 'open_db.php';
 
     //display error if database cannot be accessed 
@@ -44,10 +39,11 @@ if (isset($_POST['submit'])){
         echo( print_r( sqlsrv_errors(), true));
     }
     //assign form input to variables
+    // get current date and time
     include 'dateTime.php';
 	$last_updated_by = $_SESSION['user'];
 	$last_updated_at = $dateTime;
-	$created_at = $dateTime;
+	$created_at = $dateTime; 
     $name = $_POST['name'];
     $software_type = $_POST['software_type'];
 
@@ -63,17 +59,13 @@ if (isset($_POST['submit'])){
     // close the connection
 
     sqlsrv_close( $conn);
-    ?>
-    <div class="large-10 columns">
-	<div class="row" align="center">
-	<p>Data inserted successfully</p>
-	<a class="button" href="software.php">OK</a>
-	</div>
-	</div>
-    <?php
+    echo "<h3>Data successfully added</h3>";
+	echo "<a class=\"button\" href=\"software.php\">OK</a>";
+	echo "</div>";
 }
 else {
 ?>
+<!-- form -->
 <form data-abide type="submit" name="submit" enctype='multipart/form-data' action="add_software.php" method="POST">
 	<fieldset>
 		<legend>Software Info</legend>
@@ -92,8 +84,8 @@ else {
 	</fieldset>
 		<div class="large-12 columns">
 		<div class="row" align="center">
-		<input type="submit" name="submit" value="Create New Item" class="button" formmethod="post" action="software.php">
-		<a class="button" href="software.php">Cancel</a>
+		<a class="button large-4 columns" href="software.php">Cancel</a>
+		<input type="submit" name="submit" value="Create New Item" class="button large-4 columns" formmethod="post" action="software.php">
 		</div>
 		</div>
 </form>

@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<?php
+  <?php
 // *************************************************************
 // file: header.php
 // created by: Alex Gordon, Elliott Staude
@@ -12,75 +9,41 @@
 include 'symbolic_values.php';
 session_start();
 include("config.php");
-=======
-<!-- header.php  -->
->>>>>>> FETCH_HEAD
-<?php
-// *************************************************************
-// file: header.php
-// created by: Alex Gordon, Elliott Staude
-// date: 04-6-2014
-// purpose: The purpose of the header file is to manage general php imports and to display a dynamic nav bar depending on your user class. This nav bar also facilitates use of 
-// the in-page search function. 
-// *************************************************************
-include 'symbolic_values.php';
-session_start();
-<<<<<<< HEAD
-include("config.php");
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+if (isset($_POST['pdfsubmit']))
+{
+  $_SESSION['pdfpost'] = $_POST;
+  header('Location: pdfprint.php');
+}
  ?>
 <!-- Every user class gets this header -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html>
 <html>
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
+<meta http-equiv="x-ua-compatible" content="IE=10" >
   <meta charset="utf-8" />
 
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width" />
 
-  <title>Home</title>
+  <title>GQUIP</title>
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/foundation.css">
   <link rel="stylesheet" href="css/top_bar_fix.css">
-<<<<<<< HEAD
-  <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css">
-  <!-- End responsive table css -->
-  <!-- Responsive table JS -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/responsive-tables.js"></script>
-=======
-<<<<<<< HEAD
-  <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css">
-  <!-- End responsive table css -->
-  <!-- Responsive table JS -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/responsive-tables.js"></script>
-=======
 
-  <!-- Responsive table css -->
-<!--   <link rel="stylesheet" href="css/globals.css">
-  <link rel="stylesheet" href="css/typography.css">
-  <link rel="stylesheet" href="css/grid.css">
-  <link rel="stylesheet" href="css/ui.css">
-  <link rel="stylesheet" href="css/forms.css"> -->
-<!--   <link rel="stylesheet" href="css/orbit.css">
-  <link rel="stylesheet" href="css/reveal.css">
-  <link rel="stylesheet" href="css/mobile.css">
-  <link rel="stylesheet" href="css/app.css"> -->
-  <link rel="stylesheet" href="css/responsive-tables.css">
+  <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css">
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/responsive-tables.js"></script>
+  <script type="text/javascript" src="js/forms.jquery.js"></script>
+  <script type="text/javascript" src="js/jquery.customforms.js"></script>
+
+  <link type="text/css" media="screen" rel="stylesheet" href="css/responsive-tables.css">
   <!-- End responsive table css -->
   <!-- Responsive table JS -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/responsive-tables.js"></script>
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
-  <!-- End responsive table JS -->
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/responsive-tables.js"></script>
 
   <script src="js/foundation/foundation.js"></script>
   <script src="js/foundation/foundation.topbar.js"></script>
@@ -95,7 +58,7 @@ include("config.php");
 // User is a Manager
 
 
-if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSION OR $_SESSION['access']== FACULTY_PERMISSION) {
+if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSION OR $_SESSION['access']== FACULTY_PERMISSION OR $_SESSION['access']== STAFF_PERMISSION) {
 
 ?>
 
@@ -126,7 +89,7 @@ if($_SESSION['access']== FACULTY_PERMISSION) {
             <li class="has-dropdown">
                   <a href="#">Equipment</a>
                   <ul class="dropdown">
-                          <li><a href="faculty.php">Faculty</a></li>
+                          <li><a href="faculty.php">Facstaff</a></li>
                           <li><a href="departments.php">Departments</a></li>
                   </ul>
             </li>
@@ -138,7 +101,7 @@ if($_SESSION['access']== FACULTY_PERMISSION) {
 
 <?php 
 }
-if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSION) {
+if($_SESSION['access']== USER_PERMISSION) {
 
 ?>
 
@@ -146,7 +109,7 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSIO
     <li class="has-dropdown">
           <a href="#">Equipment</a>
           <ul class="dropdown">
-                  <li><a href="faculty.php">Faculty</a></li>
+                  <li><a href="faculty.php">Facstaff</a></li>
                   <li><a href="departments.php">Departments</a></li>
                   <li><a href="new_item.php">New Equipment Item</a></li>
           </ul>
@@ -167,15 +130,40 @@ if($_SESSION['access']==ADMIN_PERMISSION) {
 
 ?>
 
+<ul class="left">
+    <li class="has-dropdown">
+          <a href="#">Equipment</a>
+          <ul class="dropdown">
+                  <li><a href="faculty.php">Facstaff</a></li>
+                  <li><a href="departments.php">Departments</a></li>
+                  <li><a href="new_item.php">New Equipment Item</a></li>
+                  <li><a href="inventory.php">Inventory</a></li>
+          </ul>
+    </li>
+    <li class="divider"></li>
+    <li class="has-dropdown">
+          <a href="#">Software</a>
+          <ul class="dropdown">
+                  <li><a href="software.php">Software</a></li>
+                  <li><a href="students.php">Students</a></li>
+          </ul>
+    </li>
+
+<?php 
+}
+if($_SESSION['access']==ADMIN_PERMISSION) {
+
+?>
+
     <li class="divider"></li>
     <li class="has-dropdown">
           <a href="#">Administration</a>
           <ul class="dropdown">
                   <li><label>Equipment</label></li>
                   <li><a href="csv_import.php">Import</a></li>
+                  <li><a href="clear_inventory.php">Clear Inventory</a></li>
                   <li><label>Software</label></li>
                   <li><a href="add_software.php">Add Software</a></li>
-                  <li><a href="software.php">Edit or Delete software</a></li>
           </ul>
     </li>
 
@@ -191,7 +179,7 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSIO
 
 <?php 
 }
-if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSION) {
+if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSION OR $_SESSION['access']== FACULTY_PERMISSION OR $_SESSION['access']== STAFF_PERMISSION) {
 
 ?>
 
@@ -201,73 +189,29 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']== USER_PERMISSIO
           <li class="divider hide-for-small"></li>
           <li class="divider"></li>
           <li class="has-form">
-              <form data-abide name="search" enctype='multipart/form-data' action="search.php" method="POST">
-        
-        <?php
-        $pageBase = explode("?", $_SERVER['REQUEST_URI']);
-        switch ($pageBase[0])
-        {       
-          case "/add_software.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
-            break;
-       // used? case "/delete_item.php":
-          case "/departments.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
-            echo "<input hidden name=\"searchTables[1]\" value=\"FacandStaff\">";
-            echo "<input hidden name=\"searchTables[2]\" value=\"hardware_assignments\">";
-            break;
-       // used? case "/details.php":
-          case "/edit_computer.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
-            echo "<input hidden name=\"searchTables[1]\" value=\"comments\">";
-            echo "<input hidden name=\"searchTables[2]\" value=\"changes\">";
-            break;
-       // used? case "/edit_item.php":
-          case "/edit_license.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"gordonstudents\">";
-            echo "<input hidden name=\"searchTables[1]\" value=\"software\">";
-            echo "<input hidden name=\"searchTables[2]\" value=\"licenses\">";
-            break;
-          case "/edit_software.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
-            break;
-          case "/faculty.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"FacandStaff\">";
-            break;
-          case "/home.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
-            echo "<input hidden name=\"searchTables[1]\" value=\"comments\">";
-            echo "<input hidden name=\"searchTables[2]\" value=\"changes\">";
-            break;
-          case "/new_item.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"computers\">";
-            break;
-          case "/search.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
-            break;
-          case "/software.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"software\">";
-            break;
-          case "/student_info.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"gordonstudents\">";
-            echo "<input hidden name=\"searchTables[1]\" value=\"software\">";
-            echo "<input hidden name=\"searchTables[2]\" value=\"licenses\">";
-            break;
-          case "/students.php":
-            echo "<input hidden name=\"searchTables[0]\" value=\"gordonstudents\">";
-            break;
-        }
-        ?>
-        
+            <?php  
+
+
+            $pageBase = explode("?", $_SERVER['REQUEST_URI']);
+
+            if ($pageBase[0] == "/faculty.php") {
+              $page = "/faculty.php";
+            } else {
+              $page = "/home.php";
+            }
+
+             ?>
+            <form data-abide type="submit" id="searchTerms" enctype='multipart/form-data' action=<?php echo $page; ?> method="POST">
+
                 <div class="row collapse">
                   <div class="small-8 columns">
-                    <input type="text" name="searchTerms">
+                    <input type="text" name="searchTerms" placeholder="Search" >
                   </div>
                   <div class="small-4 columns">
-                    <input type="submit" class="button" name="search" action="search.php" value="Search">
+                      <input id="searchTerms" type="submit"  class="button" formmethod="POST" value="Search"></input>
                   </div>
                 </div>
-              </form>
+            </form>
           </li>
         <li class="divider show-for-small"></li>
         <li class="has-form">

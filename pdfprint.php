@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 // *************************************************************
 // file: pdfprint.php
 // created by: Alex Gordon, Elliott Staude
@@ -7,18 +7,7 @@
 // purpose: A general purpose page that allows users to print out search data in PDF format, or copy-paste a selection of search data into a .csv file
 // 
 // *************************************************************
-=======
-<<<<<<< HEAD
-// *************************************************************
-// file: 
-// created by: Alex Gordon, Elliott Staude
-// date: 04-6-2014
-// purpose: 
-// 
-// *************************************************************
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
 require 'fpdf.php';
 include 'symbolic_values.php';
 session_start();
@@ -37,72 +26,127 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==USER_PERMISSION
 
 	$realterms = "NULL";
 
-	if (isset($_POST['searchTerms']) AND $_POST['searchTerms'] != "")
+	// THIS GUY HERE holds the posted info so the session data can be cleaned safely
+	$posted;
+	if (isset($_SESSION['pdfpost']['searchTerms']) AND $_SESSION['pdfpost']['searchTerms'] != "")
 	{
-		$realTerms = explode(",", $_POST['searchTerms']);
-		$pdf->Cell(30,10,"Searched terms:");
+		$posted = $_SESSION['pdfpost'];
+		$_SESSION['pdfpost'] = NULL;
+		$pdf->Cell(30,10,"GQUIP, the Gordon College equipment database");
 		$pdf->Ln();
+		$pdf->Ln();
+		$pdf->Cell(30,10,"Searched terms: ");
+		$pdf->Ln();
+		$realTerms = str_replace(",", " ", $posted['searchTerms']);
+		$realTerms = str_replace("  ", " ", $realTerms);
+		$realTerms = explode(" ", $realTerms);
 		foreach ( $realTerms as $thisTerm )
 		{
 			$thisTerm = trim($thisTerm);
-			$pdf->Cell(30,10,$thisTerm);
+			$pdf->Cell(30,10,$thisTerm . " ");
 			$pdf->Ln();
 		}
 	}
+	else
+	{
+		$posted = NULL;
+		header('Location: search.php');
+	}
+
+	$pdf->Ln();
 
 	$query;
 	$result;
 	
 	//Check if the tables to search are set
 	
-	if (isset($_POST['searchTables']))
+	if (isset($posted['searchTables']))
 	{
-		foreach ( $_POST['searchTables'] as $table )
+
+		$pdf->Cell(30,10,"Searched tables: ");
+		$pdf->Ln();
+		foreach ($posted['searchTables'] as $table)
 		{
-			$query['$table'] = "SELECT *
+			$pdf->Cell(30,10,$tableReadableArray[$table]);
+			$pdf->Ln();
+		}
+		foreach ($posted['searchTables'] as $table)
+		{
+			$query[$table] = "SELECT *
 			FROM " . $table . " WHERE ";
 			$numberCols = count($columnArray[$table]);
+			$numberTerms = count($realTerms);
 			//Ask all of the columns if they have a row containing this value
 			if ($numberCols > 1)
 			{
-				for($colIndex = 0; $colIndex < (count($columnArray[$table]) - 1); $colIndex++)
+				for($colIndex = 0; $colIndex < ($numberCols - 1); $colIndex++)
 				{
-					$query['$table'] .= $columnArray[$table][$colIndex] . " LIKE '%" . $realTerms[0] . "%' OR ";
+					for($realIndex = 0; $realIndex < ($numberTerms); $realIndex++)
+					{
+						$query[$table] .= $columnArray[$table][$colIndex] . " LIKE '%" . $realTerms[$realIndex] . "%' OR ";
+					}
 				}
 			}
-			$query['$table'] .= $columnArray[$table][$numberCols-1] . " LIKE '%" . $realTerms[0] . "%';";
+			if ($numberTerms > 1)
+			{
+				for($realIndex = 0; $realIndex < ($numberTerms - 1); $realIndex++)
+				{
+					$query[$table] .= $columnArray[$table][$numberCols-1] . " LIKE '%" . $realTerms[$realIndex] . "%' OR ";
+				}
+			}
+			$query[$table] .= $columnArray[$table][$numberCols-1] . " LIKE '%" . $realTerms[$numberTerms-1] . "%';";
 		}
 
+		$pdf->Ln();
+		$pdf->Ln();
+		$pdf->Cell(30,10,"Results:");
+		$pdf->Ln();
+		$pdf->Ln();
+
 		include 'open_db.php';
-	
+
 		//Go through each table's query, get the relevant data, display it
-		foreach ( $_POST['searchTables'] as $table )
+		foreach ( $posted['searchTables'] as $table )
 		{
-			$result['$table'] = sqlsrv_query($conn, $query['$table']);
-			if(!$result['$table'])
-			{
-				echo print_r( sqlsrv_errors(), true);
-				exit;
-			}
+			// Get the row data from each table
+			$result[$table] = sqlsrv_query($conn, $query[$table], array(), array( "Scrollable" => 'static' ));
+			$row_count = sqlsrv_num_rows($result[$table]);
+			sqlsrvErrorLinguist($result[$table], "Problem with getting results");
+			
+
+			// Set up the pdf section header
+			$pdf->Cell(30,10,"~~~~~~~~~~~~~~" . $tableReadableArray[$table]);
+			$pdf->Ln();
+			$pdf->Cell(30,10,"Result count: " . $row_count);
 			//Ensure there are some results before starting to show tables
-			if (count($result['$table']) > 0)
+			if ($row_count > 0)
 			{
+				$pdf->Ln();
+				$pdf->Ln();
 				//Output this table's data
-				$pdf->Cell(30,5,$tableReadableArray[$table]);
-				$pdf->Ln();
-				foreach ($columnArray[$table] as $col)
-				{
-					$pdf->Cell($columnSizesArray[$table][$col],5,$col . ",");
-				}
-				$pdf->Ln();
-				while($row['$table'] = sqlsrv_fetch_array($result['$table']))
+				while($row[$table] = sqlsrv_fetch_array($result[$table]))
 				{
 					foreach ( $columnArray[$table] as $tableRowValue )
 					{
-						$pdf->Cell($columnSizesArray[$table][$tableRowValue],5,$row['$table'][$tableRowValue] . ",");
+						//Make sure that the data here can be printed
+						if (!($row[$table][$tableRowValue] instanceof DateTime))
+						{
+							$pdf->Cell($columnSizesArray[$table][$tableRowValue],5,$tableRowValue . ": " . $row[$table][$tableRowValue]);
+						}
+						else
+						{
+							$pdf->Cell($columnSizesArray[$table][$tableRowValue],5,$tableRowValue . ": " . $row[$table][$tableRowValue]->format('Y-m-d H:i:s'));
+						}
+						$pdf->Ln();
 					}
 					$pdf->Ln();
 				}
+				$pdf->Ln();
+			}
+			else
+			{
+				$pdf->Cell(20,10,"N/A");
+				$pdf->Ln();
 				$pdf->Ln();
 			}
 		}

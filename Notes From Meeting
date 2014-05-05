@@ -1,0 +1,38 @@
+Notes From Meeting
+
+-Chris Jones Can't see administration
+-New Form
+	-Unassigned Department and user
+-Edit
+	-Unassigned Department and user
+-Equipment
+	-Download Computers as CSV
+
+
+
+THE LIST (moved from update_... cuz reasonz)
+
+# Stuff2Do
+# 
+# () - not really started
+# (!!!) - in progress
+# (???) - potentially finished, needs to be checked on a basic level
+# (CHECK) - considered finished, needs stress-testing
+#
+# Quality, readability, comprehendability changes everywhere                              ()
+# Tune up on search page, search hotfield, pdf/csv printouts                              (!!!) <BIG>
+# Tune up import                                                                          (!!!) <BIG>
+# Testing!!!                                                                              ()    <BIG>
+# Finishing touches on edit/new item (computer) pages                                     (???)
+# Update documentation                                                                    (???)
+# SQL query automation                                                                    (CHECK)
+# Fix up Departments to support inventory duty, add no-assignment category for computers  (CHECK)
+# Add inventory page - move departments, rename, remove clear all                         (CHECK)
+# Add switch for inventory ((non)inventoried unit selection)                              (CHECK)
+# Add clear inventory page                                                                (CHECK)
+# Edit license data fix: don't let type be changed to one already owned                   (CHECK)
+# Consider merging departments and inventory                                              (CHECK)
+# CSV for computers/hardware/users, software/licenses/students                            (CHECK)
+
+
+

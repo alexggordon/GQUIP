@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: new_software.php
 // created by: Alex Gordon, Elliott Staude
@@ -10,16 +7,14 @@
 // purpose:  The page used to add software item content to GQUIP’s database.
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+
+// include nav bar and other default page items
 include('header.php');
+// check the session to see if the person is authenticated
 if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
-}
-// Manager or User
+  header('Location: login.php');
+}// Manager or User
 if($_SESSION['access']==ADMIN_PERMISSION) {
 
 if (isset($_POST['submit'])){
@@ -65,6 +60,7 @@ else {
 
 <div class="large-12 columns">
 <h1>New Software</h1>
+<!-- begin form -->
 <form data-abide type="submit" name="submit" enctype='multipart/form-data' action="new_software.php" method="POST">
 	<fieldset>
 		<legend>Software Info</legend>

@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: faculty_info.php
 // created by: Alex Gordon, Elliott Staude
@@ -10,27 +7,31 @@
 // purpose: This page shows info about an individual faculty member and allows easy access to the computers assigned to them and contact information. 
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
-include('header.php');
-if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
-}
 
+
+// include nav bar and other default page items
+include('header.php');
+// check the session to see if the person is authenticated
+if(!isset($_SESSION['user'])) {
+  header('Location: login.php');
+}
 // Manager or User
-if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==USER_PERMISSION) {
+if($_SESSION['access']==USER_PERMISSION || $_SESSION['access']==ADMIN_PERMISSION || $_SESSION['access']==FACULTY_PERMISSION)  {
 
 ?>
-
-<div class="large-12 columns">
+<div class="row">
+<div class="large-10 large-centered columns">
 <h1>Faculty Information</h1>
+
+<ul class="breadcrumbs">
+  <li><a href="home.php">Home</a></li>
+  <li><a href="faculty.php">Faculty</a></li>
+  <li class="current"><a href="#">Faculty Info</a></li>
+</ul>
 
 <?php
 $itemID = $_GET['id'];
-
+// submit form
 if (isset($_POST['submit'])){
 
 	//connect to the database 
@@ -146,35 +147,88 @@ else {
 
 		<div class="row">
 			<div class="large-2 columns">
-				<label>First name</label>
+				<label><strong>First name<strong/></label>
 					<label name="FirstName"><?php echo $item['FirstName']; ?></label>
 			</div>
 			<div class="large-2 columns">
-				<label>Last name</label>
+				<label><strong>Last name<strong/></label>
 					<label name="LastName"><?php echo $item['LastName']; ?></label>
 			</div>
 			<div class="large-3 columns">
-				<label>Department</label>
+				<label><strong>Department<strong/></label>
 					<label name="OnCampusDepartment"><?php echo $item['OnCampusDepartment']; ?></label>
 			</div>
 			<div class="large-1 columns">
-				<label>DPT.</label>
+				<label><strong>DPT.<strong/></label>
 					<label name="Dept"><?php echo $item['Dept']; ?></label>
 			</div>
 			<div class="large-3 columns">
-				<label>Email</label>
+				<label><strong>Email<strong/></label>
 					<label name="Email"><?php echo $item['Email']; ?></label>
 			</div>
 		</div>
 	</fieldset>
 	
+	<fieldset>
+		<legend>Computers assigned</legend>
+		<table>
+		<thead>
+		<th>Control number</th>
+		<th>Model</th>
+		<th>Type of unit</th>
+		<th>Assignment type</th>
+		<th>Assignment start time</th>
+		<th>Assignment end time</th>
+		</thead>
 
-	<div class="large-12 columns">
-	<div class="row" align="center">
-	<a class="button" href="faculty.php">Back</a>
-	</div>
-	</div>
+	<?php
+	//get the info on each of the individual's computers here
+	while($row = sqlsrv_fetch_array($hardware_assignmentResult))
+	{
+		$comptype = "Laptop";
+		if ($row['computer_type'] == "2")
+		{
+			$comptype = "Desktop";
+		}
+		if ($row['computer_type'] == "3")
+		{
+			$comptype = "Tablet";
+		}
+		$asgntype = "Dedicated unit";
+		if ($row['assignment_type'] == "2")
+		{
+			$comptype = "Special";
+		}
+		if ($row['assignment_type'] == "3")
+		{
+			$comptype = "Lab";
+		}
+		if ($row['assignment_type'] == "4")
+		{
+			$comptype = "Kiosk";
+		}
+		if ($row['assignment_type'] == "5")
+		{
+			$comptype = "Printer";
+		}
+		$endasgn = "N/A";
+		if ($row['end_assignment'] != NULL)
+		{
+			$endasgn = $row['end_assignment']->format('Y-m-d H:i:s');
+		}
+		$startasgn = "N/A";
+		if ($row['end_assignment'] != NULL)
+		{
+			$startasgn = $row['start_assignment']->format('Y-m-d H:i:s');
+		}
+		echo "<tr><td>" . "<a href=\"/info.php?id=" . $row['control'] . "\">" . $row['control'] . "</a>" . "</td><td>" . $row['model'] . "</td><td>" . $comptype . "</td><td>" . $asgntype . "</td><td>" . $startasgn . "</td><td>" . $endasgn . "</td></tr>";
+	}
+	?>
+		</table>
+	</fieldset>
+
 </form>
+</div>
 </div>
 
 <?php

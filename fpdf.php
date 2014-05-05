@@ -1,21 +1,17 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: fpdf.php
 // created by: Alex Gordon, Elliott Staude
 // date: 04-6-2014
 // purpose: An existing library file for the creation of PDFs in PHP used by the developers of GQUIP for generating printout data
-// 
+// This free library can be found at http://www.fpdf.org
+// Thank you, Olivier!
+//
 // *************************************************************
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+
 /*******************************************************************************
 * FPDF                                                                         *
 *                                                                              *

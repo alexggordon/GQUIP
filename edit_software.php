@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: edit_software.php
 // created by: Alex Gordon, Elliott Staude
@@ -10,23 +7,30 @@
 // purpose:  The page used to edit information on a software item.
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+
+// include nav bar and other default page items
 include('header.php');
+// check the session to see if the person is authenticated
 if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
+  header('Location: login.php');
 }
-
 // Manager or User
-if($_SESSION['access']==ADMIN_PERMISSION) {
+if($_SESSION['access']==ADMIN_PERMISSION || USER_PERMISSION) {
 
+?>
+
+<div class="row">
+<div class="large-10 large-centered columns">
+<h1>Editing Software</h1>
+
+<?php
+// get the item ID
 $itemID = $_GET['edit'];
 
+// post form data
 if (isset($_POST['submit'])){
-
+	// post delete item data
 	if ($_POST['submit'] == "Delete Item")
 	{
 		include 'open_db.php';
@@ -52,8 +56,9 @@ if (isset($_POST['submit'])){
 		// close the connection
 
 		sqlsrv_close($conn);
-		echo "Data successfully removed";
-		echo "<a class=\"button\" href=\"students.php\">OK</a>";
+		echo "<h3>Data successfully removed</h3>";
+		echo "<a class=\"button\" href=\"software.php\">OK</a>";
+		echo "</div>";
 	}
 	else
 	{
@@ -79,7 +84,7 @@ if (isset($_POST['submit'])){
 		$software_type = $_POST['software_type'];
 
 		//SQL query to insert variables above into table
-		$sql = "UPDATE dbo.software SET index_id = $itemID, last_updated_by = '$last_updated_by', last_updated_at = '$last_updated_at', name = '$name', software_type = '$software_type' WHERE software.index_id = $itemID;";
+		$sql = "UPDATE dbo.software SET last_updated_by = '$last_updated_by', last_updated_at = '$last_updated_at', name = '$name', software_type = '$software_type' WHERE software.index_id = $itemID;";
 		$result = sqlsrv_query($conn, $sql);
 	
 		//if the query cant be executed
@@ -91,12 +96,13 @@ if (isset($_POST['submit'])){
 		// close the connection
 
 		sqlsrv_close( $conn);
-		echo "Data successfully modified";
-		echo $_POST['submit'];
+		echo "<h3>Data successfully modified</h3>";
 		echo "<a class=\"button\" href=\"software.php\">OK</a>";
+		echo "</div>";
 	}
 }
-else {
+else
+{
 	
 	include 'open_db.php';
 	
@@ -112,17 +118,12 @@ else {
 	
 ?>
 
-<div class="large-12 columns">
-<h1>Editing Software</h1>
+<!-- form data -->
 <form data-abide type="submit" name="submit" enctype='multipart/form-data' <?php echo "action=\"edit_software.php?edit=" . $itemID . "\""; ?> method="POST">
 	<fieldset>
 		<legend>Software Info</legend>
 
 		<div class="row">
-			<div class="large-4 columns">
-				<label>ID</label>
-					<label name="id"><?php echo $itemID; ?></label>
-			</div>
 			<div class="large-4 columns">
 				<label>Name</label>
 					<input type="text" name="name" <?php echo "value=\"" . $item['name'] . "\""; ?> required>
@@ -134,6 +135,10 @@ else {
 		</div>
 	</fieldset>
 	<div class="row">
+		<?php
+		if ($_SESSION['access']==ADMIN_PERMISSION)
+		{
+		?>
 		<div class="large-4 columns">
 			<dl class="accordion" data-accordion>
 			  <dd>
@@ -145,6 +150,9 @@ else {
 			  </dd>
 			</dl>
 		</div>
+		<?php
+		}
+		?>
 			<div class="large-4 columns">
 			<a class="button expand" href="software.php">Cancel</a>
 		</div>
@@ -159,7 +167,7 @@ else {
 	}
 	}
 	// Faculty
-	if($_SESSION['access']==FACULTY_PERMISSION OR $_SESSION['access']==USER_PERMISSION ) {
+	if($_SESSION['access']==FACULTY_PERMISSION) {
 	// Faculty and users should not have access to this page. 
 	header('Location: home.php');
 	}

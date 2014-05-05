@@ -1,28 +1,12 @@
 <?php
-<<<<<<< HEAD
-// *************************************************************
-=======
-<<<<<<< HEAD
-// *************************************************************
-=======
 
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+// *************************************************************
 // file: login.php
 // created by: Alex Gordon, Elliott Staude
 // date: 02-19-2014
 // purpose: allowing a user of the GQUIP database to access the content within by way of authenticate.php
 // part of the collection of files for the GQUIP project, designed for Gordon College, 2013-2014
-<<<<<<< HEAD
 // *************************************************************
-=======
-<<<<<<< HEAD
-// *************************************************************
-=======
-// 
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
-//
 
 // include the domain authentication function
 include("authenticate.php");
@@ -54,8 +38,6 @@ if(isset($_POST['userLogin'])){
         $error = 1;
     }
 }
-// output error to user
-if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<br />";
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
@@ -95,6 +77,13 @@ if (isset($error)) echo "Login failed: Incorrect user name, password, or rights<
 	<form action="login.php" method="post" data-abide>
 	 <fieldset>
 		<legend>Log In</legend>
+		<?php
+			// output error to user
+			if (isset($error)) 
+			{
+				echo "<div class='row'><div data-alert class='alert-box alert large-centered large-9 columns'>Login failed: Incorrect user name, password, or rights<a href='' class='close'>&times;</a></div></div>";
+			}
+			?>
 		<div class="row">
 			 
 			 <div class="large-9 large-centered columns">

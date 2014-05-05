@@ -1,8 +1,4 @@
 <?php 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
 // *************************************************************
 // file: 
 // created by: Alex Gordon, Elliott Staude
@@ -10,21 +6,18 @@
 // purpose: 
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
 
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+// include nav bar and other default page items
 include('header.php');
 include('getPage.php');
 include ('paginate.php');
 include('open_db.php');
+// check the session to see if the person is authenticated
 if(!isset($_SESSION['user'])) {
   header('Location: login.php');
 }
 
-$countQuery = "SELECT ID FROM dbo.gordonstudents";
+$countQuery Ω	 "SELECT ID FROM dbo.gordonstudents";
 $count = sqlsrv_query($conn, $countQuery, array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
 if ( !$count )
   die( print_r( sqlsrv_errors(), true));

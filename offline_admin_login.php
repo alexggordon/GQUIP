@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: offline_admin_login.php
 // created by: Alex Gordon, Elliott Staude
@@ -10,11 +7,8 @@
 // purpose: Allows the user to bypass the authentication system to be authenticated as an admin. 
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+
 session_start();
 $_SESSION['user'] = 'alex.gordon';
 $_SESSION['access'] = '3';

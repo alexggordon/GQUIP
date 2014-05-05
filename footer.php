@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 <?php 
 // *************************************************************
 // file: footer.php
@@ -11,20 +8,15 @@
 // 
 // *************************************************************
  ?>
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+
   <footer class="row">
     <div class="large-12 columns">
       <hr />
       <div class="row">
         <div class="twelve columns text-center">
           <ul class="inline-list">
-            <li>&copy; Copyright Gordon College</li>
-            <script type="text/javascript">document.write(new Date().getFullYear())</script>
-            
+            <li>&copy; Copyright Gordon College <?php echo date("Y") ?></li>
             <li><a href="http://www.gordon.edu">Gordon College</a></li>
             <li><a href="http://go.gordon.edu">Go.Gordon</a></li>
             <li><a href="http://support.gordon.edu">Footprints</a></li>
@@ -35,9 +27,7 @@
     </div>
   </footer>
   
-  <script src="js/jquery.js"></script>
   <script src="js/foundation.min.js"></script>
-  <script src="js/modernizr.js"></script>
 
   <script>
     $(document).foundation();

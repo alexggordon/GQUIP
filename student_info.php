@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 // *************************************************************
 // file: student_info.php
 // created by: Alex Gordon, Elliott Staude
@@ -7,35 +7,33 @@
 // purpose: This page shows info about an individual student and allows easy access to the software assigned to them and contact information. 
 // 
 // *************************************************************
-=======
-<<<<<<< HEAD
-// *************************************************************
-// file: 
-// created by: Alex Gordon, Elliott Staude
-// date: 04-6-2014
-// purpose: 
-// 
-// *************************************************************
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
-include('header.php');
-if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
-}
 
+
+// include nav bar and other default page items
+include('header.php');
+// check the session to see if the person is authenticated
+if(!isset($_SESSION['user'])) {
+  header('Location: login.php');
+}
 // Manager or User
 if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==USER_PERMISSION) {
 
 ?>
+<div class="row">
+<div class="large-10 large-centered columns">
 
-<div class="large-12 columns">
 <h1>Student Information</h1>
+
+<ul class="breadcrumbs">
+  <li><a href="home.php">Home</a></li>
+  <li><a href="students.php">Students</a></li>
+  <li class="current"><a href="#">Student Info</a></li>
+</ul>
 
 <?php
 $itemID = $_GET['id'];
 
-$licenseKinds[] = "license";
+$licenseKinds[] = NULL;
 
 if (isset($_POST['submit'])){
 
@@ -63,14 +61,27 @@ if (isset($_POST['submit'])){
 	$date_sold = $dateTime;
 	$seller = $_POST['seller'];
 	$software_id = $_POST['licenseChoice'];
+	$softwareTypeResult = "0";
 
-	$softwareTypeQuery = "SELECT software_type
+	$possessedSoftwareTypeQuery = "SELECT DISTINCT software_type
 	FROM software
-	WHERE index_id = $software_id;";
+	RIGHT JOIN licenses
+	ON software.index_id = licenses.software_id
+	WHERE licenses.id = $itemID;";
+
+	$findSubmittedSoftwareQuery = "SELECT DISTINCT software_type
+	FROM software
+	WHERE software.index_id = $software_id;";
 	
-	$softwareTypeResult = sqlsrv_query($conn, $softwareTypeQuery);
-	$softwareType = sqlsrv_fetch_array($softwareTypeResult, SQLSRV_FETCH_ASSOC);
-	if (!array_search($softwareType['software_type'], $licenseKinds))
+	$findSubmittedSoftwareResult = sqlsrv_query($conn, $findSubmittedSoftwareQuery);
+	$softwareStats = sqlsrv_fetch_array($findSubmittedSoftwareResult, SQLSRV_FETCH_ASSOC);
+
+	$softwareTypeResult = sqlsrv_query($conn, $possessedSoftwareTypeQuery);
+	while($thisHereItem = sqlsrv_fetch_array($softwareTypeResult, SQLSRV_FETCH_ASSOC))
+	{
+		$licenseKinds[] = $thisHereItem['software_type'];
+	}
+	if (array_search($softwareStats['software_type'], $licenseKinds) === false)
 	{
 		//SQL query to insert variables above into table
 		$sql = "INSERT INTO dbo.licenses ([last_updated_by],[last_updated_at],[created_at],[date_sold],[seller],[software_id],[id])VALUES('$last_updated_by','$last_updated_at','$created_at','$date_sold','$seller','$software_id','$itemID')";
@@ -82,8 +93,17 @@ if (isset($_POST['submit'])){
 			echo print_r( sqlsrv_errors(), true);
 			exit;
 		}
-		echo "<div class=\"large-8 large-centered columns\">";
+		echo "<div class=\"row\">";
+		echo "<div class=\"large-10 large-centered columns\">";
 		echo "<h3 class=\"large-centered\">Data successfully added</h3>";
+		echo "<a class=\"button expand\" href=\"student_info.php?&id=" . $itemID . " \">OK</a>";
+		echo "</div>";
+		echo "</div>";
+	}
+	else
+	{
+		echo "<div class=\"large-8 large-centered columns\">";
+		echo "<h3 class=\"large-centered\">Sorry - that type of license is already possessed by the student</h3>";
 		echo "<a class=\"button\" href=\"students.php\">OK</a>";
 		echo "</div>";
 	}
@@ -141,27 +161,27 @@ else {
 
 		<div class="row">
 			<div class="large-2 columns">
-				<label>First name</label>
+				<label><strong>First Name</strong></label>
 					<label name="FirstName"><?php echo $item['FirstName']; ?></label>
 			</div>
 			<div class="large-2 columns">
-				<label>Middle name</label>
+				<label><strong>Middle name</strong></label>
 					<label name="MiddleName"><?php echo $item['MiddleName']; ?></label>
 			</div>
 			<div class="large-2 columns">
-				<label>Last name</label>
+				<label><strong>Last name</strong></label>
 					<label name="LastName"><?php echo $item['LastName']; ?></label>
 			</div>
 			<div class="large-1 columns">
-				<label>Class</label>
+				<label><strong>Class</strong></label>
 					<label name="Class"><?php echo $item['Class']; ?></label>
 			</div>
 			<div class="large-2 columns">
-				<label>Is a grad student</label>
+				<label><strong>Grad Student</strong></label>
 					<label name="grad_student"><?php echo $item['grad_student']; ?></label>
 			</div>
 			<div class="large-3 columns">
-				<label>Email</label>
+				<label><strong>Email</strong></label>
 					<label name="Email"><?php echo $item['Email']; ?></label>
 			</div>
 		</div>
@@ -173,23 +193,22 @@ else {
 		<?php
 		while($licenseItem = sqlsrv_fetch_array($licenseResult, SQLSRV_FETCH_ASSOC))
 		{
-		$licenseKinds[] = $licenseItem['software_type'];
 		?>		
 		<div class="row">
 			<div class="large-3 columns">
-				<label>Software name</label>
+				<label><strong>Software Name</strong></label>
 					<label name="software_name"><?php echo $licenseItem['name']; ?></label>
 			</div>
 			<div class="large-3 columns">
-				<label>Software type</label>
+				<label><strong>Software Type</strong></label>
 					<label name="software_type"><?php echo $licenseItem['software_type']; ?></label>
 			</div>
 			<div class="large-2 columns">
-				<label>Seller</label>
+				<label><strong>Seller</strong></label>
 					<label name="edited_seller"><?php echo $licenseItem['seller']; ?></label>
 			</div>
 			<div class="large-2 columns">
-				<label>Time sold</label>
+				<label><strong>Time Sold</strong></label>
 					<label name="date_sold"><?php echo $licenseItem['date_sold']->format('Y-m-d H:i:s'); ?></label>
 			</div>
 			<?php
@@ -214,7 +233,7 @@ else {
 
 					while($row = sqlsrv_fetch_array($populationResult))
 					{
-						echo "<option value=\"" . $row["index_id"] . "\">ID: " . $row["index_id"] . " - " . $row['name'] . "</option>\n";
+						echo "<option value=\"" . $row["index_id"] . "\">" . $row['name'] . "</option>\n";
 						// Use an array to get all legal values for the software search
 						$securityArray[] = $row["index_id"];
 					}
@@ -233,12 +252,8 @@ else {
 		</div>
 
 	</fieldset>
-	<div class="large-12 columns">
-	<div class="row" align="center">
-	<a class="button" href="students.php">Back</a>
-	</div>
-	</div>
 </form>
+</div>
 </div>
 
 <?php

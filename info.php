@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: info.php
 // created by: Alex Gordon, Elliott Staude
@@ -10,11 +7,8 @@
 // purpose:  The purpose of this page is to display all the information about an equipment item. 
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+
 include('header.php');
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php');
@@ -24,23 +18,72 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 	include 'open_db.php';
 	if (isset($_GET['id'])) {
 	$control = $_GET['id'];
+	$computer_id;
+	$commentresult;
 	$selectNewInsert = "Select * from dbo.computers where control = " . $control . " ";
 	$computer_id_result = sqlsrv_query($conn, $selectNewInsert);
-	while( $row = sqlsrv_fetch_array( $computer_id_result, SQLSRV_FETCH_ASSOC) ) {
+	while( $row = sqlsrv_fetch_array( $computer_id_result, SQLSRV_FETCH_ASSOC) ) 
+	{
 	      $computer_id = $row['computer_id'];
+
+		    $commentquery = "SELECT * FROM comments 
+		    WHERE computer_id = " . $computer_id . "
+		    ORDER BY created_at DESC;";
+		    $commentresult = sqlsrv_query($conn, $commentquery);
+		    sqlsrvErrorLinguist($commentresult, "SQL problem output 103");
+
 	      $created_on = $row['created_at'];
 	      $created_by = $row['last_updated_by'];
-	
+
+			// Parse out the content that is not human-readable
+			$unitType = "Other";
+			switch ($row['computer_type'])
+			{
+				case LAPTOP_EQUIPMENT_TYPE:
+					$unitType = "Laptop";
+					break;
+				case DESKTOP_EQUIPMENT_TYPE:
+					$unitType = "Desktop";
+					break;
+				case TABLET_EQUIPMENT_TYPE:
+					$unitType = "Tablet";
+					break;
+			}
+	?>
+	<div class="row">
+	<div class="large-10 large-centered columns">
+	<h1 class="docs header">Details for <?php echo $control ; ?></h1>
+	<ul class="breadcrumbs">
+	  <li><a href="home.php">Home</a></li>
+	  <li class="current"><a href="#">Computer Detail</a></li>
+	</ul>
+		</div>
+		</div>
+	  <!-- First Band (Image) -->
+
+
+	<?php if ($row['usage_status'] == 'retired' || $row['usage_status'] == 'sold')
+	{
+		?>
+	<div class="row">
+	<div class="large-10 large-centered columns">
+	<h3>This unit is recorded as <?php echo $row['usage_status'];?></h3>
+	</div>
+	</div>
+	<?php
+	}
 	?>
 
 	<div class="row">
-	<h1 class="docs header">Details for <?php echo $control ; ?></h1>
-		</div>
-	  <!-- First Band (Image) -->
-	<div class="row"> 
-	<div class="large-12 columns"> 
+	<div class="large-10 large-centered columns">
+	<?php echo "<a class=\"button small\" href=\"edit_item.php?control=" . $control . "\">Edit</a>"; ?>
+	</div>
+	</div>
+
 	<div class="row">
-	<div class="large-6 columns">
+	<div class="large-10 large-centered columns">
+	<div class="row">
+	<div class="large-5 columns">
 	<div class="panel">
 	  <h5>Computer Info</h5>
 	 		<p>
@@ -71,14 +114,14 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 
 	 		<p>
 	 		  <b>Type:</b>
-	 		  <?php echo $row['computer_type']; ?>
+	 		  <?php echo $unitType; ?>
 	 		</p>
 	 		<p>
 	 		
 	 	    </p>
 	</div>
 	  </div>
-	  <div class="large-6 columns">
+	  <div class="large-5 columns">
 	    <div class="panel">
 	      <h5>Hardware Info</h5>
 			<p><b>Memory:</b>
@@ -91,7 +134,7 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 			
 			<p>
 			  <b>Warranty Length:</b>
-			  <?php echo $row['warranty_length']; ?> Years
+			  <?php if ($row['warranty_length'] == 5) {echo 'Expired';} else {echo $row['warranty_length'];} ?> Years
 			</p>
 			<p>
 			  <b>Warranty Start:</b>
@@ -101,7 +144,7 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 	  </div>
 	</div> 
 	  	<div class="row">
-	  	<div class="large-6 columns">
+	  	<div class="large-5 columns">
 	  	    <div class="panel">
 	  	      <h5>Purchasing Info</h5>
 			<p>
@@ -129,13 +172,23 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 	  	  </div>
 	<?php 
 	}
-	$selectNewInsert = "Select * from dbo.hardware_assignments where computer = " . $computer_id . " ";
+	$selectNewInsert = "Select * from dbo.hardware_assignments where computer = " . $computer_id . " AND end_assignment IS NULL";
 	$computer_id_result = sqlsrv_query($conn, $selectNewInsert);
-	while( $row = sqlsrv_fetch_array( $computer_id_result, SQLSRV_FETCH_ASSOC) ) {
-
+	$primaryVal;
+	$fullVal;
+	while( $row = sqlsrv_fetch_array( $computer_id_result, SQLSRV_FETCH_ASSOC) )
+	{
+			// Parse out the content that is not human-readable
+			$assignmentVal = "N/A";
+			if (getAssignmentTypeOutputFromValue($row['assignment_type']))
+			{
+				$assignmentVal = getAssignmentTypeOutputFromValue($row['assignment_type']);
+			}
+			$primaryVal = $row['primary_computer'];
+			$fullVal = $row['full_time'];
 	 ?>	
 
-	  <div class="large-6 columns">
+	  <div class="large-5 columns">
 	      <div class="panel">
 	        <h5>Assignment Info</h5>
 				<p>
@@ -148,14 +201,30 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 
 				  $selectUser = "Select FirstName, LastName from dbo.FacandStaff where ID = " . $row['user_id'] . " ";
 				  $userResult = sqlsrv_query($conn, $selectUser);
-				  while( $row = sqlsrv_fetch_array( $userResult, SQLSRV_FETCH_ASSOC) ) {
+				  if($userResult)
+				  {
+				  	while( $row = sqlsrv_fetch_array( $userResult, SQLSRV_FETCH_ASSOC) )
+				  	{
 				        echo " " . $row['FirstName'] . "  " . $row['LastName'] .  " ";
 				    }
+				  }
+				  else
+				  {
+					echo "N/A";
+				  }
 				  ?>
 				</p>
 				<p>
 				  <b>Assignment Type:</b>
-				  <?php echo $row['assignment_type']; ?>
+				  <?php echo $assignmentVal; ?>
+				</p>
+				<p>
+				  <b>Is full time:</b>
+				  <?php echo $fullVal; ?>
+				</p>
+				<p>
+				  <b>Is primary unit:</b>
+				  <?php echo $primaryVal; ?>
 				</p>
 				<br />
 				<p>
@@ -171,25 +240,85 @@ if($_SESSION['access']==ADMIN_PERMISSION OR $_SESSION['access']==FACULTY_PERMISS
 	  	</div>
 		</div>
 	  		</div> 
-	  		<div class="row">
-	  		<fieldset>
-	  		<legend>Item History</legend>
-		  		<div class="large-12 columns">
-		  		<div class="accordion" data-accordion>
-					
-		  		<dd>
-		  		  <a href="#panel3">Created on <?php  echo " " . $created_on->format('Y-m-d') . " by " . $created_by . " "     ; ?> 	</a>
-		  		  <div id="panel3" class="content">
-		  		  PHP
-		  		  </div>
-		  		</dd>
 
-		  		</div>
+		<div class="row">
+	  		<fieldset>
+	  		<?php $panelNum = 1;?>
+	  		<legend>Comments</legend>
+		  		<div class="large-10 large-centered columns">
+		  		<dl class="accordion" data-accordion>
+		  		<?php 
+
+		  		$changeQuery = "SELECT *
+				FROM changes
+				WHERE changes.computer_id = $computer_id
+				ORDER BY created_at DESC;";
+
+				$changeResults = sqlsrv_query($conn, $changeQuery);
+				sqlsrvErrorLinguist($changeResults, "Problem with getting comments for unit");
+				while ($thisChange = sqlsrv_fetch_array($commentresult))
+				{
+					$panelNum++;
+					?>
+  		  		<dd>
+  		  			<?php echo "<a href=\"#panel" . $panelNum . "\">"; ?>Commentary made at <?php  echo " " . $thisChange['created_at']->format('Y-m-d H:i:s') . " by " . $thisChange['user_name'] . " "; ?></a>
+		  		  	<?php echo "<div id=\"panel" . $panelNum . "\" class=\"content\">"; ?><kbd>
+					<?php
+
+					echo $thisChange['body'];
+					?>
+					</kbd></div>
+		  		</dd>
+					<?php
+				}
+
+		  		?>
+		  		</dl>
+		  		</fieldset>
 		  		</div>
 	  		</div>
 
+	  		<div class="row">
+	  		<fieldset>
+	  		<legend>Item History</legend>
+		  		<div class="large-10 large-centered columns">
+		  		<dl class="accordion" data-accordion>
+		  		<?php 
 
-	  		</fieldset>
+		  		$changeQuery = "SELECT *
+				FROM changes
+				WHERE changes.computer_id = $computer_id
+				ORDER BY created_at DESC;";
+
+				$changeResults = sqlsrv_query($conn, $changeQuery);
+				sqlsrvErrorLinguist($changeResults, "Problem with getting change info for unit");
+				while ($thisChange = sqlsrv_fetch_array($changeResults))
+				{
+					$panelNum++;
+					?>
+  		  		<dd>
+  		  			<?php echo "<a href=\"#panel" . $panelNum . "\">"; ?>Change made on<?php  echo " " . $thisChange['created_at']->format('Y-m-d H:i:s') . " by " . $thisChange['creator'] . " "; ?></a>
+		  		  	<?php echo "<div id=\"panel" . $panelNum . "\" class=\"content\">"; ?>
+					<?php
+					$formattedChange = str_replace("\n", "<br />", $thisChange['body']);
+					$formattedChange = str_replace("*** CHANGED ***", "<kbd>*** CHANGED ***</kbd>", $formattedChange);
+					$formattedChange = str_replace("*** ASSIGNMENT ADDED ***", "<kbd>*** ASSIGNMENT ADDED ***</kbd>", $formattedChange);
+					$formattedChange = str_replace("*** ASSIGNMENT REMOVED ***", "<kbd>*** ASSIGNMENT REMOVED ***</kbd>", $formattedChange);
+					echo $formattedChange;
+					?>
+					</div>
+		  		</dd>
+					<?php
+				}
+
+		  		?>
+		  		<dd>
+		  		  <a href="#panel1">Created on <?php  echo " " . $created_on->format('Y-m-d H:i:s') . " by " . $created_by . " "     ; ?> 	</a>
+		  		</dd>
+		  		</dl>
+		  		</fieldset>
+		  		</div>
+	  		</div>
 
 	<?php
 	} else {

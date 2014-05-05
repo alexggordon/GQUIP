@@ -1,27 +1,18 @@
 <?php
-<<<<<<< HEAD
-// *************************************************************
-// file: page_template.php
-=======
-<<<<<<< HEAD
 // *************************************************************
 // file: 
->>>>>>> FETCH_HEAD
 // created by: Alex Gordon, Elliott Staude
 // date: 04-6-2014
 // purpose: 
 // 
 // *************************************************************
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+// include nav bar and other default page items
 include('header.php');
+// check the session to see if the person is authenticated
 if(!isset($_SESSION['user'])) {
-	header('Location: login.php');
-}
-// Manager
+  header('Location: login.php');
+}// Manager
 if($_SESSION['access']==ADMIN_PERMISSION ) {
 ?>
 

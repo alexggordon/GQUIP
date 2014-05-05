@@ -1,8 +1,5 @@
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
+
 // *************************************************************
 // file: csv_import.php
 // created by: Alex Gordon, Elliott Staude
@@ -12,26 +9,33 @@
 // 
 // *************************************************************
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d43e4053f086f079cc512432daaab90ef7aea892
->>>>>>> FETCH_HEAD
+
+// include nav bar and other default page items
 include('header.php');
 if(!isset($_SESSION['user'])) {
     header('Location: login.php');
 }
 // Manager
 if($_SESSION['access']==ADMIN_PERMISSION ) {
-$self = $_SERVER['PHP_SELF'];
-$request = $_SERVER['REQUEST_METHOD'];
+    $self = $_SERVER['PHP_SELF'];
+    $request = $_SERVER['REQUEST_METHOD'];
 
-if (!isset($_GET['success'])) {
-$get_success = "";
-}
-else {
-$get_success = $_GET['success'];
-}
+
+
+// if (!isset($_GET['success'])) {
+// $get_success = "";
+// }
+// else {
+// $get_success = $_GET['success'];
+// }
+
+    if (isset($_POST['submit'])){
+        echo "<div class=\"large-10 large-centered columns\">";
+        echo "<h3 class=\"large-centered\">Data successfully inserted</h3>";
+        echo "<a class=\"button\" href=\"home.php\">OK</a>";
+        echo "</div>";
+         //generic success notice 
+    }
 
 if (!empty($_FILES)) { 
 
@@ -88,8 +92,8 @@ if (!empty($_FILES)) {
     }
 
     // this will prepare a reusable query. This allows for easy cacheing. 	
-    function prepare ( $conn, $query, $params ) {
-        $result = sqlsrv_prepare($conn, $query, $params);
+    function prepare ( $conn, $query, &$params ) {
+        $result = sqlsrv_prepare($conn, $query, &$params);
         if ($result === FALSE) {
             get_last_error();
         }
@@ -123,18 +127,25 @@ if (!empty($_FILES)) {
     $conn = connect();
 
     // prepare the query statement. It is done in this form for easy modification. 
-    $query = "INSERT dbo.computers values ( ? , ? , ? )";
-    $param1 = null; // this will hold col1 from the CSV
-    $param2 = null; // this will hold col2 from the CSV
-    $param3 = null; // this will hold col3 from the CSV
-    $param4 = null; // this will hold col3 from the CSV
-    $param5 = null; // this will hold col3 from the CSV
-    $param6 = null; // this will hold col3 from the CSV
-    $param7 = null; // this will hold col3 from the CSV
-    $param8 = null; // this will hold col3 from the CSV
+    $query = "INSERT dbo.computers ([last_updated_by], [last_updated_at], [created_at], [control], [serial_num], [model], [manufacturer], [memory], [hard_drive], [part_number], [purchase_date], [purchase_price], [purchase_acct], [replacement_year], [usage_status]) values ( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)";
+    $lastUpdatedBy = null; // this will hold col1 from the CSV
+    $lastUpdatedAtString = null; // this will hold col2 from the CSV
+    $createdAtString = null; // this will hold col3 from the CSV
+    $controlNumber = null; // this will hold col3 from the CSV
+    $serialNumber = null; // this will hold col3 from the CSV
+    $model = null; // this will hold col3 from the CSV
+    $manufacturer = null; // this will hold col3 from the CSV
+    $memory = null; // this will hold col3 from the CSV
+    $hdSize = null; // this will hold col3 from the CSV
+    $partNumber = null;
+    $purchaseDate = null; // this will hold col3 from the CSV
+    $purchasePrice = null; // this will hold col3 from the CSV
+    $accountNumber = null; 
+    $replacementYear = null; 
+    $usage_status = null;
 
-    $params = array( $param1, $param2, $param3, $param4, $param5, $param6, $param7, $param8 );
-    $prep = prepare ( $conn, $query, $params );
+    $params = array( &$lastUpdatedBy, &$lastUpdatedAtString, &$createdAtString, &$controlNumber, &$serialNumber, &$model, &$manufacturer, &$memory, &$hdSize, &$partNumber, &$purchaseDate, &$purchasePrice, &$accountNumber, &$replacementYear, &$usage_status );
+    $prep = prepare ( $conn, $query, &$params );
     //$result = execute ( $prep );
 
     //get the csv file 
@@ -145,27 +156,43 @@ if (!empty($_FILES)) {
     Here is where you read in and parse your CSV file into an array.
     That may get too large, so you would have to read smaller chunks of rows.
   */
+
+    if (isset($_SESSION['user'])) {
+        $lastUpdatedBy = $_SESSION['user'];
+    }
+
+    $timezone = new DateTimeZone("UTC");
   
     $csv_array = file($file);
     foreach ($csv_array as $row_num => $row) {
         $row = trim ($row);
         $column = explode ( ',' , $row );
-        $param1 = $column[0];
-        $param2 = $column[1];
-        $param3 = $column[2];
+            $lastUpdatedBy = $_SESSION['user'];
+            $lastUpdatedAt = new DateTime("now", $timezone);
+            $lastUpdatedAtString = $lastUpdatedAt->format('Y-m-d H:i:s');
+            $createdAtString = new DateTime("now", $timezone);
+            $controlNumber = $column[0];
+            $serialNumber = $column[1];
+            $model = $column[2];
+            $manufacturer = $column[3];
+            $memory = $column[4];
+            $hdSize = $column[5];
+            $partNumber = $column[6];
+            $purchaseDate = $column[7];
+            $purchasePrice = $column[8];
+            $accountNumber = $column[9];
+            $replacementYear = $column[10];
+            $usage_status = "circulation";
 
         // insert the row
-		
         $result = execute ( $prep );
     }
 	
 /* Free statement and connection resources. */
 
 sqlsrv_close($conn);
-header( "Location: test.php?success=1" );
 }
 ?>
-<?php if (!empty($get_success)) { echo "<b>Your file has been imported.</b><br><br>"; } //generic success notice ?> 
 <br>
 <br>
 <div class="row">
